@@ -1,0 +1,539 @@
+.err{
+    border: 1px solid red
+}
+.theme-dark .err{
+    border: 1px solid red
+}
+
+.theme-dark .topbar{
+  background-color: #1e1e2d;
+  border-radius:10px;
+  color: #eee;
+  font-weight: 700;
+
+} 
+
+.theme-dark #topBar-Content a{
+  color: white;
+}
+
+
+
+.dropdown-menu li{
+	position: relative;
+}
+
+.dropdown-menu .submenu{
+	display: none;
+	position: absolute;
+} 
+
+.dropdown-menu>li:hover>.submenu{
+	display: block;
+	left: 100%;
+	top: -7px;
+}
+
+.categoria{
+	cursor: pointer;
+}
+.item{
+	cursor: pointer;
+}
+
+
+/* DRAG AND DROP VEHICULOS*/
+  #sortable1, #sortable2 {
+    border: 2px solid rgb(28, 19, 189);
+    background-color: #2212a8;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 350px;
+    list-style-type: none;
+	  min-width: 95%;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+  }
+  #sortable1 li, #sortable2 li {
+    color: white;
+    background: #4525d2;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+  }
+  #sortable1 li{
+    border-radius: 5px;
+    cursor: pointer;
+    pointer-events: visibleStroke;
+  }
+
+  #sortable1 #sortable2{
+	border: 1px solid black;
+  }
+/* DRAG AND DROP personal*/
+  #sortablePersonal1, #sortablePersonal2 {
+    border: 2px solid rgb(28, 19, 189);
+    background-color: #2212a8;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 350px;
+    list-style-type: none;
+	  min-width: 95%;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+  }
+  #sortablePersonal1 li, #sortablePersonal2 li {
+    color: white;
+    background: #4525d2;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 5px 5px 5px;
+    padding: 5px;
+    font-size: 1.2em;
+  }
+  #sortablePersonal1 li{
+    border-radius: 5px;
+    cursor: pointer;
+    pointer-events: visibleStroke;
+  }
+
+  #sortablePersonal1 #sortablePersonal2{
+	border: 1px solid black;
+  }
+
+  .notSelectedProd,.selectedProd{
+	border: 1px solid #eee;
+	min-height: 350px;
+  }
+
+
+  #sortable3{
+	min-width: 100%;
+
+  }
+
+
+  #sortable3,#sortable4{
+	min-width: 100%;
+	border: 1px solid blue;
+  }
+  #sortable3,#sortable4 tr{
+	min-width: 100%;
+	border: 1px solid rgb(71, 71, 174);
+  }
+
+
+  .box{
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset; 
+   }
+
+  input[type=text],input[type=number],input[type=date],textarea {
+   border:1px solid gray;
+   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;         
+  }
+
+  .form-select{
+    border:1px solid gray;
+  }
+
+  .box-prod{
+    max-height: 350px;
+    overflow-x: hidden;
+  }
+
+  .addProdInput{
+    max-width: 50px;
+  }
+
+
+  .dragItemsHead{
+    display: flex;   
+    justify-content: space-between;
+    color: black;
+    font-weight: 800;
+  }
+  .dragItemsHead p{
+    width: 23%;
+    background-color: blue;
+    text-align: center;
+    line-height: auto;
+    margin-top: 8px;
+    margin: 2px;
+  }
+  .dropItem{
+    min-height: 350px;
+  }
+
+  #tableDrop td{
+    height: auto;
+    border: 1px solid black;
+    margin: 3px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    line-height: auto;
+    cursor: pointer;
+  }
+
+  #selectableProducts{
+   margin:1px solid red;
+  }
+
+
+  .tableProducts td {
+    /* padding: 0px !important;   */
+  }
+
+  @media (min-width: 1250px) {
+   
+  }
+
+  @media (min-width: 1250px) {
+    .notSelectedProd{
+      max-width: 82%;
+      min-width: 50%;
+    }
+    td .catProd{
+      width: 120px ;
+    }
+    .selectedProd {
+      max-width:18%
+    }
+
+  }
+  
+
+
+
+
+
+  @media (min-width: 1250px) {
+
+      /* .notSelectedProd{
+        width: 100%;
+      }
+      THEME DARK STYLE FOR DISPLAY TABLE AND REUSMEN SELECTED PRODUCTS 
+      .theme-dark .notSelectedProd{
+        width: 100%;
+      } */
+    
+  }
+
+  @media (max-width: 1250px) {
+    #tableDrop .itemProd, #tableDrop .productPrice{
+      display: none;
+    }
+    #tableProducts .itemProd, #tableProducts .productPrice{
+      display:none;
+    }
+  }
+
+
+
+
+  #tbodyReceive{
+    min-height: 200px;
+    border: 1px solid white;
+  }
+
+  #tbodyReceive{
+    min-height: 200px;
+    border: 1px solid white;
+  }
+  
+
+  .centered-spaced{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .itemName{
+    font-weight: 800;
+    font-size: 20px;
+    overflow: hidden;
+  }
+  #receiveProducto{
+    min-height: 104px;
+    margin-top: 20px;
+  }
+  .detailsProduct-box{
+    border-radius: 5%;
+    border:2px solid rgb(61 61 177 / 38%);
+    display: flex;
+  }
+  .checkitem{
+    margin: 0px 5px;
+    display: flex;
+    align-content: center;
+  }
+
+  .verticalLine{
+    min-height: 100%;
+    float: right;
+    max-width: 1px;
+    border:1px solid rgb(61 61 177 / 38%);
+    margin-left: 3px;
+  }
+  .itemDetails{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin:4px 10px;
+  }
+
+  .containerRemoveLogo{
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    display: flex;
+  }
+  .containerRemoveLogo{
+    justify-content: center;
+    display: flex;
+  }
+  .detailQuantity{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .logoRemove{
+    cursor: pointer;
+  }
+
+  .dragableItems{
+    max-height: 1200px;
+    overflow: scroll;
+  }
+
+  .moveProd{
+    max-height: 1000px;
+    overflow: scroll;
+  }
+  .detailsProduct-box{
+    margin-bottom: 20px;
+  }
+  #receiveProducto{
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: white;
+    
+  }
+  .theme-dark #receiveProducto {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #1e1e2d;
+    
+  }
+
+  .serachInputDrag{
+    display:flex;
+    max-width: 40%;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .getProjectDetails:hover{
+    border: 2px solid black;
+    transition: .4s all ease;
+    cursor: pointer;
+  }
+
+  .personalPrice{
+    max-height: 30px;
+    margin-left: 20px;
+  }
+  .addPersonal{
+    font-size: 20px;
+    color: green;
+    margin: 0px 5px;
+  }
+  .addPersonal:hover{
+    animation: beat 1.5s infinite alternate;
+  }
+
+  @keyframes beat{
+    0%{
+      transform: scale(1.5) translateY(8px) 
+    }
+    100%{
+      display: none;
+    }
+  }
+
+  .resume-table{
+    width: 100%;
+    margin-top: 40px;
+    border-radius: 1px;
+
+  }
+  .resume-table tr{
+    min-height: calc(100% + 15px);
+    border-bottom: 1px solid gray;
+  }
+  .resume-table td{
+    text-align: center;
+    justify-content: center;
+  }
+
+
+  /* LOADER */
+  .lds-facebook {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: #fff;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  }
+  .lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+  }
+  .lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+  }
+  .lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+  }
+  @keyframes lds-facebook {
+    0% {
+      top: 8px;
+      height: 64px;
+    }
+    50%, 100% {
+      top: 24px;
+      height: 32px;
+    }
+  }
+
+
+.projectNameResume{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+}
+.dark-theme .projectNameResume{
+  text-align: center;
+}
+.verticalTable tr{
+  border:1px solid black
+}
+.spaced{
+  margin-bottom: 50px;
+}
+
+.verticalTable td, .verticalTable th{
+  margin: 5px;
+  padding:3px;
+  text-align: center;
+  vertical-align: baseline;
+}
+.theme-dark .verticalTable td,.theme-dark .verticalTable th{
+  margin: 5px;
+  padding:3px;
+  text-align: center;
+  vertical-align: baseline;
+  transition: all .4s ease;
+
+}
+
+.tbodyHeader,.verticalTable th{
+  border: 1px solid black;
+  background-color: grey;
+  color: black;
+  width: 30%;
+  font-size: 18px;
+  font-weight: 700;
+  transition: all .4s ease;
+
+}
+
+.theme-dark .tbodyHeader,.theme-dark .verticalTable th{
+  border: 1px solid rgba(255, 255, 255, 0.703);
+  background-color: #1e1e2d;
+  color: white;
+  width: 30%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all .4s ease;
+
+}
+
+.theme-dark .tbodyHeaderTotal{
+  background-color: #1e1e2d;
+  transition: all .4s ease;
+}
+.tbodyHeaderTotal{
+  background-color: lightcoral;
+  transition: all .4s ease;
+}
+
+#projectData{
+  margin-bottom: 30px;
+}
+
+.deleteRow{
+  color:red;
+  font-size: 18px;
+  transition: .5s all ease;
+}
+
+
+.section-cost{
+  margin:20px 0px;
+  font-size: 25px;
+  border: 1px solid black;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.centerText{
+  text-align: center;
+}
+
+.margin-button{
+ margin: 0px 10px;
+ 
+}
+
+.theme-dark #projectSubArriendos tr{
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+}
+
+#projectSubArriendos tr{
+  border: 1px solid red
+}
+
+
+#tableProducts_wrapper > .productName{
+  min-width: 25% !important;
+}
+
+table.dataTable tbody td .productName {
+  padding: 8px 10px;
+}
