@@ -25,6 +25,9 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
 }
 
 
+
+
+
 // print_r($vehiculos);
 
 //BUILD DATA AUTODUENO
