@@ -42,7 +42,6 @@ function FillDirecciones(){
   })
 }
 
-
 $('#dirSelect').on('change',function(){
 
     let idDireccion = this.value;
@@ -81,3 +80,26 @@ $('#dirSelect').on('change',function(){
   function CleanCliente(){
     document.getElementById("clienteForm").reset();
   }
+
+
+function GetComunas(){
+  let idRegion = $('#regionSelect').val();
+  $.ajax({
+    type: "POST",
+    url: "ws/pais_region_comuna/Comuna.php",
+    dataType: 'json',
+    data: JSON.stringify({
+      "action": "getComunasByRegion",
+      idRegion: idRegion
+    }),
+    success: function(response){
+
+      $('#comunaSelect').empty();
+      $('#comunaSelect').append(new Option("", ""));
+      response.forEach(response => {
+        $('#comunaSelect').append(new Option(response.comuna, response.id))
+      })
+    }
+  })
+  
+}

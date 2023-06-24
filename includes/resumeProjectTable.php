@@ -4,7 +4,7 @@
         <table id="projectData" class="verticalTable spaced">
             <thead>
                 <tr>
-                    <th colspan="2" class="projectNameResume"></th>
+                    <th colspan="2" class="projectNameResume" id="projectNameResume"></th>
                 </tr>
             </thead>
             <tbody>

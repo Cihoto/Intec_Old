@@ -200,6 +200,87 @@ function CloseAllTabsOnProjectsAssigments(){
 }
 
 $(document).ready(function() {
+    // VALIDAR FORM AGREGAR DIRECCION
+    $('#direccionAddForm').validate({
+      rules: {
+        txtDir: {
+          required: true
+        },
+        txtNumDir: {
+          required: true
+        },
+        regionSelect: {
+          required: true
+        },
+        comunaSelect: {
+          required: true
+        }
+      },
+      messages: {
+        txtDir: {
+          required: "Debe ingresar un valor"
+        },
+        txtNumDir: {
+          required: "Debe ingresar un valor"
+        },
+        regionSelect: {
+          required: "Debe ingresar un valor"
+        },
+        comunaSelect: {
+          required: "Debe ingresar un valor"
+        }
+      },
+      submitHandler: function() {
+        
+        event.preventDefault();
+        // localStorage.clear();
+        console.log("ENVIO DE INFORMACION DE PRODUCTO NUEVO UNITARIO");
+
+        //CREAR LOCALE STORAGE TO DIRECCIONES
+        $("#direccionModal ").modal('hide');
+        //DATOS DE DIRECCION
+        let dir = $('#txtDir').val();
+        let numDir = $('#txtNumDir').val();
+        let depto = $('#txtDepto').val();
+        let region = $('#regionSelect').val();
+        let comuna = $('#comunaSelect').val();
+        let regionInput = $('#regionSelect option:selected').text();
+        let comunaInput = $('#comunaSelect option:selected').text();
+        let postal_code = $('#txtcodigo_postal').val();
+        let idDireccion = $('#idDireccionModal').text();
+
+        $('#direccionInput').val(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
+        // $('#lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
+
+        console.log($('#lugarProjectResume'));
+
+        
+
+        if(localStorage.getItem("direccion") === null){
+          localStorage.setItem("direccion", JSON.stringify([{dir,
+                                                            numDir,
+                                                            depto,
+                                                            region,
+                                                            comuna,
+                                                            regionInput,
+                                                            comunaInput,
+                                                            postal_code,
+                                                            idDireccion}]))
+        }else{
+
+          let allDirs = JSON.parse(localStorage.getItem("direccion"))
+          console.log("PRE PUSH",allDirs);
+          allDirs.push({dir,numDir,depto,region,comuna,regionInput,comunaInput,postal_code,idDireccion});
+          console.log("POST PUSH",allDirs);
+          localStorage.setItem("direccion",JSON.stringify(allDirs));
+
+        }
+
+        console.log(JSON.parse(localStorage.getItem('direccion')))
+
+        
+      }
+    })
 
     $('#projectForm').validate({
         rules: {
@@ -308,13 +389,14 @@ function ViewResume(element){
         }),
         dataType: 'json',
         success: function(response) {
-            console.table(response.asignados.vehiculos);
-            console.table(response.asignados.personal);
-            console.table(response.asignados.cliente);
-            console.table(response.asignados.productos);
-            console.table(response.asignados.viaticos);
-            console.table(response.asignados.arriendos);
-            console.table(response.asignados.totalIngresos);
+            // console.table(response.asignados.vehiculos);
+            // console.table(response.asignados.personal);
+            // console.table(response.asignados.cliente);
+            // console.table(response.asignados.productos);
+            // console.table(response.asignados.viaticos);
+            // console.table(response.asignados.arriendos);
+            // console.table(response.asignados.totalIngresos);
+            console.table(response.dataProject);
 
             response.dataProject.forEach(data => {
                
@@ -346,11 +428,21 @@ function ViewResume(element){
                     comentarios="";
                 }
 
-                $('#inputProjectName').val(data.nombre_proyecto)
+                console.log("NOMBRE PROYECTO",data.nombre_proyecto);
+                $('#inputProjectName').val(data.nombre_proyecto);
                 $('#fechaInicio').val(data.fecha_inicio)
                 $('#fechaTermino').val(data.fecha_termino)
                 $('#direccionInput').val('')
-                $('#direccionInput').val(data.direccion+' '+data.numero+' '+data.dpto+', '+data.comuna+', '+data.region)
+
+                if(data.lugarId === null){
+
+                    $('#direccionInput').val("")
+
+                }else{
+
+                    $('#direccionInput').val(data.direccion+' '+data.numero+' '+data.dpto+', '+data.comuna+', '+data.region)
+                }
+
                 $('#inputNombreCliente').val(data.nombre_cliente)
                 $('#commentProjectArea').val(data.comentarios);
                 $('#estadoProyecto').text(data.estado);
@@ -530,6 +622,7 @@ function GetResumeProjectList(){
     let arriendosProject = GetArriendosProject();
     let viaticoProject = GetProjectViaticos();
     let totalIngresos = GetTotalProject();
+    let direccion = localStorage.getItem('direccion');
 
     console.log("TOTAL INGRESOS PERVIO EVALUACION",totalIngresos);
 
@@ -543,9 +636,16 @@ function GetResumeProjectList(){
             for(let i = 0; i < dataProject.length ; i++){
                 $('.fechaProjectResume').text(`${dataProject[i].fecha_inicio} ${dataProject[i].fecha_termino}`);
                 $('.clienteProjectResume').text(`${dataProject[i].nombre_cliente}`);
-                $('.lugarProjectResume').text("");
+                $('#lugarProjectResume').text("");
                 $('.comentariosProjectResume').text(dataProject[i].comentarios);
             }
+        }else{
+            $('#projectNameResume').text($('#inputProjectName').val)
+            $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
+            $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
+            $('#lugarProjectResume').text();
+            $('#inputNombreCliente').text($('#inputNombreCliente').val())
+            $('#comentariosProjectResume').text();
         }
 
         if(personalProject !== false){
@@ -806,6 +906,32 @@ $('#changeStatusButton').on('click',function(){
   updateProject();
 
 })
+
+
+$('#inputProjectName').on('change',function(){
+    $('#projectNameResume').text($('#inputProjectName').val)
+
+})
+$('#fechaInicio').on('change',function(){
+    $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
+})
+
+$('#fechaTermino').on('change',function(){
+    $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
+})
+
+$('#direccionInput').on('change',function(){
+    $('#lugarProjectResume').text();
+})
+
+$('#inputNombreCliente').on('change',function(){
+    $('#inputNombreCliente').text($('#inputNombreCliente').val())
+})
+
+$('#commentProjectArea').on('change',function(){
+    $('#comentariosProjectResume').text();
+})
+
 </script>
 </body>
 

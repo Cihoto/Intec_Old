@@ -159,17 +159,17 @@ function getProjectResume($request)
         $queryTotalIngresos = "SELECT * FROM proyecto_has_ingresos WHERE id_proyecto = $idProject";
     }
 
-    $queryProject = "Select p.nombre_proyecto, p.fecha_inicio, p.fecha_termino,p.comentarios,
-                                    d.id as dirId, l.id as lugarId, d.direccion, d.numero,
-                                    d.dpto, d.postal_code,c.comuna,r.region, p.id, e.id as estado
-                            from proyecto p 
-                            INNER JOIN proyecto_has_estado phe on phe.proyecto_id  = p.id 
-                            INNER JOIN estado e on e.id = phe.estado_id 
-                            INNER JOIN lugar l on l.id = p.lugar_id 
-                            INNER JOIN direccion d on d.id = l.direccion_id
-                            INNER JOIN comuna c ON c.id = d.comuna_id
-                            INNER JOIN region r ON r.id = c.region_id 
-                            where p.id = $idProject";
+    $queryProject = "SELECT  p.nombre_proyecto, p.fecha_inicio, p.fecha_termino,p.comentarios,
+                        d.id as dirId, l.id as lugarId, d.direccion, d.numero,
+                        d.dpto, d.postal_code,c.comuna,r.region, p.id, e.id as estado 
+                    FROM proyecto p 
+                    INNER JOIN proyecto_has_estado phe on phe.proyecto_id  = p.id 
+                    INNER JOIN estado e on e.id = phe.estado_id 
+                    LEFT JOIN lugar l on l.id = p.lugar_id 
+                    LEFT JOIN direccion d on d.id = l.direccion_id
+                    LEFT JOIN comuna c ON c.id = d.comuna_id
+                    LEFT JOIN region r ON r.id = c.region_id
+                    WHERE p.id = $idProject";
 
     if ($responseBd = $conn->mysqli->query($queryProject)) {
         while ($dataProject = $responseBd->fetch_object()) {
@@ -280,24 +280,61 @@ function UpdateProjectData($request)
     $conn =  new bd();
     $conn->conectar();
 
-    $projectId = $request->id;
+    $idProject = $request->idProject;
+    $projectName = $request->projectName;
+    $fechaInicio = $request->fechaInicio;
+    $fechaTermino = $request->fechaTermino;
+    $comentarios = $request->comentarios;
 
-    $queryViewData = "SELECT * FROM proyecto p where p.id = $projectId";
-
-
-    $resultDatabase =  $conn->mysqli->query($queryViewData);
-
-    while ($dataProject = $resultDatabase->fetch_object()) {
-        $response[] = $dataProject;
-        // $nombreProyecto = $dataProject["nombre_proyecto"];
-        // $lugarId = $dataProject["lugar_id"];
-        // $fecha_inicio = $dataProject["fecha_inicio"];
-        // $fecha_termino = $dataProject["fecha_termino"];
-        // $comentarios = $dataProject["comentarios"];
-        // $clienteId = $dataProject["cliente_id"];
+    if($idProject === ""){
+        $$idProject = "null";
+    }else{
+        $idProject = "'".$idProject."'";
+    }
+    if($projectName === ""){
+        $$projectName = "null";
+    }else{
+        $projectName = "'".$projectName."'";
+    }
+    if($fechaInicio === ""){
+        $$fechaInicio = "null";
+    }else{
+        $fechaInicio = "'".$fechaInicio."'";
+    }
+    if($fechaTermino === ""){
+        $$fechaTermino = "null";
+    }else{
+        $fechaTermino = "'".$fechaTermino."'";
+    }
+    if($comentarios === ""){
+        $$comentarios = "null";
+    }else{
+        $comentarios = "'".$comentarios."'";
     }
 
-    return json_encode($response);
+
+    $queryUpdateProject = "UPDATE intec.proyecto
+                SET nombre_proyecto='', lugar_id=0, fecha_inicio='', 
+                fecha_termino='', comentarios='',
+                modifiedAt='',
+                WHERE id= !;";
+
+    return $queryUpdateProject;
+
+
+    // $resultDatabase =  $conn->mysqli->query($queryUpdateProject);
+
+    // while ($dataProject = $resultDatabase->fetch_object()) {
+    //     $response[] = $dataProject;
+    //     // $nombreProyecto = $dataProject["nombre_proyecto"];
+    //     // $lugarId = $dataProject["lugar_id"];
+    //     // $fecha_inicio = $dataProject["fecha_inicio"];
+    //     // $fecha_termino = $dataProject["fecha_termino"];
+    //     // $comentarios = $dataProject["comentarios"];
+    //     // $clienteId = $dataProject["cliente_id"];
+    // }
+
+    // return json_encode($response);
     // return json_encode($dataProject);
 
 

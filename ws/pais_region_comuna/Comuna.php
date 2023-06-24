@@ -2,17 +2,17 @@
 
 if ($_POST) {
     require_once('../bd/bd.php');
-
-    $action = $_POST['action'];
+    $json = file_get_contents('php://input');
+    $data = json_decode($json);
+    $action = $data->action;
 
     // Realiza la acción correspondiente según el valor de 'action'
     switch ($action) {
         case 'getComunasByRegion':
             // Recibe el parámetro jsonRequest
-            $jsonRequest = json_decode($_POST['jsonRequest']);
-            
+            $idregion = $data->idRegion;
             // Llama a la función getComunasByRegion y devuelve el resultado
-            $comunas = getComunasByRegion($jsonRequest);
+            $comunas = getComunasByRegion($idregion);
             echo json_encode($comunas);
             break;
         
@@ -25,14 +25,14 @@ if ($_POST) {
 
 }
 
-    function getComunasByRegion($jsonRequest){
+    function getComunasByRegion($idRegion){
+
         $conn = new bd();
         $conn->conectar();
-    
-        $idRegion = $jsonRequest->idRegion;
+        // $idRegion = $jsonRequest->idRegion;
         $comunas = [];
     
-        $query = 'Select c.id, c.comuna from comuna c
+        $query = 'SELECT c.id, c.comuna from comuna c
                     INNER JOIN region r on r.id = c.region_id
                     WHERE r.id ='.$idRegion;
                     

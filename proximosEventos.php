@@ -108,12 +108,11 @@ $active = 'proximosEventos';
             <div class="col-3 mt-2 mb-2">
               <button class="btn btn-success" id="submitProject">Crear Proyecto</button>
             </div>
-            <div class="col-3 mt-2 mb-2">
+            <!-- <div class="col-3 mt-2 mb-2">
               <button class="btn btn-success" id="verarray">Ver array</button>
-            </div>
+            </div> -->
           </div>
         </div>
-
       </div>
     </div>
     <?php require_once('./includes/footer.php') ?>
@@ -138,9 +137,6 @@ $active = 'proximosEventos';
   <script src="/js/ProjectResume/projectResume.js"></script>
   <script src="/js/ProjectResume/viatico.js"></script>
   <script src="/js/ProjectResume/subArriendo.js"></script>
-  
-  
-
 </body>
 
 <script>
@@ -701,38 +697,7 @@ $active = 'proximosEventos';
   $('#addCliente').on('click',function(){
         
   })
-
-
-  //FIN CIERRE DE ASIGNACIONES
-
-  //OPTIONS CHANGE DEPENDIENDO DE REGION SELECCIONADA
-  $('#regionSelect').on('blur', function() {
-    let idRegion = $(this).val();
-    $.ajax({
-      type: 'POST',
-      url: 'ws/pais_region_comuna/Comuna.php',
-      data: {
-        action: 'getComunasByRegion',
-        jsonRequest: JSON.stringify({
-          idRegion: idRegion
-        })
-      },
-      dataType: 'json',
-      success: function(response) {
-
-        var comuna = response;
-        $('#comunaSelect').empty();
-        $('#comunaSelect').append(new Option("", ""));
-        comuna.forEach(comuna => {
-          $('#comunaSelect').append(new Option(comuna.comuna, comuna.id))
-        })
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.error(textStatus, errorThrown);
-      }
-    });
-  })
-
+  
   //GATILLAR EVENTO CLICK EN BOTON SUBMIT DE FORM PARA CREACION DEL PROYECTO
   $('#submitProject').on('click', function() {
     $('#hiddenAddProject').trigger('click')

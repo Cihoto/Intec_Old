@@ -37,7 +37,7 @@
                     </div>
 
                     <label for="regionSelect">Región</label>
-                    <select class="form-select" name="regionSelect" id="regionSelect" aria-label="Default select example">
+                    <select class="form-select" onchange="GetComunas()" name="regionSelect" id="regionSelect" aria-label="Default select example">
                         <option value=""></option>
                         <?php foreach ($regiones as $region) : ?>
                             <option value="<?= $region->id ?>"><?= $region->region ?></option>

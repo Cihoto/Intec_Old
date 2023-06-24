@@ -11,6 +11,34 @@ async function updateProject() {
     let fechaTermino = $('#fechaTermino').val();
     let comentarios = $('#commentProjectArea').val()
 
+    let array = {
+
+    }
+
+
+    $.ajax({
+      type: "POST",
+      url: 'ws/proyecto/proyecto.php',
+      data: JSON.stringify({
+        action: "dropAssigmentVehicles",
+        "idProject": idProject,
+        "projectName" : projectName,
+        "fechaInicio" : fechaInicio,
+        "fechaTermino" : fechaTermino,
+        "comentarios" : comentarios
+      }),
+      dataType: 'json',
+      success: function(data) {
+        console.log("RESPONSE Updated Project VEHICLES", data);
+      },
+      error: function(response) {
+        console.log(response.responseText);
+      }
+  })
+
+    // UPDATE DATOS DE PROYECTO
+
+
     //CREAR CLIENTE PARA PROYECTO
     let nombre = $('#txtNombreCliente').val()
     let nombreCliente = $('#inputNombreClienteForm').val()
