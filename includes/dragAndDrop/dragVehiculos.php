@@ -5,8 +5,6 @@
                 <h4>Asignar Vehículo</h4>
             </div>
         </div>
-        <div style="display:none" id="loader" class="lds-facebook"><div></div><div></div><div></div></div>
-
         <div class="card-body" id="DragVehiculos">
              <div class="serachInputDrag">
                 <label for="searchInputVehiculo">Búscar Vehiculos: </label>

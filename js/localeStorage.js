@@ -22,6 +22,10 @@ function TotalCosts(valor){
     }
 }
 
+
+
+
+
 function GetTotalCosts(){
     return localStorage.getItem('totalCosts');
 }
@@ -194,14 +198,15 @@ function GetUpdateCliente(){
 
 
 function SetProjectData(nombre_proyecto,fecha_inicio,fecha_termino,nombre_cliente,comentarios){
+    localStorage.setItem("projectData", JSON.stringify({nombre_proyecto,fecha_inicio,fecha_termino,nombre_cliente,comentarios}))
 
-    if(localStorage.getItem("projectData") === null){
-        localStorage.setItem("projectData", JSON.stringify([{nombre_proyecto,fecha_inicio,fecha_termino,nombre_cliente,comentarios}]))
-      }else{
-        let allDirs = JSON.parse(localStorage.getItem("projectData"))
-        allDirs.push({nombre_proyecto,fecha_inicio,fecha_termino,nombre_cliente,comentarios});
-        localStorage.setItem("projectData",JSON.stringify(allDirs));
-    }
+    // if(localStorage.getItem("projectData") === null){
+    //   }else{
+    //     let allDirs = JSON.parse(localStorage.getItem("projectData"))
+    //     console.log(allDirs);
+    //     allDirs.push({nombre_proyecto,fecha_inicio,fecha_termino,nombre_cliente,comentarios});
+    //     localStorage.setItem("projectData",JSON.stringify(allDirs));
+    // }
 
 }
 

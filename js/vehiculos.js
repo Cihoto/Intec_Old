@@ -55,7 +55,6 @@ function GetAvailableVehicles(empresaId,fechaInicio,fechaTermino){
         }),
         success: function(response) {
           console.log("vehiculos", response);
-          $('#loader').hide();
           $('#DragVehiculos').show();
           response.forEach(vehiculo => {
 

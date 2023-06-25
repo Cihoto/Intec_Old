@@ -48,7 +48,7 @@ $active = 'dashboard';
                           <!-- fin icono -->
                           <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7  d-flex justify-content-center align-items-center">
                             <h5 class="text-muted font-semibold">
-                              Proximos Eventos
+                              Proximos Eventos AutoPush
                             </h5>
                           </div>
                         </div>

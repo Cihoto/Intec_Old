@@ -250,11 +250,10 @@ $(document).ready(function() {
         let idDireccion = $('#idDireccionModal').text();
 
         $('#direccionInput').val(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
-        // $('#lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
 
-        console.log($('#lugarProjectResume'));
+        $('#lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
 
-        
+        SetProjectData($('#inputProjectName').val(), $('#fechaInicio').val(), $('#fechaTermino').val(), $('#inputNombreCliente').val(), $('#commentProjectArea').val() );
 
         if(localStorage.getItem("direccion") === null){
           localStorage.setItem("direccion", JSON.stringify([{dir,
@@ -560,28 +559,30 @@ function ViewResume(element){
 
 $('#getAvailableVehicles').on('click',function(){
 
-    $('#loader').show();
-    $('#DragVehiculos').hide();
+    $('#DragVehiculos').show();
     $('#fechaInicio').val();
     $('#fechaTermino').val();
     let fechaInicio = $('#fechaInicio').val();
     let fechaTermino = $('#fechaTermino').val();
-    DropVehiculos()
-    GetAvailableVehicles(EMPRESA_ID,fechaInicio,fechaTermino);
-
-})
-
-$('#getAvailableVehicles').on('click',function(){
-
-    $('#loader').show();
-    $('#DragVehiculos').hide();
-    $('#fechaInicio').val();
-    $('#fechaTermino').val();
-    let fechaInicio = $('#fechaInicio').val();
-    let fechaTermino = $('#fechaTermino').val();
-    DropVehiculos()
-    GetAvailableVehicles(EMPRESA_ID,fechaInicio,fechaTermino);
-
+    DropVehiculos();
+    if(fechaInicio === "" || fechaTermino === ""){
+        Swal.fire({
+            title: '',
+            text: "Debes seleccionar el rango de fechas en las que se realizará este proyecto para poder ver los vehículos disponibles, ¿Deseas continuar y ver todos tus vehículos?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ver todos los vehículos',
+            cancelButtonText: 'Seleccionaré un rango de fechas'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                FillVehiculos(EMPRESA_ID);
+            }else{
+            }
+        })
+    }
+    if(fechaInicio !== "" && fechaTermino !== ""){
+        GetAvailableVehicles(EMPRESA_ID,fechaInicio,fechaTermino);    
+    }
 })
 
 $('#products-tab').on('click',function(){
@@ -624,7 +625,7 @@ function GetResumeProjectList(){
     let totalIngresos = GetTotalProject();
     let direccion = localStorage.getItem('direccion');
 
-    console.log("TOTAL INGRESOS PERVIO EVALUACION",totalIngresos);
+    console.log("DATOS DEL PROYECTO",dataProject);
 
     if(listed !== idProyecto){
         ClearTables();
@@ -633,19 +634,13 @@ function GetResumeProjectList(){
     if(listed !== idProyecto){
         listed = idProyecto;
         if(dataProject !== false){
-            for(let i = 0; i < dataProject.length ; i++){
-                $('.fechaProjectResume').text(`${dataProject[i].fecha_inicio} ${dataProject[i].fecha_termino}`);
-                $('.clienteProjectResume').text(`${dataProject[i].nombre_cliente}`);
-                $('#lugarProjectResume').text("");
-                $('.comentariosProjectResume').text(dataProject[i].comentarios);
-            }
-        }else{
-            $('#projectNameResume').text($('#inputProjectName').val)
-            $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
-            $('#fechaProjectResume').text( `${$('#fechaInicio').val()}  / ${$('#fechaTermino').val() }`);
-            $('#lugarProjectResume').text();
-            $('#inputNombreCliente').text($('#inputNombreCliente').val())
-            $('#comentariosProjectResume').text();
+            
+            $('#projectNameResume').text(`${dataProject.nombre_proyecto}`);
+            $('#fechaProjectResume').text(`${dataProject.fecha_inicio} ${dataProject.fecha_termino}`);
+            $('#clienteProjectResume').text(`${dataProject.nombre_cliente}`);
+            $('#lugarProjectResume').text("");
+            $('#comentariosProjectResume').text(dataProject.comentarios);
+            
         }
 
         if(personalProject !== false){
@@ -844,6 +839,10 @@ $('#clienteForm').validate({
         let direccionDatosFacturacion = $('#inputDireccionDatosFacturacion').val();
         let correoDatosFacturacion = $('#inputCorreoDatosFacturacion').val();
         $('#inputNombreCliente').val(`${nombreFantasia} | ${rut}`);
+        $('#clienteProjectResume').text(`${nombreFantasia} | ${rut}`);
+
+        SetProjectData($('#inputProjectName').val(), $('#fechaInicio').val(), $('#fechaTermino').val(), $('#inputNombreCliente').val(), $('#commentProjectArea').val());
+
         $("#clienteModal ").modal('hide');
       }
     })
@@ -908,6 +907,10 @@ $('#changeStatusButton').on('click',function(){
 })
 
 
+
+
+
+
 $('#inputProjectName').on('change',function(){
     $('#projectNameResume').text($('#inputProjectName').val)
 
@@ -929,7 +932,8 @@ $('#inputNombreCliente').on('change',function(){
 })
 
 $('#commentProjectArea').on('change',function(){
-    $('#comentariosProjectResume').text();
+
+    $('#comentariosProjectResume').text($('#commentProjectArea').val());
 })
 
 </script>
