@@ -118,17 +118,11 @@
           </a>
           <ul class="submenu">
             <li class="submenu-item">
+              <a href="proyectos.php" >Lista de Eventos</a>
+            </li>
+            <li class="submenu-item">
               <a href="proximosEventos.php">Crear Evento</a>
             </li>
-            <li class="submenu-item">
-              <a href="../proyectos.php" >Lista de Eventos</a>
-            </li>
-            <!-- <li class="submenu-item">
-              <a href="">Crear Evento</a>
-            </li>
-            <li class="submenu-item">
-              <a href="">Eventos pasados</a>
-            </li> -->
           </ul>
         </li>
 
