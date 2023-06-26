@@ -145,8 +145,7 @@ $active = 'proximosEventos';
 <script src="/js/ProjectResume/viatico.js"></script>
 <script src="/js/ProjectResume/subArriendo.js"></script>
 <script src="/js/ProjectResume/projectResume.js"></script>
-
-
+<script src="/js/Funciones/assigments.js"></script>
 <script>
 
 const EMPRESA_ID = document.getElementById('empresaId').textContent;
@@ -163,21 +162,6 @@ $('#inputNombreCliente').on('click', function() {
     $('#clienteModal').modal('show');
 })
 
-//CLOSE ALL TABS IN PROJECT ASSIGNMENTS
-function CloseAllTabsOnProjectsAssigments(){
-
-    $('#myTab .projectAssigmentTab').each((key,element)=>{
-        if($(element).hasClass('active')){
-            element.classList.remove("active")
-        }
-    })
-    $('#myTabContent .tabAssigments').each((key,element)=>{
-        if($(element).hasClass('active show')){
-            $(element).removeClass('active show');
-            $(element).addClass('fade');
-        }
-    })
-}
 
 $(document).ready(function() {
     // VALIDAR FORM AGREGAR DIRECCION
@@ -288,8 +272,17 @@ $(document).ready(function() {
             }
         },
         submitHandler: async function () {
-            event.preventDefault()
-            updateProject();
+            event.preventDefault();
+            let form = $('#projectForm').serializeArray();
+
+            let request = convertFormToJSON(form);
+
+            request["idProject"] = $('#idProjectModalResume').text();
+
+            updateProject().then(()=>{
+                UpdateProjectData(request);
+            });
+
         }
     })
 
@@ -309,6 +302,13 @@ $(document).ready(function() {
 
 })
 
+function convertFormToJSON(form) {
+  return form.reduce(function (json, { name, value}){
+      json[name] = value
+      return json;
+    }, {});
+}
+
 $('#created-tab').on('click',function(){
     FillCreated(EMPRESA_ID,1); 
 })
@@ -320,32 +320,41 @@ $('#finished-tab').on('click',function(){
 })
 
 
-
 $('#getAvailableVehicles').on('click',function(){
 
-    $('#DragVehiculos').show();
-    $('#fechaInicio').val();
-    $('#fechaTermino').val();
-    let fechaInicio = $('#fechaInicio').val();
-    let fechaTermino = $('#fechaTermino').val();
-    DropVehiculos();
-    if(fechaInicio === "" || fechaTermino === ""){
-        Swal.fire({
-            title: '',
-            text: "Debes seleccionar el rango de fechas en las que se realizará este proyecto para poder ver los vehículos disponibles, ¿Deseas continuar y ver todos tus vehículos?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ver todos los vehículos',
-            cancelButtonText: 'Seleccionaré un rango de fechas'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                FillVehiculos(EMPRESA_ID);
-            }else{
-            }
-        })
-    }
-    if(fechaInicio !== "" && fechaTermino !== ""){
-        GetAvailableVehicles(EMPRESA_ID,fechaInicio,fechaTermino);    
+    let navItem = $(this).find('.projectAssigmentTab')
+    if($(navItem).hasClass('active')){
+        $(navItem).removeClass('active')
+        $('#vehicle').removeClass('active show').addClass('fade');
+    }else{
+
+        CloseAllTabsOnProjectsAssigments();
+        $(navItem).addClass('active');
+        $('#vehicle').removeClass('fade').addClass('active show');
+        $('#DragVehiculos').show();
+        $('#fechaInicio').val();
+        $('#fechaTermino').val();
+        let fechaInicio = $('#fechaInicio').val();
+        let fechaTermino = $('#fechaTermino').val();
+        DropVehiculos();
+        if(fechaInicio === "" || fechaTermino === ""){
+            Swal.fire({
+                title: '',
+                text: "Debes seleccionar el rango de fechas en las que se realizará este proyecto para poder ver los vehículos disponibles, ¿Deseas continuar y ver todos tus vehículos?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ver todos los vehículos',
+                cancelButtonText: 'Seleccionaré un rango de fechas'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    FillVehiculos(EMPRESA_ID);
+                }else{
+                }
+            })
+        }
+        if(fechaInicio !== "" && fechaTermino !== ""){
+            GetAvailableVehicles(EMPRESA_ID,fechaInicio,fechaTermino);    
+        }
     }
 })
 
@@ -373,7 +382,17 @@ function DropDragPersonal(){
 }
 
 $('#tableResumeView').on('click',function(){
-    GetResumeProjectList();
+    let navItem = $(this).find('.projectAssigmentTab')
+    if($(navItem).hasClass('active')){
+        $(navItem).removeClass('active')
+        $('#resumen').removeClass('active show').addClass('fade');
+    }else{
+        CloseAllTabsOnProjectsAssigments();
+        $(navItem).addClass('active')
+        $('#resumen').removeClass('fade').addClass('active show');
+        GetResumeProjectList();
+    }
+    
 })
 
 function GetResumeProjectList(){
@@ -622,28 +641,72 @@ $('#verarray').on('click',function(){
 })
 
 $('#getAvailableProducts').on('click',function(){
-    if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
 
-        Swal.fire({
-            title: '',
-            text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ver todos los productos',
-            cancelButtonText: 'Seleccionaré un rango de fechas'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                FillProductosAvailable(EMPRESA_ID,"all","","");
-            }
-        })
-    }
 
-    if($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== ""){
-        FillProductosAvailable(EMPRESA_ID,"available",$('#fechaInicio').val(),$('#fechaTermino').val());
+    let navItem = $(this).find('.projectAssigmentTab')
+    if($(navItem).hasClass('active')){
+        $(navItem).removeClass('active')
+        $('#products').removeClass('active show').addClass('fade');
+    }else{
+        
+        CloseAllTabsOnProjectsAssigments();
+        $(navItem).addClass('active')
+        $('#products').removeClass('fade').addClass('active show');
+    
+        if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
+    
+            Swal.fire({
+                title: '',
+                text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ver todos los productos',
+                cancelButtonText: 'Seleccionaré un rango de fechas'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    FillProductosAvailable(EMPRESA_ID,"all","","");
+                }
+            })
+        }
+    
+        if($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== ""){
+            FillProductosAvailable(EMPRESA_ID,"available",$('#fechaInicio').val(),$('#fechaTermino').val());
+        }
+    
+    
     }
 
 })
 
+$('#getAvailablePersonal').on('click',function(){
+
+    let navItem = $(this).find('.projectAssigmentTab')
+    if($(navItem).hasClass('active')){
+        $(navItem).removeClass('active')
+        $('#personal').removeClass('active show').addClass('fade');
+    }else{
+        
+        CloseAllTabsOnProjectsAssigments();
+        $(navItem).addClass('active')
+        $('#personal').removeClass('fade').addClass('active show');
+    
+        if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
+    
+            Swal.fire({
+                title: '',
+                text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los tecnicos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ver todos los productos',
+                cancelButtonText: 'Seleccionaré un rango de fechas'
+                }).then((result) => {
+                if (result.isConfirmed){
+
+                }
+            })
+        }
+    }
+})
 
 $('#changeStatusButton').on('click',function(){
     let idProject = $('#idProjectModalResume').text();
@@ -656,7 +719,6 @@ $('#changeStatusButton').on('click',function(){
     }),
     dataType: 'json',
     success: function (data) {
-
     },
     error: function (response) {
 
@@ -665,11 +727,6 @@ $('#changeStatusButton').on('click',function(){
   updateProject();
 
 })
-
-
-
-
-
 
 $('#inputProjectName').on('change',function(){
     $('#projectNameResume').text($('#inputProjectName').val)
@@ -702,7 +759,8 @@ $(document).on('click', '.getProjectDetails', function(){
      ViewResume($(this))
 });
 
-function ViewResume(element) {
+
+function ViewResume(element){
 
 // $('#resumen').show();
 ResetClienteForm();

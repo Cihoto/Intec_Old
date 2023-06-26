@@ -280,47 +280,61 @@ function UpdateProjectData($request)
     $conn =  new bd();
     $conn->conectar();
 
+    // return $request;
+
+
     $idProject = $request->idProject;
-    $projectName = $request->projectName;
-    $fechaInicio = $request->fechaInicio;
-    $fechaTermino = $request->fechaTermino;
-    $comentarios = $request->comentarios;
+
+    if(!isset($idProject)){
+        return array("error"=>array("message"=>"No has seleccionado eventos, elige uno antes de actualizarlo"));
+    }
+
+    $projectName = $request->txtProjectName;
+    $fechaInicio = $request->dpInicio;
+    $fechaTermino = $request->dpTermino;
+    $comentarios = $request->txtAreaComments;
+    $today = date("Y-m-d");
 
     if($idProject === ""){
-        $$idProject = "null";
+        $idProject = "null";
     }else{
-        $idProject = "'".$idProject."'";
+        $idProject = $idProject;
     }
     if($projectName === ""){
-        $$projectName = "null";
+        $projectName = "null";
     }else{
         $projectName = "'".$projectName."'";
     }
-    if($fechaInicio === ""){
-        $$fechaInicio = "null";
+    if($fechaInicio === ''){
+        $fechaInicio = "null";
     }else{
         $fechaInicio = "'".$fechaInicio."'";
     }
     if($fechaTermino === ""){
-        $$fechaTermino = "null";
+        $fechaTermino = "null";
     }else{
         $fechaTermino = "'".$fechaTermino."'";
     }
     if($comentarios === ""){
-        $$comentarios = "null";
+        $comentarios = "null";
     }else{
         $comentarios = "'".$comentarios."'";
     }
 
 
     $queryUpdateProject = "UPDATE intec.proyecto
-                SET nombre_proyecto='', lugar_id=0, fecha_inicio='', 
-                fecha_termino='', comentarios='',
-                modifiedAt='',
-                WHERE id= !;";
+                SET nombre_proyecto = $projectName, fecha_inicio = $fechaInicio, 
+                fecha_termino = $fechaTermino, comentarios = $comentarios,
+                modifiedAt = '".$today."'
+                WHERE id= $idProject";
 
-    return $queryUpdateProject;
+    // return $queryUpdateProject;
 
+    if($conn->mysqli->query($queryUpdateProject)){
+        return array("success"=>array("message"=>"Evento modificado exitosamente"));
+    }else{
+        return array("error"=>array("message"=>"No se ha podido actualizar el proyecto, por favor intente nuevamente"));
+    }
 
     // $resultDatabase =  $conn->mysqli->query($queryUpdateProject);
 
