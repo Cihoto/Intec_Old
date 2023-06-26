@@ -4,8 +4,9 @@ require_once('./ws/vehiculo/Vehiculo.php');
 require_once('./ws/pais_region_comuna/Region.php');
 require_once('./ws/proyecto/Proyecto.php');
 require_once('./ws/personal/Personal.php');
-$conn = new bd();
-$conn->conectar();
+
+// $conn = new bd();
+// $conn->conectar();
 
 $isDetails = true;
 
