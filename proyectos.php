@@ -1,35 +1,17 @@
 <?php
-require_once('./ws/bd/bd.php');
-require_once('./ws/vehiculo/Vehiculo.php');
-require_once('./ws/pais_region_comuna/Region.php');
-require_once('./ws/proyecto/Proyecto.php');
-require_once('./ws/personal/Personal.php');
-
-// $conn = new bd();
-// $conn->conectar();
 
 $isDetails = true;
-
 //Variables que manipulan condiciones if en Form proyecto
 $detalle = true;
-
-//FALTA SETTEAR POR SESSION
-$empresaId = 1;
-
-//GET ARRAYS
-$vehiculos = getVehiculos($empresaId);
-$regiones = getRegiones();
-// $proyectos = getMyProjects($empresaId);
-$proyectos = [];
-$personal = getPersonal($empresaId);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
 require_once('./includes/head.php');
 $active = 'proximosEventos';
+
 ?>
 
 <body>
@@ -169,10 +151,7 @@ $active = 'proximosEventos';
 
 const EMPRESA_ID = document.getElementById('empresaId').textContent;
 let listed;
-
-
 let actualizarCliente ="";
-//ABRIR MODAL PERSONA
 
 //OPEN MODAL DIRECCION
 $('#direccionInput').on('click', function() {
@@ -277,7 +256,6 @@ $(document).ready(function() {
         }
 
         console.log(JSON.parse(localStorage.getItem('direccion')))
-
         
       }
     })
@@ -321,10 +299,9 @@ $(document).ready(function() {
 
     // Fill Clientes
     FillClientes(EMPRESA_ID);
-
     //FILL DIRECCIONES
     FillDirecciones();
-
+    
     //FILL PRODUCTOS
     // FillProductos(EMPRESA_ID);
 
