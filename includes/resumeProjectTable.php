@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Resumen de Evento</h1>
     <div class="row resumeProjectTables">
-        <table id="projectData" class="verticalTable spaced">
+        <table id="projectData" class="verticalTable spaced table-responsive">
             <thead>
                 <tr>
                     <th colspan="2" class="projectNameResume" id="projectNameResume"></th>

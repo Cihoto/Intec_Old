@@ -6,7 +6,7 @@ $conn ->conectar();
 
 //AFTER SET EMPRESAID WITH SESSION();
 $empresaId = 1;
-
+$vehiculos = [];
 $queryVehiculos = "SELECT v.id , v.patente, CONCAT(p.nombre,' ',p.apellido) as nombre  FROM vehiculo v 
                     LEFT JOIN persona p ON p.id =v.persona_id 
                     INNER JOIN empresa e on e.id  = v.empresa_id 
@@ -281,12 +281,12 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
 
 <script>
 
-    const EMPRESA_ID = $('.empresaId').text();
+const EMPRESA_ID = $('.empresaId').text();
 
 $(document).ready(function() {
-    $('#tableVehiculo').DataTable( {
-        fixedHeader: true
-    } );
+    $('#tableVehiculo').DataTable({
+        scrollX:true
+    });
 
     $('#addVehiculo').validate({
         rules:{

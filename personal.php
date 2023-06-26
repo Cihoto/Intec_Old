@@ -333,7 +333,8 @@ $active = 'personal';
         $(document).ready(function() {
 
             $('#example').DataTable({
-                fixedHeader: true
+                fixedHeader: true,
+                scrollX:true
             })
 
             $('#addPersonal').validate({
