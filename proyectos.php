@@ -131,6 +131,7 @@ $active = 'proximosEventos';
 
     <?php require_once('./includes/footerScriptsJs.php') ?>
 
+<script src="/js/Funciones/UpdateProject.js"></script>
 <script src="/js/clientes.js"></script>
 <script src="/js/direccion.js"></script>
 <script src="/js/personal.js"></script>
@@ -144,7 +145,6 @@ $active = 'proximosEventos';
 <script src="/js/ProjectResume/viatico.js"></script>
 <script src="/js/ProjectResume/subArriendo.js"></script>
 <script src="/js/ProjectResume/projectResume.js"></script>
-<script src="/js/Funciones/UpdateProject.js"></script>
 
 
 <script>
@@ -444,10 +444,6 @@ function GetResumeProjectList(){
     }
 }
 
-$(document).on('click', '.getProjectDetails', function() {
-    ViewResume($(this))
-});
-
 
 $('#clienteSelect').on('change',function(){
 
@@ -699,6 +695,18 @@ $('#commentProjectArea').on('change',function(){
 
     $('#comentariosProjectResume').text($('#commentProjectArea').val());
 })
+
+
+$(document).on('click', '.getProjectDetails', function(){
+    // console.log("THIS DE VIEW RESUME",$(this));
+     ViewResume($(this))
+});
+
+
+// $('.getProjectDetails').on('click',function(){
+//     console.log("THIS DE VIEW RESUME",this);
+//     // ViewResume($(this));
+// })
 
 </script>
 </body>
