@@ -328,7 +328,7 @@ function ViewResume(element) {
   DropDragPersonal();
 
   // CLOSE ALL NAV-LINKS IN PORJECT ASSIGMENTS
-  CloseAllTabsOnProjectsAssigments()
+  CloseAllTabsOnProjectsAssigments();
 
   // CLEAR PRODUCTS ASSIGMENTS
   DropAllSelectedProducts();

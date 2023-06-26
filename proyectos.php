@@ -137,14 +137,14 @@ $active = 'proximosEventos';
 <script src="/js/vehiculos.js"></script>
 <script src="/js/productos.js"></script>
 <script src="/js/project.js"></script>
-<script src="/js/Funciones/UpdateProject.js"></script>
 <script src="/js/Funciones/NewProject.js"></script>
 <script src="/js/localeStorage.js"></script>
 <script src="/js/valuesValidator/validator.js"></script>
 <script src="/js/ClearData/clearFunctions.js"></script>
-<script src="/js/ProjectResume/projectResume.js"></script>
 <script src="/js/ProjectResume/viatico.js"></script>
 <script src="/js/ProjectResume/subArriendo.js"></script>
+<script src="/js/ProjectResume/projectResume.js"></script>
+<script src="/js/Funciones/UpdateProject.js"></script>
 
 
 <script>
