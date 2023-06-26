@@ -142,6 +142,7 @@ if ($_POST) {
     function GetAvailableProducts(){
         $conn = new bd();
         $conn->conectar();
+        $products = [];
 
 
         $queryGetAvailable = "SELECT  p.id, 

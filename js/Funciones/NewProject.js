@@ -31,7 +31,6 @@ async function addDir(dirRequest) {
       id_direccion = data.id_direccion;
       console.log("DIRECCION", data);
 
-
     },
     error: function (response) {
 

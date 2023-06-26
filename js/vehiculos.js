@@ -90,8 +90,7 @@ function AddVehiculo(el){
 
         li.remove()
         $(el).hide();
-        $(el).closest(li).find('.addVehicle').show()
-
+        $(el).closest(li).find('.addVehicle').show();
         $('#sortable2').append(li)
         VehicleStorage(idVehiculo, patente, valor)
         AppendVehiculoToResume("add")

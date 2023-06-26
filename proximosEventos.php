@@ -101,7 +101,7 @@ $active = 'proximosEventos';
         </div>
 
 
-        <?php include_once('./includes/projectAssigments.php')?>
+        <?php include_once('./includes/projectAssigments.php') ?>
 
         <div class="card box">
           <div class="row" style="justify-content: end;">
@@ -137,29 +137,30 @@ $active = 'proximosEventos';
   <script src="/js/ProjectResume/projectResume.js"></script>
   <script src="/js/ProjectResume/viatico.js"></script>
   <script src="/js/ProjectResume/subArriendo.js"></script>
+  <script src="/js/Funciones/assigments.js"></script>
 </body>
 
 <script>
   //BOTON DE TEST
   $('#verarray').on('click', function() {
-      localStorage.clear();
-      console.log("asdjhasd,jahkdsjhasd");
+    localStorage.clear();
+    console.log("asdjhasd,jahkdsjhasd");
 
-    })
+  })
   //FIN BOTON TEST
 
-  $('#inputProjectName').on('change',function(){
-      $('.projectNameResume').text($(this).val());
+  $('#inputProjectName').on('change', function() {
+    $('.projectNameResume').text($(this).val());
   })
 
-  $('#fechaInicio').on('change',function(){
+  $('#fechaInicio').on('change', function() {
     $('.fechaProjectResume').text($(this).val())
   })
 
-  $('#fechaTermino').on('change',function(){
+  $('#fechaTermino').on('change', function() {
     $('.fechaProjectResume').text($('.fechaProjectResume').text() + '  /  ' + $(this).val())
   })
-  $('#commentProjectArea').on('change',function(){
+  $('#commentProjectArea').on('change', function() {
     $('.comentariosProjectResume').text($(this).val())
   })
 
@@ -168,17 +169,17 @@ $active = 'proximosEventos';
     const EMPRESA_ID = document.getElementById('empresaId').textContent
 
 
-    $("#sortable1, #sortable2").sortable({
-      connectWith: ".connectedSortable"
-    }).disableSelection();
+    // $("#sortable1, #sortable2").sortable({
+    //   connectWith: ".connectedSortable"
+    // }).disableSelection();
 
-    $("#sortable1, #sortable2").sortable({
-      connectWith: ".connectedSortable"
-    }).disableSelection();
+    // $("#sortable1, #sortable2").sortable({
+    //   connectWith: ".connectedSortable"
+    // }).disableSelection();
 
-    $("#sortablePersonal1, #sortablePersonal2").sortable({
-      connectWith: ".connectedSortablePersonal"
-    }).disableSelection();
+    // $("#sortablePersonal1, #sortablePersonal2").sortable({
+    //   connectWith: ".connectedSortablePersonal"
+    // }).disableSelection();
 
     $('#tableResume').DataTable({})
 
@@ -236,7 +237,7 @@ $active = 'proximosEventos';
         }
       },
       submitHandler: function() {
-        
+
         event.preventDefault();
         // localStorage.clear();
         console.log("ENVIO DE INFORMACION DE PRODUCTO NUEVO UNITARIO");
@@ -256,35 +257,47 @@ $active = 'proximosEventos';
 
         $('#direccionInput').val(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
         $('.lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
-        
 
-        if(localStorage.getItem("direccion") === null){
 
-          localStorage.setItem("direccion", JSON.stringify([{dir,
-                                                            numDir,
-                                                            depto,
-                                                            region,
-                                                            comuna,
-                                                            regionInput,
-                                                            comunaInput,
-                                                            postal_code,
-                                                            idDireccion}]))
-        }else{
+        if (localStorage.getItem("direccion") === null) {
+
+          localStorage.setItem("direccion", JSON.stringify([{
+            dir,
+            numDir,
+            depto,
+            region,
+            comuna,
+            regionInput,
+            comunaInput,
+            postal_code,
+            idDireccion
+          }]))
+        } else {
 
           let allDirs = JSON.parse(localStorage.getItem("direccion"))
-          console.log("PRE PUSH",allDirs);
-          allDirs.push({dir,numDir,depto,region,comuna,regionInput,comunaInput,postal_code,idDireccion});
-          console.log("POST PUSH",allDirs);
-          localStorage.setItem("direccion",JSON.stringify(allDirs));
+          console.log("PRE PUSH", allDirs);
+          allDirs.push({
+            dir,
+            numDir,
+            depto,
+            region,
+            comuna,
+            regionInput,
+            comunaInput,
+            postal_code,
+            idDireccion
+          });
+          console.log("POST PUSH", allDirs);
+          localStorage.setItem("direccion", JSON.stringify(allDirs));
 
         }
 
 
         console.log(JSON.parse(localStorage.getItem('direccion')))
-        
+
 
         // localStorage.setItem("direccion",JSON.stringify())
-        
+
       }
     })
 
@@ -292,67 +305,67 @@ $active = 'proximosEventos';
     // VALIDAR FORM CLIENTE Y DATOS DE FACTURACION
     $('#clienteForm').validate({
       rules: {
-        txtNombreCliente:{
-          required:true
+        txtNombreCliente: {
+          required: true
         },
-        txtApellidos:{
-          required:true
+        txtApellidos: {
+          required: true
         },
-        txtRut:{
-          required:true
+        txtRut: {
+          required: true
         },
-        txtCorreo:{
-          required:true
+        txtCorreo: {
+          required: true
         },
-        txtTelefono:{
-          required:true
+        txtTelefono: {
+          required: true
         },
-        txtRut:{
-          required:true
+        txtRut: {
+          required: true
         },
-        txtRazonSocial:{
-          required:true
+        txtRazonSocial: {
+          required: true
         },
-        txtNombreFantasia:{
-          required:true
+        txtNombreFantasia: {
+          required: true
         },
-        txtDireccionDatosFacturacion:{
-          required:true
+        txtDireccionDatosFacturacion: {
+          required: true
         },
-        txtCorreoDatosFacturacion:{
-          required:true
+        txtCorreoDatosFacturacion: {
+          required: true
         }
       },
       messages: {
-        txtNombreCliente:{
-          required : "Ingrese un valor"
+        txtNombreCliente: {
+          required: "Ingrese un valor"
         },
-        txtApellidos:{
-          required : "Ingrese un valor"
+        txtApellidos: {
+          required: "Ingrese un valor"
         },
-        txtRut:{
-          required : "Ingrese un valor"
+        txtRut: {
+          required: "Ingrese un valor"
         },
-        txtCorreo:{
-          required : "Ingrese un valor"
+        txtCorreo: {
+          required: "Ingrese un valor"
         },
-        txtTelefono:{
-          required : "Ingrese un valor"
+        txtTelefono: {
+          required: "Ingrese un valor"
         },
-        txtRut:{
-          required : "Ingrese un valor"
+        txtRut: {
+          required: "Ingrese un valor"
         },
-        txtRazonSocial:{
-          required : "Ingrese un valor"
+        txtRazonSocial: {
+          required: "Ingrese un valor"
         },
-        txtNombreFantasia:{
-          required : "Ingrese un valor"
+        txtNombreFantasia: {
+          required: "Ingrese un valor"
         },
-        txtDireccionDatosFacturacion:{
-          required : "Ingrese un valor"
+        txtDireccionDatosFacturacion: {
+          required: "Ingrese un valor"
         },
-        txtCorreoDatosFacturacion:{
-          required : "Ingrese un valor"
+        txtCorreoDatosFacturacion: {
+          required: "Ingrese un valor"
         }
       },
       submitHandler: function() {
@@ -435,24 +448,24 @@ $active = 'proximosEventos';
         let idClienteReq = $('#clienteSelect').val();
         console.log("idCliente", idClienteReq);
 
-        if(idClienteReq === "" || idClienteReq === null || idClienteReq === undefined){
-          idClienteReq = "" 
+        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {
+          idClienteReq = ""
         }
 
 
-        let requestCliente ={
-          empresaId : EMPRESA_ID,
-          nombreCliente :nombreCliente,
-          apellidos :apellidos,
-          rutCliente :rutCliente,
-          correoCliente :correoCliente,
-          telefono :telefono,
-          rut :rut,
-          razonSocial :razonSocial,
-          nombreFantasia :nombreFantasia,
-          direccionDatosFacturacion :direccionDatosFacturacion,
-          correoDatosFacturacion :correoDatosFacturacion,
-          idCliente : idClienteReq === "" ?  "" : parseInt(idClienteReq)
+        let requestCliente = {
+          empresaId: EMPRESA_ID,
+          nombreCliente: nombreCliente,
+          apellidos: apellidos,
+          rutCliente: rutCliente,
+          correoCliente: correoCliente,
+          telefono: telefono,
+          rut: rut,
+          razonSocial: razonSocial,
+          nombreFantasia: nombreFantasia,
+          direccionDatosFacturacion: direccionDatosFacturacion,
+          correoDatosFacturacion: correoDatosFacturacion,
+          idCliente: idClienteReq === "" ? "" : parseInt(idClienteReq)
         }
 
         console.table(requestCliente);
@@ -504,7 +517,7 @@ $active = 'proximosEventos';
           let direccion = $('#direccionInput').val();
           let nombreCliente = $('#inputNombreCliente').val();
         }
-        
+
         //REQUEST LUGAR
         if ($('#inputNombreCliente').val() === "") {
           idCliente = "";
@@ -553,8 +566,8 @@ $active = 'proximosEventos';
           let valor = $(this).find('.personalPrice').val()
           arrayPersonal.push({
             idPersonal: vClass,
-            cost :valor
-            
+            cost: valor
+
           })
         })
         const requestPersonal = arrayPersonal.map(vId => {
@@ -578,63 +591,67 @@ $active = 'proximosEventos';
           })
         })
 
-        console.log("requestPersonal",requestPersonal);
+        console.log("requestPersonal", requestPersonal);
 
         const responseAssignPersonal = await Promise.all([assignvehicleToProject(requestVehicle), assignPersonal(requestPersonal), assignProduct(arrayProducts)])
         response = responseAssignPersonal
-        
+
         let arrayViaticos = $('#projectViatico > tbody tr .tbodyHeader');
-        if(arrayViaticos.length > 0){
-          $('#projectViatico > tbody tr .tbodyHeader').each((key,el)=>{
-              SetViatico(idProject,$(el).closest('tr').find('.totalViaticoInput').val() ,$(el).closest('tr').find('.inputViaticoName').val());
+        if (arrayViaticos.length > 0) {
+          $('#projectViatico > tbody tr .tbodyHeader').each((key, el) => {
+            SetViatico(idProject, $(el).closest('tr').find('.totalViaticoInput').val(), $(el).closest('tr').find('.inputViaticoName').val());
           })
-          
+
           let arrayViaticosRequest = GetProjectViaticos();
-          console.table("arrayViaticosRequest",arrayViaticosRequest);
-          if(arrayViaticosRequest !== false){
-               $.ajax({
-                type: "POST",
-                url: 'ws/personal/Personal.php',
-                data: JSON.stringify({
-                  action: 'setviatico', request: arrayViaticosRequest}),
-                dataType: 'json',
-                success: function (data) {
+          console.table("arrayViaticosRequest", arrayViaticosRequest);
+          if (arrayViaticosRequest !== false) {
+            $.ajax({
+              type: "POST",
+              url: 'ws/personal/Personal.php',
+              data: JSON.stringify({
+                action: 'setviatico',
+                request: arrayViaticosRequest
+              }),
+              dataType: 'json',
+              success: function(data) {
 
-                  console.log("RESPONSE AGIGNACION VIATICOS", data);
+                console.log("RESPONSE AGIGNACION VIATICOS", data);
 
-                },
-                error: function (response) {
-                  console.log(response.responseText);
-                }
-              })
+              },
+              error: function(response) {
+                console.log(response.responseText);
+              }
+            })
           }
         }
-        
+
 
         let arrayArriendos = $('#projectSubArriendos > tbody tr .tbodyHeader');
-        if(arrayArriendos.length > 0){
-          $('#projectSubArriendos > tbody tr .tbodyHeader').each((key,el)=>{
-            SetArriendosProject(idProject,$(el).closest('tr').find('.inputSubValue').val(),$(el).closest('tr').find('.inputSubDetalle').val() );
+        if (arrayArriendos.length > 0) {
+          $('#projectSubArriendos > tbody tr .tbodyHeader').each((key, el) => {
+            SetArriendosProject(idProject, $(el).closest('tr').find('.inputSubValue').val(), $(el).closest('tr').find('.inputSubDetalle').val());
           })
 
           let arriendosRequest = GetArriendosProject();
-          console.log("REQUEST DE ARRIENDOS",arriendosRequest);
-          if(arriendosRequest !== false){
-               $.ajax({
-                type: "POST",
-                url: 'ws/personal/Personal.php',
-                data: JSON.stringify({
-                  action: 'setArriendos', request: arriendosRequest}),
-                dataType: 'json',
-                success: function (data) {
+          console.log("REQUEST DE ARRIENDOS", arriendosRequest);
+          if (arriendosRequest !== false) {
+            $.ajax({
+              type: "POST",
+              url: 'ws/personal/Personal.php',
+              data: JSON.stringify({
+                action: 'setArriendos',
+                request: arriendosRequest
+              }),
+              dataType: 'json',
+              success: function(data) {
 
-                  console.log("ARRIENDOS", data);
+                console.log("ARRIENDOS", data);
 
-                },
-                error: function (response) {
-                  console.log(response.responseText);
-                }
-              })
+              },
+              error: function(response) {
+                console.log(response.responseText);
+              }
+            })
           }
         }
 
@@ -642,23 +659,25 @@ $active = 'proximosEventos';
 
         let totalIngresos = parseInt(ClpUnformatter($('#totalIngresos').text()));
 
-        if(totalIngresos === "" || totalIngresos === undefined || totalIngresos === null || totalIngresos === "$NaN"){
+        if (totalIngresos === "" || totalIngresos === undefined || totalIngresos === null || totalIngresos === "$NaN") {
           totalIngresos = 0
         }
         console.log("---------------------------------");
         console.log(`totalProject ${totalIngresos}`);
         console.log("---------------------------------");
         let request = [{
-          idProject:idProject,
-          valor:totalIngresos
+          idProject: idProject,
+          valor: totalIngresos
         }];
         $.ajax({
           type: "POST",
           url: 'ws/personal/Personal.php',
           data: JSON.stringify({
-            action: 'SetTotalProject', request: request}),
+            action: 'SetTotalProject',
+            request: request
+          }),
           dataType: 'json',
-          success: function (data) {
+          success: function(data) {
 
             console.log("LOG", data);
 
@@ -668,12 +687,12 @@ $active = 'proximosEventos';
               title: 'El proyecto ha sido creado exitosamente',
               showConfirmButton: false,
               timer: 1500
-            }).then(()=>{
+            }).then(() => {
               // window.location = "proyectos.php"
             })
 
           },
-          error: function (response) {
+          error: function(response) {
             console.log(response.responseText);
           }
         })
@@ -681,7 +700,7 @@ $active = 'proximosEventos';
       }
     })
   })
-  
+
   //OPEN MODAL DIRECCION
   $('#direccionInput').on('click', function() {
     $('#direccionModal').modal('show');
@@ -693,15 +712,130 @@ $active = 'proximosEventos';
 
 
   // GUARDAR CLIENTE EN INPUT CLIENTE
+  $('#addCliente').on('click', function() {
 
-  $('#addCliente').on('click',function(){
-        
   })
-  
+
   //GATILLAR EVENTO CLICK EN BOTON SUBMIT DE FORM PARA CREACION DEL PROYECTO
   $('#submitProject').on('click', function() {
     $('#hiddenAddProject').trigger('click')
   })
+
+
+  $('#tableResumeView').on('click', function() {
+    let navItem = $(this).find('.projectAssigmentTab')
+    if ($(navItem).hasClass('active')) {
+      $(navItem).removeClass('active')
+      $('#resumen').removeClass('active show').addClass('fade');
+    } else {
+      CloseAllTabsOnProjectsAssigments();
+      $(navItem).addClass('active')
+      $('#resumen').removeClass('fade').addClass('active show');
+    }
+  })
+
+
+
+$('#getAvailableVehicles').on('click', function() {
+
+  let navItem = $(this).find('.projectAssigmentTab')
+  if ($(navItem).hasClass('active')) {
+    $(navItem).removeClass('active')
+    $('#vehicle').removeClass('active show').addClass('fade');
+  } else {
+
+    CloseAllTabsOnProjectsAssigments();
+    $(navItem).addClass('active');
+    $('#vehicle').removeClass('fade').addClass('active show');
+    $('#DragVehiculos').show();
+    $('#fechaInicio').val();
+    $('#fechaTermino').val();
+    let fechaInicio = $('#fechaInicio').val();
+    let fechaTermino = $('#fechaTermino').val();
+    if (fechaInicio === "" || fechaTermino === "") {
+      Swal.fire({
+        title: '',
+        text: "Debes seleccionar el rango de fechas en las que se realizará este proyecto para poder ver los vehículos disponibles, ¿Deseas continuar y ver todos tus vehículos?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ver todos los vehículos',
+        cancelButtonText: 'Seleccionaré un rango de fechas'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          FillVehiculos(EMPRESA_ID);
+        } else {}
+      })
+    }
+    if (fechaInicio !== "" && fechaTermino !== "") {
+      GetAvailableVehicles(EMPRESA_ID, fechaInicio, fechaTermino);
+    }
+  }
+})
+
+$('#getAvailableProducts').on('click',function(){
+
+
+let navItem = $(this).find('.projectAssigmentTab')
+if($(navItem).hasClass('active')){
+    $(navItem).removeClass('active')
+    $('#products').removeClass('active show').addClass('fade');
+}else{
+    
+  CloseAllTabsOnProjectsAssigments();
+  $(navItem).addClass('active')
+  $('#products').removeClass('fade').addClass('active show');
+
+  if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
+
+    Swal.fire({
+      title: '',
+      text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ver todos los productos',
+      cancelButtonText: 'Seleccionaré un rango de fechas'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        FillProductosAvailable(EMPRESA_ID,"all","","");
+      }
+    })
+  }
+
+  if($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== ""){
+    FillProductosAvailable(EMPRESA_ID,"available",$('#fechaInicio').val(),$('#fechaTermino').val());
+  }
+}
+
+})
+
+$('#getAvailablePersonal').on('click',function(){
+
+let navItem = $(this).find('.projectAssigmentTab')
+if($(navItem).hasClass('active')){
+    $(navItem).removeClass('active')
+    $('#personal').removeClass('active show').addClass('fade');
+}else{
+    
+  CloseAllTabsOnProjectsAssigments();
+  $(navItem).addClass('active')
+  $('#personal').removeClass('fade').addClass('active show');
+
+  if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
+
+    Swal.fire({
+        title: '',
+        text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los tecnicos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ver todos los productos',
+        cancelButtonText: 'Seleccionaré un rango de fechas'
+        }).then((result) => {
+        if (result.isConfirmed) {
+        }
+    })
+  }
+}
+})
 </script>
 
 </html>

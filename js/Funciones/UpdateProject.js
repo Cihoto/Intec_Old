@@ -193,10 +193,6 @@ async function updateProject() {
     const responseAssignProductos = await Promise.all([assignProduct(arrayProducts)])
     response = responseAssignProductos
   }
-  $('#proyectosModal').modal('hide');
-
-
-
 
 
   let arrayViaticos = $('#projectViatico > tbody tr .tbodyHeader');
@@ -230,13 +226,18 @@ async function updateProject() {
 
   let arrayArriendos = $('#projectSubArriendos > tbody tr .tbodyHeader');
   if (arrayArriendos.length > 0) {
+
     $('#projectSubArriendos > tbody tr .tbodyHeader').each((key, el) => {
+
       SetArriendosProject(idProject, $(el).closest('tr').find('.inputSubValue').val(), $(el).closest('tr').find('.inputSubDetalle').val());
+
     })
 
     let arriendosRequest = GetArriendosProject();
-    console.log("REQUEST DE ARRIENDOS", arriendosRequest);
+    // console.log("REQUEST DE ARRIENDOS", arriendosRequest);
+
     if (arriendosRequest !== false) {
+
       $.ajax({
         type: "POST",
         url: 'ws/personal/Personal.php',
@@ -250,20 +251,18 @@ async function updateProject() {
 
         },
         error: function (response) {
+
           console.log(response.responseText);
+
         }
       })
     }
   }
 
   let totalIngresos = parseInt(ClpUnformatter($('#totalIngresos').text()));
-
   if (totalIngresos === "" || totalIngresos === undefined || totalIngresos === null || totalIngresos === "$NaN") {
     totalIngresos = 0
   }
-  console.log("---------------------------------");
-  console.log(`totalProject ${totalIngresos}`);
-  console.log("---------------------------------");
   let request = [{
     idProject: idProject,
     valor: totalIngresos
@@ -276,33 +275,24 @@ async function updateProject() {
     }),
     dataType: 'json',
     success: function (data) {
-
-      console.log("LOG", data);
-
       Swal.fire({
         position: 'bottom-end',
         icon: 'success',
-        title: 'El proyecto ha sido creado exitosamente',
+        title: 'Asignaciones actualizadas exitosamente',
         showConfirmButton: false,
         timer: 1500
       }).then(() => {
-        // window.location = "proyectos.php"
+        // CLOSE MODAL PROYECTOS
       })
-
     },
     error: function (response) {
       console.log(response.responseText);
     }
-  })
-
-
+  });
 }
 
-
-
-function UpdateProjectData(request) {
-
-  console.log(request);
+function UpdateProjectData(request){
+  // console.log(request);
   $.ajax({
     type: "POST",
     url: "ws/proyecto/proyecto.php",
@@ -311,7 +301,50 @@ function UpdateProjectData(request) {
       "action": "UpdateProjectData",
       "request": request
     }),
-    success: function (response) {
+    success: function (response){
+
+      if(response.error){
+        Swal.fire({
+          icon : "error",
+          title : "Ups!",
+          text : response.error.message,
+          timer : 2000,
+          position : "bottom-end"
+        })
+      }
+
+      if(response.success){
+        Swal.fire({
+          icon : "success",
+          title : "Excelente!",
+          text : response.success.message,
+          timer : 2000,
+          position : "bottom-end"
+        }).then(()=>{
+
+          let estado = $('#estadoProyecto').text();
+          if(estado === '1'){
+
+            $('#created-tab').trigger('click');
+
+          }
+
+          if(estado === '2'){
+
+            $('#confirmed-tab').trigger('click');
+
+          }
+
+          if(estado === '1'){
+
+            $('#finished-tab').trigger('click');
+
+          }
+
+          $('#proyectosModal').modal('hide');
+
+        })
+      }
       console.log(response)
     }
   })
