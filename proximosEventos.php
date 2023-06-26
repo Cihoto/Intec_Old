@@ -165,8 +165,9 @@ $active = 'proximosEventos';
   })
 
 
+  const EMPRESA_ID = document.getElementById('empresaId').textContent
+  console.log(EMPRESA_ID);
   $(document).ready(function() {
-    const EMPRESA_ID = document.getElementById('empresaId').textContent
 
 
     // $("#sortable1, #sortable2").sortable({
@@ -737,7 +738,6 @@ $active = 'proximosEventos';
 
 
 $('#getAvailableVehicles').on('click', function() {
-
   let navItem = $(this).find('.projectAssigmentTab')
   if ($(navItem).hasClass('active')) {
     $(navItem).removeClass('active')
@@ -823,16 +823,20 @@ if($(navItem).hasClass('active')){
   if($('#fechaInicio').val() === "" || $('#fechaTermino').val() === ""){
 
     Swal.fire({
-        title: '',
-        text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los tecnicos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ver todos los productos',
-        cancelButtonText: 'Seleccionaré un rango de fechas'
-        }).then((result) => {
-        if (result.isConfirmed) {
-        }
+      title: '',
+      text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los técnicos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ver todos los técnicos',
+      cancelButtonText: 'Seleccionaré un rango de fechas'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        FillPersonal(EMPRESA_ID);
+      }
     })
+  }
+  if($('#fechaInicio').val() !== "" || $('#fechaTermino').val() !== ""){
+    FillAvailablepersonal(EMPRESA_ID,$('#fechaInicio').val(),$('#fechaTermino').val());
   }
 }
 })

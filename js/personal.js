@@ -41,6 +41,41 @@ function FillPersonal(empresaId) {
         }
     })
 }
+function FillAvailablepersonal(empresaId,fechaInicio,fechaTermino){
+    $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        dataType: 'json',
+        data: JSON.stringify({
+            "action": "getAvailablePersonal",
+            request:{
+                "empresaId": empresaId,
+                "fechaInicio":fechaInicio,
+                "fechaTermino":fechaTermino
+            }
+            
+        }),
+        success: function (response) {
+            console.table(response);
+            // response.forEach(personal => {
+
+            //     if(personal.neto ==="" || personal.neto === null || personal.neto === undefined){
+            //         personal.neto = 0;
+            //     }
+            //     let li = `<li style="display:flex; justify-content:space-between;" class="${personal.id}">
+            //             ${personal.nombre} | ${personal.cargo} ${personal.especialidad}                             
+            //             <p class="tipoContrato" style="display:none">${personal.contrato}</p>
+            //             <div class="personalPricing" style="display:flex;align-content: center;">
+            //                 <input type="number" name="price" class="personalPrice" value="${personal.neto}" placeholder="Costo"/>
+            //                 <i onclick="AddPersonal(this)"class="fa-solid fa-plus addPersonal"></i>
+            //                 <i onclick="removePersonal(this)" class="fa-solid fa-minus removePersonal" style="display:none; color: #b92413;"></i>
+            //             </div>
+            //         </li>`;
+            //     $('#sortablePersonal1').append(li)
+            // });
+        }
+    })
+}
 
 function AddPersonal(el){
 

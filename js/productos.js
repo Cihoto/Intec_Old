@@ -1,4 +1,10 @@
 function FillProductos(empresaId) {
+  if ($.fn.DataTable.isDataTable('#tableProducts')){
+    $('#tableProducts').DataTable().destroy();
+    $('#tableDrop > tr').each((key, element) => {
+      $(element).remove();
+    })
+  }
   $.ajax({
     type: "POST",
     url: "ws/productos/Producto.php",
@@ -20,7 +26,10 @@ function FillProductos(empresaId) {
         $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`)
       });
 
-      $('#tableProducts').DataTable({})
+      $('#tableProducts').DataTable({
+        scrollX:true,
+        fixedHeader: true
+      })
     }
   })
 }
@@ -251,7 +260,11 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
           $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
         })
       }
-      $('#tableProducts').DataTable({})
+      $('#tableProducts').DataTable({
+        scrollX:true,
+        fixedHeader: true,
+        responsive: true
+      })
     }, error: function (response) {
       console.log(response);
     }

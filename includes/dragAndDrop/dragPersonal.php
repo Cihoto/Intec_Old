@@ -11,12 +11,12 @@
                 <input type="text" name="" oninput="searchPersonalDrag()" id="searchInputPersonal">
             </div>
             <div class="row">
-                <div class="col-6 ">
+                <div class="col-md-6 col-12 mb-4 ">
                     <ul id="sortablePersonal1" class="connectedSortablePersonal" style="min-height: 150px;">
                         
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                     <ul id="sortablePersonal2" class="connectedSortablePersonal" style="min-height: 150px;">
 
                     </ul>

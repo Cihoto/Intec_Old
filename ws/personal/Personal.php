@@ -46,6 +46,13 @@ if ($_POST) {
             $response = SetTotalProject($request);
             echo json_encode($response);
             break;
+        case 'getAvailablePersonal':
+            // Recibe el parámetro request
+            $request = $data->request;
+            // Llama a la función getAvailablePersonal y devuelve el resultado
+            $response = getAvailablePersonal($request);
+            echo json_encode($response);
+            break;
         case 'dropAssigmentPersonal':
             // Recibe el parámetro request
             $idProject = $data->idProject;
@@ -162,6 +169,43 @@ function SetTotalProject($request){
         $conn->mysqli->query($queryInsertTotal);
 
     }
+}
+
+function getAvailablePersonal($request)
+{
+    $conn = new bd();
+    $conn->conectar();
+    $personal = [];
+
+    $empresaId = $request->empresaId;
+    $fechaInicio = $request->fechaInicio;
+    $fechaTermino = $request->fechaTermino;
+
+    $queryPersonal = "SELECT  p.id, p.cargo_id, CONCAT(per.nombre ,' ',per.apellido) as nombre,
+                            c.cargo, e.especialidad, p.neto, tc.contrato
+                            FROM personal p
+                        INNER JOIN persona per on per.id = p.persona_id 
+                        INNER JOIN cargo c on c.id  = p.cargo_id 
+                        INNER JOIN especialidad e on e.id  = p.especialidad_id 
+                        INNER JOIN empresa emp on emp.id = p.empresa_id 
+                        INNER JOIN tipo_contrato tc on tc.id = p.tipo_contrato_id 
+                        LEFT JOIN  personal_has_proyecto php  on php.personal_id  = per.id
+                        LEFT JOIN proyecto pro on p.id = php.proyecto_id
+                        LEFT JOIN proyecto_has_estado phe on phe.proyecto_id = pro.id
+                        where pro.id IS NULL or phe.estado_id != 2
+                        or '".$fechaInicio."' < pro.fecha_inicio and '".$fechaTermino."' < pro.fecha_inicio 
+                        or '".$fechaInicio."' > pro.fecha_termino and '".$fechaTermino."' > pro.fecha_termino
+                        and p.empresa_id = $empresaId";
+
+
+
+    if ($responseBdVehiculos = $conn->mysqli->query($queryPersonal)) {
+        while ($dataVehiculos = $responseBdVehiculos->fetch_object()) {
+            $personal[] = $dataVehiculos;
+        }
+    }
+    $conn->desconectar();
+    return $personal;
 }
 
 
