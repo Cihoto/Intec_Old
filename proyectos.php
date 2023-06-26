@@ -736,7 +736,7 @@ let projectRequest = {
 
 $.ajax({
   type: "POST",
-  url: 'ws/proyecto/Proyecto.php',
+  url: 'ws/proyecto/proyecto.php',
   data: JSON.stringify({
     request: {
       projectRequest
