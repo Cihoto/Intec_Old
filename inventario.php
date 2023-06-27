@@ -395,7 +395,11 @@ $active = 'inventario';
             })
 
         }else{
-            console.log("INGRESE UN VALOR");
+            Swal.fire({
+                'icon':'error',
+                'title': 'Ups!',
+                'text': 'Ingrese al menos una categoría'
+            })
         }
     }
     function AddItem(){

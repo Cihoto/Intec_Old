@@ -73,9 +73,8 @@ function AddCategorias($request){
     }
 
     return $arrayIdsInserted;
-
-  
 }
+
 ?>
 
 
