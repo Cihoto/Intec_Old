@@ -149,15 +149,19 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-light-secondary"
-                                data-bs-dismiss="modal"
-                            >
-                                <i class="bx bx-x d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Close</span>
-                            </button>
-                            <input type="submit" value="Agregar" class="btn btn-info">
+                            <div class="row justify-content-center">
+                                <div class="col-6">
+                                    <button type="button"
+                                            class="btn btn-light-secondary"
+                                            data-bs-dismiss="modal"
+                                    >
+                                    Cerrar
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <input type="submit" value="Agregar" class=" btn btn-info">
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -240,8 +244,10 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="modalClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success" id="saveExcelData">Guardar</button>
+                    <div class="row">
+                        <button type="button" id="modalClose" class="col-md-3 col-12 btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-success col-md-4 col-12" id="saveExcelData">Guardar</button>
+                    </div>
                 </div>
                 </div>
             </div>

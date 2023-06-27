@@ -53,6 +53,36 @@ if ($_POST) {
             $response = getAvailablePersonal($request);
             echo json_encode($response);
             break;
+        case 'AddEspecialidad':
+            // Recibe el parámetro request
+            $request = $data->request;
+            $empresaId = $data->empresaId;
+            // Llama a la función AddEspecialidad y devuelve el resultado
+            $response = AddEspecialidad($request,$empresaId);
+            echo json_encode($response);
+            break;
+        case 'AddCargo':
+            // Recibe el parámetro request
+            $request = $data->request;
+            $empresaId = $data->empresaId;
+            // Llama a la función AddCargo y devuelve el resultado
+            $response = AddCargo($request,$empresaId);
+            echo json_encode($response);
+            break;
+        case 'getEspecialidad':
+            // Recibe el parámetro request
+            $empresaId = $data->empresaId;
+            // Llama a la función getEspecialidad y devuelve el resultado
+            $response = getEspecialidad($empresaId);
+            echo json_encode($response);
+            break;
+        case 'getCargo':
+            // Recibe el parámetro request
+            $empresaId = $data->empresaId;
+            // Llama a la función getCargo y devuelve el resultado
+            $response = getCargo($empresaId);
+            echo json_encode($response);
+            break;
         case 'dropAssigmentPersonal':
             // Recibe el parámetro request
             $idProject = $data->idProject;
@@ -209,8 +239,78 @@ function getAvailablePersonal($request)
 }
 
 
+function AddEspecialidad($request,$empresaId){
 
+    $conn =  new bd();
+    $conn->conectar();
+    $arrayIdsInserted = [];
+    $today = date('Y-m-d');
 
+    // return count($request->arrayCategorias);
+    for($i = 0 ; $i < count($request->arrayCargos); $i++){
+
+        $queryInsertCargo = "INSERT INTO intec.especialidad
+        (especialidad, createAt, IsDelete, empresa_id)
+        VALUES('".trim($request->arrayCargos[$i])."', '".$today."', 0, $empresaId);";
+
+        if($conn->mysqli->query($queryInsertCargo)){
+            array_push($arrayIdsInserted,$conn->mysqli->insert_id);
+        }
+    }
+
+    // return $queryInsertCargo;
+    return $arrayIdsInserted;
+}
+function AddCargo($request,$empresaId){
+
+    $conn =  new bd();
+    $conn->conectar();
+    $arrayIdsInserted = [];
+    $today = date('Y-m-d');
+
+    // return count($request->arrayCategorias);
+    for($i = 0 ; $i < count($request->arrayCargos); $i++){
+        
+        $queryInsertCargo = "INSERT INTO intec.cargo (cargo,empresa_id)
+        VALUES('".trim($request->arrayCargos[$i])."', $empresaId)";
+
+        if($conn->mysqli->query($queryInsertCargo)){
+            array_push($arrayIdsInserted,$conn->mysqli->insert_id);
+        }
+    }
+
+    // return $queryInsertCargo;
+    return $arrayIdsInserted;
+}
+
+function getEspecialidad($empresaId){
+
+    $conn = new bd();
+    $conn->conectar();
+    $especialidades = [];
+    $queryGetEspecialidad = "SELECT id, especialidad FROM especialidad e WHERE empresa_id = $empresaId";
+    $responseBd = $conn->mysqli->query($queryGetEspecialidad);
+
+    while($dataEspecialidad = $responseBd->fetch_object()){
+        $especialidades[] = $dataEspecialidad;
+    }
+
+    return array("especialidades"=>$especialidades);
+}
+function getCargo($empresaId){
+
+    $conn = new bd();
+    $conn->conectar();
+    $cargos = [];
+    $queryGetCargo = "SELECT id, cargo FROM cargo  WHERE empresa_id = $empresaId";
+    $responseBd = $conn->mysqli->query($queryGetCargo);
+
+    while($datosCargo = $responseBd->fetch_object()){
+        $cargos[] = $datosCargo;
+    }
+
+    return array("cargos"=>$cargos);
+}
 
 function getPersonal($empresaId)
 {
@@ -291,6 +391,9 @@ function dropAssigmentPersonal($idProject){
 
     return $conn->mysqli->affected_rows;
 }
+
+
+
 
 
 

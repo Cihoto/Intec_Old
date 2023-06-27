@@ -1,5 +1,5 @@
 <!-- MODAL CATEGORIA ITEM -->
-<div class="modal fade modal-xl" id="modalCatItemAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade modal-xl" id="cargoEspecialidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,12 +14,12 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="categoria-tab" data-bs-toggle="tab" href="#categoria" role="tab" aria-controls="categoria" aria-selected="true">
-                                Asignar categoría
+                                Crear cargo
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="vehicle-tab" data-bs-toggle="tab" href="#vehicle" role="tab" aria-controls="vehicle" aria-selected="false">
-                                Asignar ítem
+                                Crear Especialidad
                             </a>
                         </li>
                     </ul>
@@ -28,16 +28,16 @@
                             <form id="addCategoria">
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="CatName">Nombre de la categoría</label>
-                                        <input type="text" name="CatName" class="form-control" id="CatName">
+                                        <label for="CargoName">Nombre del cargo</label>
+                                        <input type="text" name="CargoName" class="form-control" id="CargoName">
                                     </div>
-                                    <p>Para poder agregar multiples categorías separe los nombres por una coma</p>
-                                    <p>Ejemplo : categoría 1 , categoría 2, categoría 3</p>
+                                    <p>Para poder agregar multiples cargos separe los nombres por una coma</p>
+                                    <p>Ejemplo : Cargo 1 , Cargo 2, Cargo 3</p>
                                 </div>
                             </form>
                             <div class="modal-footer">
                                 <div class="row">
-                                    <input type="button" class="btn btn-success" onclick="AddCategoria()" id="btnConfirmCategoria" value="Agregar">
+                                    <input type="button" class="btn btn-success" id="btnConfirmCargo" value="Agregar">
                                 </div>
                             </div>
                         </div>
@@ -45,16 +45,16 @@
                             <form id="addItem">
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="ItemName">Nombre del Item</label>
-                                        <input type="text" name="ItemName" class="form-control" id="ItemName">
+                                        <label for="especialidadName">Nombre de la Especialidad</label>
+                                        <input type="text" name="especialidadName" class="form-control" id="especialidadName">
                                     </div>
                                     <p>Para poder agregar multiples items separe los nombres por una coma</p>
-                                    <p>Ejemplo : Item 1 , Item 2, Item 3</p>
+                                    <p>Ejemplo : Especialidad 1 , Especialidad 2, Especialidad 3</p>
                                 </div>
                             </form>
                             <div class="modal-footer">
                                 <div class="row">
-                                    <input type="button" class="btn btn-success" onclick="AddItem()" id="btnConfirmItem" value="Agregar">
+                                    <input type="button" class="btn btn-success" id="btnConfirmEspecialidad" value="Agregar">
                                 </div>
                             </div>
                             </form>

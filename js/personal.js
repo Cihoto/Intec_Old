@@ -207,3 +207,121 @@ function AppendPersonalTableResumeArray(arrayPersonal) {
 }
 
 
+function AddEspecialidad(empresaId){
+    let string = $('#especialidadName').val()
+    if(string !== ""){
+
+        const arrayCargos  = string.split(",")
+        $.ajax({
+            type: "POST",
+            url: "ws/personal/Personal.php",
+            data: JSON.stringify({
+                action: "AddEspecialidad",
+                request: {arrayCargos},
+                "empresaId":empresaId
+            }),
+            dataType: 'json',
+            success: async function(data) {
+                Swal.fire({
+                    'icon':'success',
+                    'title': 'Excelente!',
+                    'text': 'Datos ingresados con exito',
+                    'timer': 1500
+                }).then(()=>{
+                    $('#especialidadName').val("");
+                    $('#cargoEspecialidad').modal('hide');
+
+                })
+            }
+        })
+
+    }else{
+        Swal.fire({
+            'icon':'error',
+            'title': 'Ups!',
+            'text': 'Ingrese al menos una especialidad'
+        })
+    }
+}
+function AddCargo(empresaId){
+    let string = $('#CargoName').val()
+    if(string !== ""){
+
+        const arrayCargos  = string.split(",")
+        $.ajax({
+            type: "POST",
+            url: "ws/personal/Personal.php",
+            data: JSON.stringify({
+                action: "AddCargo",
+                request: {arrayCargos},
+                "empresaId":empresaId
+            }),
+            dataType: 'json',
+            success: async function(data) {
+                Swal.fire({
+                    'icon':'success',
+                    'title': 'Excelente!',
+                    'text': 'Datos ingresados con exito',
+                    'timer': 1500
+                }).then(()=>{
+                    $('#CargoName').val("");
+                    $('#cargoEspecialidad').modal('hide');
+
+                })
+            }
+        })
+
+    }else{
+        Swal.fire({
+            'icon':'error',
+            'title': 'Ups!',
+            'text': 'Ingrese al menos un cargo'
+        })
+    }
+}
+
+
+function GetEspecialidad(empresaId){
+
+    $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        data: JSON.stringify({
+            action: "getEspecialidad",
+            "empresaId":empresaId
+        }),
+        dataType: 'json',
+        success: async function(data) {
+            console.log(data);
+            $('#especialidad_select').empty();
+            $('#especialidad_select').append(new Option("", ""));
+            data.especialidades.forEach(esp => {
+              $('#especialidad_select').append(new Option(`${esp.especialidad}`, esp.id))
+            })
+        }
+    })
+
+}
+function GetCargo(empresaId){
+
+    $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        data: JSON.stringify({
+            action: "getCargo",
+            "empresaId":empresaId
+        }),
+        dataType: 'json',
+        success: async function(data) {
+            console.log(data);
+            $('#cargo_select').empty();
+            $('#cargo_select').append(new Option("", ""));
+            data.cargos.forEach(car => {
+              $('#cargo_select').append(new Option(`${car.cargo}`, car.id))
+            })
+        }
+    })
+
+}
+
+

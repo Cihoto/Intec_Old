@@ -249,7 +249,8 @@ function addVehicle($vehicleData, $empresaId)
                 $idPersonal = $value->id;
                 
             } else {
-                array_push($returnErrArray, array("nombre" => $nombre, "patente" => $patente));
+                $idPersonal = "null";
+                // array_push($returnErrArray, array("nombre" => $nombre, "patente" => $patente));
             }
 
         }else{
@@ -258,7 +259,7 @@ function addVehicle($vehicleData, $empresaId)
         $query = "INSERT INTO intec.vehiculo
         (patente, IsDelete, empresa_id, persona_id)
         VALUES('".$patente."', 0, $empresaId, $idPersonal)";
-        
+
         $conn->mysqli->query($query);
     }
 

@@ -4,7 +4,6 @@ $conn = new bd();
 $conn->conectar();
 $arregloPersonal = [];
 
-
 $queryPersonal = 'SELECT p.id , per.nombre , per.apellido ,e.especialidad ,c.cargo, tc.contrato,per.rut FROM personal p 
                 INNER JOIN cargo c on c.id  = p.cargo_id 
                 INNER JOIN especialidad e on e.id  = p.especialidad_id 
@@ -27,11 +26,11 @@ while ($dataPersonal = $responseDbPersonal->fetch_object()) {
 }
 
 //BUILD DATA CARGOS
-$responseDbCargos = $conn->mysqli->query($queryCargos);
+// $responseDbCargos = $conn->mysqli->query($queryCargos);
 
-while ($dataCargos = $responseDbCargos->fetch_object()) {
-    $cargos[] = $dataCargos;
-}
+// while ($dataCargos = $responseDbCargos->fetch_object()) {
+//     $cargos[] = $dataCargos;
+// }
 
 //BUILD DATA ESPECIALIDAD
 $responseDbEspecialidad = $conn->mysqli->query($queryEsepcialidad);
@@ -66,6 +65,7 @@ $active = 'personal';
 
         <div id="main">
             <header class="mb-3">
+                <?php include_once('./includes/Constantes/empresaId.php');?>
                 <a href="#" class="burger-btn d-block d-xl-none">
                     <i class="bi bi-justify fs-3"></i>
                 </a>
@@ -73,10 +73,10 @@ $active = 'personal';
 
             <div class="page-header">
                 <h3>Personal</h3>
-                <div class="row">
+                <div class="row justify-content-center">
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#xlarge">
+                            <button type="button" id="btnPersonalUnitario" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#xlarge">
                                 Agregar personal
                             </button>
                             <button class="btn mt-2" onclick="ExportToExcel('xlsx')">
@@ -86,14 +86,22 @@ $active = 'personal';
                     </div>
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#xlarge">
+                            <button type="button" disabled class="btn btn-success" data-bs-toggle="modal" data-bs-target="#xlarge">
                                 Agregar personal masivo
                             </button>
                             <input class="form-control form-control-sm" id="excel_input" type="file" />
                         </div>
                     </div>
+                    <div class="col-8 col-lg-3 col-sm-4">
+                        <div class="card">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#cargoEspecialidad">
+                                Agregar Especialidades y cargos
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <?php include_once('./includes/Modal/cargoEspecialidad.php')?>
 
             <!-- modal agregar personal -->
             <div class="modal fade text-left w-100" id="xlarge" tabindex="-1" role="dialog" aria-hidden="true">
@@ -148,11 +156,6 @@ $active = 'personal';
                                         <div class="form-group">
                                             <select name="cargo_select" id="cargo_select" class="form-select">
                                                 <option value=""></option>
-                                                <?php
-                                                foreach ($cargos as $key => $value) :
-                                                ?>
-                                                    <option value="<?= $value->cargo ?>"><?= $value->cargo ?></option>
-                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -161,11 +164,6 @@ $active = 'personal';
                                         <div class="form-group">
                                             <select name="especialidad_select" id="especialidad_select" class="form-select">
                                                 <option value=""></option>
-                                                <?php
-                                                foreach ($especialidades as $key => $value) :
-                                                ?>
-                                                    <option value="<?= $value->especialidad ?>"><?= $value->especialidad ?></option>
-                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -327,15 +325,36 @@ $active = 'personal';
 
     <!-- Validate.js -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
-
+    <!-- FUNCTIONS (JS AJAX WITH PHP) PERSONAL MANAGEMENT  -->
+    <script src="/js/personal.js"></script>
 
     <script>
+        const EMPRESA_ID = $('#empresaId').text();
+        
+        $('#btnConfirmEspecialidad').on('click',function(){
+            AddEspecialidad(EMPRESA_ID);
+        });
+        $('#btnConfirmCargo').on('click',function(){
+            AddCargo(EMPRESA_ID);
+        });
+        $('#btnPersonalUnitario').on('click',function(){
+            // FILL ESPECIALIDAD
+            GetEspecialidad(EMPRESA_ID);  
+            // FILL CARGOS
+            GetCargo(EMPRESA_ID);
+        });
+
+
         $(document).ready(function() {
+
 
             $('#example').DataTable({
                 fixedHeader: true,
                 scrollX:true
             })
+
+            
+
 
             $('#addPersonal').validate({
                 rules: {
