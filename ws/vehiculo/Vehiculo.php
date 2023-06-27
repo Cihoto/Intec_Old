@@ -70,9 +70,10 @@ if ($_POST) {
         case 'addVehicle':
             // Recibe el parámetro vehicleData
             $vehicleData = $data->vehicleData;
+            $empresaId = $data->empresaId;
             
             // Llama a la función addVehicle y devuelve el resultado
-            $response = addVehicle($vehicleData);
+            $response = addVehicle($vehicleData,$empresaId);
             echo $response;
             break;
         
@@ -226,33 +227,39 @@ function deleteVehicle($arrayIdVehicles)
     return $arrayResponse;
 }
 
-function addVehicle($vehicleData)
+function addVehicle($vehicleData, $empresaId)
 {
     $conn = new bd();
     $conn->conectar();
-     
-    // return json_encode($vehicleArray); 
+    // return json_encode($vehicleData);
     $returnErrArray = [];
-    foreach ($vehicleData as $key => $value) {
+    foreach ($vehicleData->arrayRequest as $value) {
         
-        $patente = $key['patente'];
-        $nombre = $key['nombre'];
-        $empresaId = $key['empresaId'];
-        $query = 'select p.id from personal p 
-                where CONCAT(LOWER(p.nombre)," ",LOWER(p.apellido))="' . trim(strtolower(($nombre))) . '" LIMIT 1';
-        $queryNombre = $conn->mysqli->query($query);
+        $patente = $value->patente;
+        $nombre = $value->nombre;
 
-        if ($queryNombre->num_rows > 0) {
+        if($nombre !== ""){  
+            
+            $query = 'select p.id from personal p 
+                    where CONCAT(LOWER(p.nombre)," ",LOWER(p.apellido))="'.trim(strtolower(($nombre))).'" LIMIT 1';
 
-            $value = $queryNombre->fetch_object();
-            $idPersonal = $value->id;
-            $query = "INSERT INTO intec.vehiculo
-                        (patente, IsDelete, empresa_id)
-                        VALUES('".$patente."', 0, $empresaId)";
-            $conn->mysqli->query($query);
-        } else {
-            array_push($returnErrArray, array("nombre" => $nombre, "patente" => $patente));
+            $responseBd = $conn->mysqli->query($query);
+            if ($responseBd->num_rows > 0) {
+                $value = $responseBd->fetch_object();
+                $idPersonal = $value->id;
+                
+            } else {
+                array_push($returnErrArray, array("nombre" => $nombre, "patente" => $patente));
+            }
+
+        }else{
+            $idPersonal = "null";
         }
+        $query = "INSERT INTO intec.vehiculo
+        (patente, IsDelete, empresa_id, persona_id)
+        VALUES('".$patente."', 0, $empresaId, $idPersonal)";
+        
+        $conn->mysqli->query($query);
     }
 
     if (count($returnErrArray) > 0) {
