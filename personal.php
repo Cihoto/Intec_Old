@@ -4,40 +4,25 @@ $conn = new bd();
 $conn->conectar();
 $arregloPersonal = [];
 
-$queryPersonal = 'SELECT p.id , per.nombre , per.apellido ,e.especialidad ,c.cargo, tc.contrato,per.rut FROM personal p 
-                INNER JOIN cargo c on c.id  = p.cargo_id 
-                INNER JOIN especialidad e on e.id  = p.especialidad_id 
-                INNER JOIN persona per on per.id = p.persona_id 
-                LEFT JOIN usuario u on u.id  = p.usuario_id 
-                INNER JOIN tipo_contrato tc on tc.id  = p.tipo_contrato_id 
-                INNER JOIN empresa emp on emp.id = p.empresa_id 
-                where emp.id = 1
-                AND p.IsDelete = 0';
+// $queryPersonal = 'SELECT p.id , per.nombre , per.apellido ,e.especialidad ,c.cargo, tc.contrato,per.rut FROM personal p 
+//                 INNER JOIN cargo c on c.id  = p.cargo_id 
+//                 INNER JOIN especialidad e on e.id  = p.especialidad_id 
+//                 INNER JOIN persona per on per.id = p.persona_id 
+//                 LEFT JOIN usuario u on u.id  = p.usuario_id 
+//                 INNER JOIN tipo_contrato tc on tc.id  = p.tipo_contrato_id 
+//                 INNER JOIN empresa emp on emp.id = p.empresa_id 
+//                 where emp.id = 1
+//                 AND p.IsDelete = 0';
 
-$queryCargos = 'select cargo from cargo c';
-$queryEsepcialidad = 'SELECT especialidad from especialidad e';
+
 $queryContrato = 'select contrato FROM tipo_contrato tc';
 
-//BUILD DATA PERSONAL
-$responseDbPersonal = $conn->mysqli->query($queryPersonal);
+// //BUILD DATA PERSONAL
+// $responseDbPersonal = $conn->mysqli->query($queryPersonal);
 
-while ($dataPersonal = $responseDbPersonal->fetch_object()) {
-    $arregloPersonal[] = $dataPersonal;
-}
-
-//BUILD DATA CARGOS
-// $responseDbCargos = $conn->mysqli->query($queryCargos);
-
-// while ($dataCargos = $responseDbCargos->fetch_object()) {
-//     $cargos[] = $dataCargos;
+// while ($dataPersonal = $responseDbPersonal->fetch_object()) {
+//     $arregloPersonal[] = $dataPersonal;
 // }
-
-//BUILD DATA ESPECIALIDAD
-$responseDbEspecialidad = $conn->mysqli->query($queryEsepcialidad);
-
-while ($dataEspecialidad = $responseDbEspecialidad->fetch_object()) {
-    $especialidades[] = $dataEspecialidad;
-}
 
 //BUILD TIPO CONTRATO DATA
 $responseDbTipoContrato = $conn->mysqli->query($queryContrato);
@@ -172,11 +157,6 @@ $active = 'personal';
                                         <div class="form-group">
                                             <select name="contrato_Select" id="contrato_Select" class="form-select">
                                                 <option value=""></option>
-                                                <?php
-                                                foreach ($contratos as $key => $value) :
-                                                ?>
-                                                    <option value="<?= $value->contrato ?>"><?= $value->contrato ?></option>
-                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -214,7 +194,7 @@ $active = 'personal';
                             <div class="card">
                                 <div class="card-body px-4 py-4">
 
-                                    <table class="table" id="example" class="display" style="width:100%">
+                                    <table class="table" id="AllPersonalTable" class="display" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; display:none">id</th>
@@ -231,27 +211,6 @@ $active = 'personal';
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-
-
-                                            foreach ($arregloPersonal as $dato) {
-                                                echo '<tr>';
-
-                                                echo '<td class="id" align="center" style ="display:none">' . $dato->id . '</td>';
-                                                echo '<td class="nombre" align="center">' . $dato->nombre . '</td>';
-                                                echo '<td class="apellido" align="center">' . $dato->apellido . '</td>';
-                                                echo '<td align="center">' . $dato->rut . '</td>';
-                                                echo '<td align="center">Email</td>';
-                                                echo '<td align="center">Telefono</td>';
-                                                echo '<td align="center">' . $dato->cargo . '</td>';
-                                                echo '<td align="center">' . $dato->especialidad . '</td>';
-                                                echo '<td align="center">' . $dato->contrato . '</td>';
-                                                echo '<td align="center"><input type="radio"></td>';
-                                                echo '<td align="center"><i class="fa-solid fa-trash deletePersonal"></i><i style="left-margin:5px" class="fa-solid fa-pencil"></i></td>';
-                                                echo '</tr>';
-                                            }
-
-                                            ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -276,6 +235,8 @@ $active = 'personal';
                     </div>
                 </div>
             </div>
+
+
 
             <!-- Modal agregar personal masiva -->
             <div class="modal fade" id="masivaPersonalCreation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -344,18 +305,78 @@ $active = 'personal';
             GetCargo(EMPRESA_ID);
         });
 
+        function FillPersonalAllData(empresaId){
+
+            $.ajax({
+                type: "POST",
+                url: "ws/personal/Personal.php",
+                data: JSON.stringify({
+                    'action':'getAllPersonalData',
+                    'empresaId':EMPRESA_ID
+                }),
+                dataType: 'json',
+                success: function(data){
+
+                    if($('#AllPersonalTable tbody tr').length > 0){
+                        $('#AllPersonalTable').empty();
+                    }
+                    if($.fn.DataTable.isDataTable( '#AllPersonalTable' )){
+                        $('#AllPersonalTable').DataTable().destroy();
+                    }
+                    data.forEach(per => {
+                        console.log("dentro del foreach");
+                        let newTr = `<td class="id" align="center" style ="display:none"> ${per.id}</td>
+                                    <td class="nombre" align="center"> ${per.nombre} </td>
+                                    <td class="apellido" align="center"> ${per.apellido} </td>
+                                    <td align="center">${per.rut} </td>
+                                    <td align="center">${per.email}</td>
+                                    <td align="center">${per.telefono}</td>
+                                    <td align="center">${per.cargo}</td>
+                                    <td align="center">${per.especialidad}</td>
+                                    <td align="center">${per.contrato}</td>
+                                    <td align="center"><input type="radio"></td>
+                                    <td align="center"><i class="fa-solid fa-trash deletePersonal"></i><i style="left-margin:5px" class="fa-solid fa-pencil"></i></td>`
+                        $('#AllPersonalTable').append(`<tr>${newTr}</tr>`);
+                    });
+                    $('#AllPersonalTable').DataTable({
+                        fixedHeader: true,
+                        scrollX:true
+                    })
+                },
+                error: function(data) {
+                    console.log(data.responseText);
+                }
+            })
+        }
+
+        function GetContratos(){
+            
+        }
+
 
         $(document).ready(function() {
 
+            FillPersonalAllData(EMPRESA_ID);
+            $.ajax({
+                type: "POST",
+                url: "ws/personal/Personal.php",
+                data:JSON.stringify({action:"getAllContratos"}),
+                dataType: 'json',
+                success: function(data){
+                    // console.table(data);
+                    console.log(data);
+                    $('#contrato_Select').empty();
+                    $('#contrato_Select').append(new Option("", ""));
+                        data.forEach(con => {
+                        $('#contrato_Select').append(new Option(`${con.contrato}`, con.id))
+                    })
 
-            $('#example').DataTable({
-                fixedHeader: true,
-                scrollX:true
+                },
+                error: function(data) {
+                    console.log(data.responseText);
+                }
             })
-
-            
-
-
+            // GetContratos();
             $('#addPersonal').validate({
                 rules: {
                     nombres: {
@@ -429,8 +450,8 @@ $active = 'personal';
                     let especialidad = $('#especialidad_select').val();
                     let contrato = $('#contrato_Select').val();
                     let cargo = $('#cargo_select').val();
-                    let correoPersonal = $('#inputTelefonoPersonal').val();
-                    let telefonoPersonal = $('#correoPersonalAddUnitario').val();
+                    let correoPersonal = $('#correoPersonalAddUnitario').val();
+                    let telefonoPersonal = $('#inputTelefonoPersonal').val();
                     let neto = $('#neto').val();
 
                     let arrayRequest = [{
@@ -441,27 +462,49 @@ $active = 'personal';
                         "correo": correoPersonal,
                         "cargo": cargo,
                         "especialidad": especialidad,
-                        "contrato": contrato,
+                        "idContrato": contrato,
                         "neto": neto
                     }]
-
+                    console.log(arrayRequest);
                     $.ajax({
                         type: "POST",
-                        url: "ws/personal/addpersonal.php",
-                        data: JSON.stringify(arrayRequest),
+                        url: "ws/personal/Personal.php",
+                        data: JSON.stringify({
+                            'action': 'AddPersonal',
+                            'request': arrayRequest,
+                            'empresaId':EMPRESA_ID
+                        }),
                         dataType: 'json',
                         success: function(data) {
-                            console.log(data);
+                            console.log("RESPONSE ADD PERSONAL UNITARIO",data);
+
+                            if(data.success){
+                                Swal.fire({
+                                    'icon':'success',
+                                    'title':"Listo",
+                                    'text':data.success.message,
+                                    'timer': 2500
+                                })
+                            }
+                            if(data.error){
+                                Swal.fire({
+                                    'icon':'error',
+                                    'title':"Ups!",
+                                    'text':data.error.message,
+                                    'timer': 2500
+                                })
+                            }
                         },
                         error: function(data) {
                             console.log(data.responseText);
                         }
+                    }).then(()=>{
+                        $('#xlarge').modal('hide');
+                        FillPersonalAllData(empresaId)
                     })
                 }
             })
         });
-
-
 
         const dataArrayIndex = ['nombres', 'apellidos', 'rut', 'telefono', 'correo', 'cargo', 'especialidad', 'contrato']
         const dataArray = {
@@ -526,6 +569,14 @@ $active = 'personal';
                     'maxlength': 50,
                     'notNull': false
                 }
+                // ,
+                // {
+                //     'name': 'neto',
+                //     'type': 'string',
+                //     'minlength': 1,
+                //     'maxlength': 50,
+                //     'notNull': false
+                // }
             ]
         }
 
@@ -683,14 +734,14 @@ $active = 'personal';
                 console.log("requestArray", arrayRequest);
                 $.ajax({
                     type: "POST",
-                    url: "ws/personal/addpersonal.php",
-                    data: JSON.stringify(arrayRequest),
+                    url: "ws/personal/Personal.php",
+                    data: JSON.stringify({action:"addPersonalMasiva",request:arrayRequest}),
                     dataType: 'json',
-                    success: async function(data) {
+                    success: function(data) {
                         console.log(data);
                     },
                     error: function(data) {
-                        console.log(data.responseText);
+                        console.log(data);
                     }
                 })
 
