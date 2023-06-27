@@ -45,6 +45,7 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
     $active = 'vehiculos';
 ?>
   <body>
+    <?php include_once('./includes/Constantes/empresaId.php')?>
 
   <p style="display: none;" class="empresaId"> <?=$empresaId?></p>
     <script src="./assets/js/initTheme.js"></script>
@@ -118,48 +119,34 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
                             class="close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
-                        >
-                            <i data-feather="x"></i>
+                        > 
                         </button>
+                        <p style="align-self: start;">* (campo obligatorio)</p>
+                        <i data-feather="x"></i>
                     </div>
                     <form id="addVehiculo">
                         <div class="modal-body">
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td>
-                                        <label>Patente:</label>
-                                        <div class="form-group">
-                                            <input
-                                            name="patente"
-                                            id="patente"
-                                            type="text"
-                                            placeholder="Patente"
-                                            class="form-control"
-                                            />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label>Dueño:</label>
-                                        <div class="form-group">
-                                        <select name="asignacion_Select" id="asignacion_Select">
+                            <div class="row ">
+                                <div class="col-12 col-md-6">
+                                    <label for="patente">Patente: *</label>
+                                    <input
+                                        name="patente"
+                                        id="patente"
+                                        type="text"
+                                        placeholder="Patente *"
+                                        class="form-control"
+                                    />
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="asignacion_Select">Dueño:</label>
+                                    <select name="asignacion_Select" 
+                                            class="form-control" 
+                                            id="asignacion_Select">
                                         <option value=""></option>
-                                        </select>
-                                        </div>
-                                    </td>
-                                    <!-- <td>
-                                        <label>Kilometraje:</label>
-                                        <div class="form-group">
-                                            <input
-                                            name="rut"
-                                            type="text"
-                                            placeholder="numero"
-                                            class="form-control"
-                                        />
-                                        </div>
-                                    </td> -->
-                                </tr>
-                            </table>
-                            
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button
@@ -281,7 +268,7 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
 
 <script>
 
-const EMPRESA_ID = $('.empresaId').text();
+const EMPRESA_ID = $('#empresaId').text();
 
 $(document).ready(function() {
     $('#tableVehiculo').DataTable({
@@ -292,15 +279,9 @@ $(document).ready(function() {
         rules:{
             patente:{
                 required:true
-            },
-            asignacion_Select:{
-                required:true
             }
         },messages:{
             patente:{
-                required: "Ingrese un valor"
-            },
-            asignacion_Select:{
                 required: "Ingrese un valor"
             }
         },submitHandler:function(){
@@ -317,9 +298,10 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "ws/vehiculo/Vehiculo.php",
-                data:JSON.stringify({action:"addVehicle",vehicleData:{arrayRequest}}),
+                data:JSON.stringify({action:"addVehicle",vehicleData:{arrayRequest},'empresaId':EMPRESA_ID}),
                 dataType: 'json',
                 success: function(data){
+                    console.log(data);
 
                     if(data.status === 1){
                         Swal.fire({
@@ -330,25 +312,27 @@ $(document).ready(function() {
                     }
                     if(data.status === 0){
 
-                        let arrayErr = data.array;
-                        let htmlSwal = ""
-                        arrayErr.forEach(el => {
-                            htmlSwal += `<tr><td>${el.patente}</td><td>${el.nombre}</td></tr>`
-                        });
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Ups',
-                            html:  `<p>Estos nombres no pueden ser asignados a un vehiculo </p>
-                                    <table class="table">
-                                        <thead>
-                                            <th>Patente</th>
-                                            <th>Nombre</th>
-                                        </thead>
-                                        <tbody>
-                                            ${htmlSwal}
-                                        </tbody>
-                                    </table>`
-                        })
+
+
+                        // let arrayErr = data.array;
+                        // let htmlSwal = ""
+                        // arrayErr.forEach(el => {
+                        //     htmlSwal += `<tr><td>${el.patente}</td><td>${el.nombre}</td></tr>`
+                        // });
+                        // Swal.fire({
+                        //     icon: 'error',
+                        //     title: 'Ups',
+                        //     html:  `<p>Estos nombres no pueden ser asignados a un vehiculo </p>
+                        //             <table class="table">
+                        //                 <thead>
+                        //                     <th>Patente</th>
+                        //                     <th>Nombre</th>
+                        //                 </thead>
+                        //                 <tbody>
+                        //                     ${htmlSwal}
+                        //                 </tbody>
+                        //             </table>`
+                        // })
                     }
                 },error: function(data) {
                     console.log(data.responseText);
@@ -535,8 +519,13 @@ $('#saveExcelData').on('click',function(){
             data:JSON.stringify(arrayRequest),
             dataType: 'json',
             success: function(data){
-
-                console.log(data);
+                
+                Swal.fire({
+                        icon: 'info',
+                        title: 'Excelente',
+                        position : 'bottom-end',
+                        text: data.data
+                    })
 
                 if(data.status === 1){
                     Swal.fire({
