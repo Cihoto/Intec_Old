@@ -41,6 +41,7 @@ function FillPersonal(empresaId) {
         }
     })
 }
+
 function FillAvailablepersonal(empresaId,fechaInicio,fechaTermino){
     $.ajax({
         type: "POST",

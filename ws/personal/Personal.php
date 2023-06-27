@@ -46,6 +46,14 @@ if ($_POST) {
             $response = SetTotalProject($request);
             echo json_encode($response);
             break;
+        case 'AddPersonal':
+            // Recibe el parámetro request
+            $request = $data->request;
+            $empresaId = $data->empresaId;
+            // Llama a la función SetTotalProject y devuelve el resultado
+            $response = AddPersonal($request,$empresaId);
+            echo json_encode($response);
+            break;
         case 'getAvailablePersonal':
             // Recibe el parámetro request
             $request = $data->request;
@@ -83,6 +91,20 @@ if ($_POST) {
             $response = getCargo($empresaId);
             echo json_encode($response);
             break;
+        case 'getAllPersonalData':
+            // Recibe el parámetro request
+            $empresaId = $data->empresaId;
+            // Llama a la función getAllPersonalData y devuelve el resultado
+            $response = getAllPersonalData($empresaId);
+            echo json_encode($response);
+            break;
+        case 'getAllContratos':
+            // Llama a la función getAllContratos y devuelve el resultado
+            $response = getAllContratos();
+            // $response = "123123123123123123";
+            
+            echo json_encode($response);
+            break;
         case 'dropAssigmentPersonal':
             // Recibe el parámetro request
             $idProject = $data->idProject;
@@ -91,13 +113,56 @@ if ($_POST) {
             $response = dropAssigmentPersonal($idProject);
             echo json_encode($response);
             break;
-
+        case 'addPersonalMasiva':
+            // Recibe el parámetro request
+            $request = $data->request;
+            // Llama a la función dropAssigmentPersonal =>
+            // devuelve los ids eliminados de las asignaciones
+            $response = addPersonalMasiva($request);
+            echo json_encode($response);
+            break;
         default:
             echo 'Invalid action.';
             break;
     }
 } else {
     require_once('./ws/bd/bd.php');
+}
+
+function AddPersonal($request,$empresaId){
+    $conn = new bd();
+    $conn->conectar();
+    $today= date('Y-d-m');
+
+    foreach($request as $req){
+        $nombre = $req->nombre;
+        $apellido = $req->apellido;
+        $rut = $req->rut;
+        $correo = $req->correo;
+        $telefono = $req->telefono;
+        $neto = $req->neto;
+        $especialidad = $req->especialidad;
+        $idContrato = $req->idContrato;
+        $cargo = $req->cargo;
+    }
+
+    $queryPersona = "INSERT INTO intec.persona
+    (nombre, apellido, rut, telefono, email)
+    VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$telefono."', '".$correo."')";
+
+    $conn->mysqli->query($queryPersona);
+    $idPersona = $conn->mysqli->insert_id;
+
+    $queryInsert = "INSERT INTO intec.personal
+    (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
+    VALUES(".$idPersona.",".$cargo.",".$especialidad.",".$idContrato.",'".$today."', 0, $empresaId, $neto)";
+
+
+    if($conn->mysqli->query($queryInsert)){
+        return array("success"=>array("message"=>"Se ha ingresado a ".$nombre." ".$apellido." al sistema"));
+    }else{
+        return array("error"=>array("message"=>"No se ha podido ingresar a ".$nombre." ".$apellido." al sistema"));
+    }
 }
 
 function setviatico($request){
@@ -335,6 +400,29 @@ function getPersonal($empresaId)
     $conn->desconectar();
     return $personal;
 }
+function getAllPersonalData($empresaId)
+{
+    $conn = new bd();
+    $conn->conectar();
+    $personal =  [];
+    $queryPersonal = "SELECT  p.id, p.cargo_id, per.nombre, per.apellido, per.rut,per.email,c.cargo ,e.especialidad,
+                        c.cargo, e.especialidad, p.neto, tc.contrato, per.telefono
+                    FROM personal p
+                    INNER JOIN persona per on per.id = p.persona_id 
+                    INNER JOIN cargo c on c.id  = p.cargo_id 
+                    INNER JOIN especialidad e on e.id  = p.especialidad_id 
+                    INNER JOIN empresa emp on emp.id = p.empresa_id 
+                    INNER JOIN tipo_contrato tc on tc.id = p.tipo_contrato_id 
+                    where emp.id = $empresaId";
+
+    if ($responseBd = $conn->mysqli->query($queryPersonal)) {
+        while ($dataPersonal = $responseBd->fetch_object()) {
+            $personal[] = $dataPersonal;
+        }
+    }
+    $conn->desconectar();
+    return $personal;
+}
 
 function addPersonalToProject($request)
 {
@@ -388,8 +476,79 @@ function dropAssigmentPersonal($idProject){
         $qdelete = "DELETE FROM personal_has_proyecto WHERE proyecto_id =$idProject";
         $conn->mysqli->query($qdelete);
     }
+    $deleted = $conn->mysqli->affected_rows;
+    $conn->desconectar();
+    return $deleted;
+}
 
-    return $conn->mysqli->affected_rows;
+function getAllContratos(){
+    $conn = new bd();
+    $conn->conectar();
+    $contratos = [];
+    $queryAllContratos = "SELECT * FROM tipo_contrato tc";
+    
+    if($responseBd = $conn->mysqli->query($queryAllContratos)){
+        while($dataContratos = $responseBd->fetch_object()){
+            $contratos [] = $dataContratos;
+        }
+    }
+    $conn->desconectar();
+    return $contratos;
+}
+
+function addPersonalMasiva($request){
+    $conn =  new bd();
+    $conn->conectar();
+    return 1;
+    $today = date('Y-m-d');
+    // $arr
+
+    // foreach ($request as  $value){
+
+    //     $nombre = $value ->nombre;
+    //     $apellido = $value ->apellido;
+    //     $rut = $value ->rut;
+    //     $telefono = $value->telefono;
+    //     $correo = $value->correo;
+    //     $cargo = $value ->cargo;
+    //     $especialidad = $value ->especialidad;
+    //     $contrato = $value ->contrato;
+    //     $neto = 15000;
+    //     // $neto = $value->neto;
+    //     $idPersona = 0;
+        
+    //     $queryPersona = "INSERT INTO intec.persona
+    //                     (nombre, apellido, rut, email, telefono)
+    //                     VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$correo."', '$telefono')";
+
+    //     $resposenBdPersona = $conn->mysqli->query($queryPersona);
+    //     $idPersona = $conn->mysqli->insert_id;
+
+    //     $queryCargo = $conn->mysqli->query('select id from cargo where cargo = "'.$cargo.'"'); 
+    //     $value = $queryCargo->fetch_object();
+    //     // $idCargo = $value->id;
+    //     return 'select id from cargo where cargo = "'.$cargo.'"';
+
+    //     $especialidadq = $conn->mysqli->query('select id from especialidad where especialidad ="' .$especialidad.'"'); 
+    //     $value = $especialidadq->fetch_object();
+    //     // $idEspecialidad = $value->id;
+
+    //     $contratoq = $conn->mysqli->query('select id from tipo_contrato where contrato = "'.$contrato.'"'); 
+    //     $value = $contratoq->fetch_object();
+    //     // $idContrato = $value->id;
+        
+    //     // $query = "INSERT INTO intec.personal
+    //     //         (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
+    //     //         VALUES(".$idPersona.",".$idCargo.",".$idEspecialidad.",".$idContrato.",'".$today."', 0, 1, $neto)";
+       
+    //     // if($conn->mysqli->query($query)){
+    //     //     return array("Success"=>"123321");
+    //     // }else{
+
+    //     // }
+
+    // }
+
 }
 
 
