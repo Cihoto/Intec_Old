@@ -116,9 +116,10 @@ if ($_POST) {
         case 'addPersonalMasiva':
             // Recibe el parámetro request
             $request = $data->request;
+            $empresaId = $data->empresaId;
             // Llama a la función dropAssigmentPersonal =>
             // devuelve los ids eliminados de las asignaciones
-            $response = addPersonalMasiva($request);
+            $response = addPersonalMasiva($request,$empresaId);
             echo json_encode($response);
             break;
         default:
@@ -400,6 +401,7 @@ function getPersonal($empresaId)
     $conn->desconectar();
     return $personal;
 }
+
 function getAllPersonalData($empresaId)
 {
     $conn = new bd();
@@ -496,58 +498,107 @@ function getAllContratos(){
     return $contratos;
 }
 
-function addPersonalMasiva($request){
+function addPersonalMasiva($request, $empresaId){
     $conn =  new bd();
     $conn->conectar();
-    return 1;
     $today = date('Y-m-d');
-    // $arr
 
-    // foreach ($request as  $value){
+    $arrayNoCompleteData = [];
+    $counterInserted = 0;
+   
 
-    //     $nombre = $value ->nombre;
-    //     $apellido = $value ->apellido;
-    //     $rut = $value ->rut;
-    //     $telefono = $value->telefono;
-    //     $correo = $value->correo;
-    //     $cargo = $value ->cargo;
-    //     $especialidad = $value ->especialidad;
-    //     $contrato = $value ->contrato;
-    //     $neto = 15000;
-    //     // $neto = $value->neto;
-    //     $idPersona = 0;
+    foreach ($request as $key => $value){
+        $excelRow = $key +1;
+        $nombre = $value ->nombre;
+        $apellido = $value ->apellido;
+        $rut = $value ->rut;
+        $telefono = $value->telefono;
+        $correo = $value->correo;
+        $cargo = $value ->cargo;
+        $especialidad = $value ->especialidad;
+        $contrato = $value ->contrato;
+        $neto = 15000;
+        // $neto = $value->neto;
+
+
+
+        $idEspecialidad = 0;
+        $idCargo = 0;
         
-    //     $queryPersona = "INSERT INTO intec.persona
-    //                     (nombre, apellido, rut, email, telefono)
-    //                     VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$correo."', '$telefono')";
+        $queryPersona = "INSERT INTO intec.persona
+                        (nombre, apellido, rut, email, telefono)
+                        VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$correo."', '$telefono')";
 
-    //     $resposenBdPersona = $conn->mysqli->query($queryPersona);
-    //     $idPersona = $conn->mysqli->insert_id;
+        $resposenBdPersona = $conn->mysqli->query($queryPersona);
+        $idPersona = $conn->mysqli->insert_id;
 
-    //     $queryCargo = $conn->mysqli->query('select id from cargo where cargo = "'.$cargo.'"'); 
-    //     $value = $queryCargo->fetch_object();
-    //     // $idCargo = $value->id;
-    //     return 'select id from cargo where cargo = "'.$cargo.'"';
+        $queryCargo = $conn->mysqli->query('select id from cargo where cargo = "'.$cargo.'"'); 
+        if($queryCargo->num_rows > 0){
 
-    //     $especialidadq = $conn->mysqli->query('select id from especialidad where especialidad ="' .$especialidad.'"'); 
-    //     $value = $especialidadq->fetch_object();
-    //     // $idEspecialidad = $value->id;
+            $idCargo = $queryCargo->fetch_object()->id;
 
-    //     $contratoq = $conn->mysqli->query('select id from tipo_contrato where contrato = "'.$contrato.'"'); 
-    //     $value = $contratoq->fetch_object();
-    //     // $idContrato = $value->id;
+        }else{
+            array_push($arrayNoCompleteData, array('row' => $excelRow, 'problem' => "Cargo","data"=>array("nombre"=>$nombre,
+                                                                                                            "apellido"=>$apellido,
+                                                                                                            "rut"=>$rut,
+                                                                                                            "telefono"=>$telefono,
+                                                                                                            "correo"=>$correo,
+                                                                                                            "cargo"=>$cargo,
+                                                                                                            "especialidad"=>$especialidad,
+                                                                                                            "contrato"=>$contrato)));
+        }
+
+        $especialidadq = $conn->mysqli->query('SELECT id from especialidad where LOWER(especialidad) ="' .strtolower($especialidad).'"'); 
         
-    //     // $query = "INSERT INTO intec.personal
-    //     //         (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
-    //     //         VALUES(".$idPersona.",".$idCargo.",".$idEspecialidad.",".$idContrato.",'".$today."', 0, 1, $neto)";
-       
-    //     // if($conn->mysqli->query($query)){
-    //     //     return array("Success"=>"123321");
-    //     // }else{
+        if($especialidadq->num_rows > 0){
+            $idEspecialidad = $especialidadq->fetch_object()->id;
+        }else{
+            array_push($arrayNoCompleteData, array('row' => $excelRow, 'problem'=>"Especialidad","data"=>array("nombre"=>$nombre,
+                                                                                                                "apellido"=>$apellido,
+                                                                                                                "rut"=>$rut,
+                                                                                                                "telefono"=>$telefono,
+                                                                                                                "correo"=>$correo,
+                                                                                                                "cargo"=>$cargo,
+                                                                                                                "especialidad"=>$especialidad,
+                                                                                                                "contrato"=>$contrato)));
+        }
+        // return $arrayNoCompleteData;
 
-    //     // }
+        $contratoq = $conn->mysqli->query('SELECT id from tipo_contrato where LOWER(contrato) = "'.strtolower($contrato).'"'); 
 
-    // }
+        if($contratoq->num_rows > 0){
+            $value = $contratoq->fetch_object()->id;
+            $idContrato = $value;
+        }else{
+            array_push($arrayNoCompleteData, array('row' => $excelRow, 'problem'=>"Contrato","data"=>array("nombre"=>$nombre,
+                                                                                                            "apellido"=>$apellido,
+                                                                                                            "rut"=>$rut,
+                                                                                                            "telefono"=>$telefono,
+                                                                                                            "correo"=>$correo,
+                                                                                                            "cargo"=>$cargo,
+                                                                                                            "especialidad"=>$especialidad,
+                                                                                                            "contrato"=>$contrato)));
+        }
+
+        if($idEspecialidad === 0 || $idCargo === 0){
+            $conn->mysqli->query("DELETE FROM intec.persona where id = $idPersona");
+        }else{
+            $query = "INSERT INTO intec.personal
+                (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
+                VALUES(".$idPersona.",".$idCargo.",".$idEspecialidad.",".$idContrato.",'".$today."', 0, $empresaId, $neto)";
+
+            if($conn->mysqli->query($query)){
+                $counterInserted ++;
+            }
+        }
+    }
+
+    if($counterInserted === count($request)){
+        return array("success"=>array("inserted"=>$counterInserted,"total"=>count($request)));
+    }else{
+        return array('error'=>array("inserted"=>$counterInserted,'total'=>count($request),'arrErr'=>$arrayNoCompleteData));
+    }
+
 
 }
 

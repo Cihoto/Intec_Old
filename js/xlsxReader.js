@@ -63,9 +63,9 @@ async function xlsxReadandWrite(arrayHead){
         const content = await readXlsxFile(excelInput.files[0])
         const arrayCount = getArrayLength(arrayHead.xlsxData)
         const excel = new Excel(content);
-        let rows = excel.rows()
-        const headers = excel.header()
-
+        let rows = excel.rows();
+        const headers = excel.header();
+        
         let xlsxHead =[];
         let xslxType = [];
         let xlsxRow = [];
