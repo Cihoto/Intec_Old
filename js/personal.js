@@ -222,7 +222,7 @@ function AddEspecialidad(empresaId){
                 "empresaId":empresaId
             }),
             dataType: 'json',
-            success: async function(data) {
+            success: async function(data){
                 Swal.fire({
                     'icon':'success',
                     'title': 'Excelente!',
@@ -231,7 +231,6 @@ function AddEspecialidad(empresaId){
                 }).then(()=>{
                     $('#especialidadName').val("");
                     $('#cargoEspecialidad').modal('hide');
-
                 })
             }
         })
@@ -244,6 +243,46 @@ function AddEspecialidad(empresaId){
         })
     }
 }
+async function AddEspecialidadGivenArray(empresaId,valor){
+    let arrayCargos = valor
+    let response ;
+    return $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        data: JSON.stringify({
+            action: "AddEspecialidad",
+            request: {arrayCargos},
+            "empresaId":empresaId
+        }),
+        dataType: 'json',
+        success: function(data){
+           return true;
+        },error:function(){
+           return false;
+        }
+    })
+}
+async function AddCargoGivenArray(empresaId,valor){
+    
+    let arrayCargos = valor
+    let response ;
+    return $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        data: JSON.stringify({
+            action: "AddCargo",
+            request: {arrayCargos},
+            "empresaId":empresaId
+        }),
+        dataType: 'json',
+        success: function(data){
+           return true;
+        },error:function(){
+           return false;
+        }
+    })
+}
+
 function AddCargo(empresaId){
     let string = $('#CargoName').val()
     if(string !== ""){
@@ -271,7 +310,6 @@ function AddCargo(empresaId){
                 })
             }
         })
-
     }else{
         Swal.fire({
             'icon':'error',

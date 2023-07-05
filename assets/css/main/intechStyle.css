@@ -190,9 +190,7 @@
     /* padding: 0px !important;   */
   }
 
-  @media (min-width: 1250px) {
-   
-  }
+
 
   @media (min-width: 1250px) {
     .notSelectedProd{
@@ -536,4 +534,418 @@
 
 table.dataTable tbody td .productName {
   padding: 8px 10px;
+}
+
+.err{
+  border:1px solid red;
+  background-color: rgba(255, 0, 0, 0.12);
+}
+.theme-dark .err{
+  border:1px solid red;
+  background-color: rgba(255, 0, 0, 0.12);
+}
+.max300{
+  max-height: 300px !important;
+}
+.theme-dark .max300{
+ max-height: 300px !important;
+}
+.max800{
+  max-height: 800px !important;
+}
+.theme-dark .max800{
+ max-height: 800px !important;
+}
+.max400{
+  max-height: 400px !important;
+}
+.theme-dark .max400{
+ max-height: 400px !important;
+}
+
+
+/* hide scrollbar but allow scrolling */
+.hiddenScroll {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: 2px; /* for Firefox */
+  overflow-y: scroll; 
+}
+
+.hiddenScroll::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+/* hide scrollbar but allow scrolling */
+.theme-dark .hiddenScroll {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+}
+
+.theme-dark .hiddenScroll::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+
+
+/* .theme-dark .btn-confirm{
+ padding: 5px;
+ font-size: 16px;
+ border-radius: 5px;
+ color:white;
+ font-weight: 600;
+ background-color: #04AA6D;  
+}
+.btn-confirm{
+ padding: 5px;
+ font-size: 16px;
+ border-radius: 5px;
+ color:white;
+ font-weight: 600;
+ background-color: #04AA6D;
+} */
+
+
+
+.ulProblems{
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* flex-direction: row; */
+}
+.container-end{
+  justify-content: center;
+  right: 10px;
+  display: flex;
+
+}
+.problemContainer{
+  box-shadow: 1px 2px 3px 4px rgba(20,20,20,0.4);
+  margin: 30px 15px;
+  padding: 10px;
+  border-radius: 10px;
+  min-width: 30%;
+  margin: 20px 10px;
+}
+
+@media (max-width: 1500px) {
+  .problemContainer{
+    min-width: 40%;
+  }
+}
+@media (max-width: 1000px) {
+  .problemContainer{
+    min-width: 70%;
+  }
+}
+@media (max-width: 700px) {
+  .problemContainer{
+    min-width: 80%;
+  }
+}
+/* .sideContainer{
+  display: flex;
+  justify-content: center;
+} */
+
+/* .theme-light  .sideContainer{
+  display: flex;
+  justify-content: center;
+}
+.theme-dark  .sideContainer{
+  display: flex;
+  justify-content: center;
+} */
+
+.elementList{
+  list-style: none;
+  padding: 0px;
+
+}
+.elementList li{
+  margin-top: 6px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  overflow: auto;
+  /* width: 100%; */
+  /* border: 1px solid black; */
+  padding: 5px;  
+  height: 65px;
+  transition: all .3s ease;
+  font-weight: 700;
+  color:black;
+}
+
+.elementList li:hover{
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px inset;
+  background-color: rgba(38, 36, 36, 0.24);
+}
+
+.actionContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; 
+  margin: 2px 3px;
+  right: 15px;
+  padding: 5px;
+}
+
+.deleteDynamic{
+  border-radius: 10px;
+  font-size: 0px;
+  margin: 0px;
+  transition: all .3s ease;
+  background-color: red;
+  color: red;
+  font-weight: 600;
+  padding: 0px;
+  color: white;
+  cursor: pointer;
+}
+
+.minus{
+  border-radius: 20px;
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.actionContainer:hover .deleteDynamic{
+  font-size: 15px;
+  padding: 5px;
+}
+.actionContainer:hover .minus{
+  font-size: 0px;
+  padding: 0px;
+}
+
+
+.addDynamic{
+  border-radius: 10px;
+  font-size: 0px;
+  margin: 0px;
+  transition: all .3s ease;
+  background-color: green;
+  color: green;
+  font-weight: 600;
+  padding: 0px;
+  color: white;
+  cursor: pointer;
+}
+
+.plus{
+  border-radius: 20px;
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background-color: green;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.actionContainer:hover .addDynamic{
+  font-size: 15px;
+  padding: 5px;
+}
+.actionContainer:hover .plus{
+  font-size: 0px;
+  padding: 0px;
+}
+
+.btn-confirm{
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  color: white;
+  font-weight: 550;
+  cursor: pointer;
+  background-color: rgba(0, 128, 0, 0.864);
+  transition: all .4s ease;
+  letter-spacing: 0.5px;
+}
+.btn-confirm:hover{
+  background-color:  rgba(4, 104, 4, 0.864);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.flex{
+  display: flex;
+}
+
+.just-content-end{
+  justify-content: end;
+}
+
+
+.theme-dark .ulProblems{
+  display: flex;
+  flex-wrap: wrap;
+}
+.theme-dark .container-end{
+  justify-content: center;
+  right: 10px;
+  display: flex;
+
+}
+.theme-dark .problemContainer{
+  box-shadow: 1px 2px 3px 4px rgba(20,20,20,0.4);
+  margin: 30px 15px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.theme-dark .elementList{
+  list-style: none;
+  padding: 0px;
+
+}
+.theme-dark .elementList li{
+  margin-top: 6px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  overflow: auto;
+  /* width: 100%; */
+  /* border: 1px solid black; */
+  padding: 5px;  
+  height: 70px;
+  transition: all .3s ease;
+  font-weight: 700;
+  color:white;
+}
+
+.theme-dark .elementList li:hover{
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px inset;
+  background-color: rgba(91, 87, 87, 0.24);
+}
+
+.theme-dark .actionContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; 
+  margin: 2px 3px;
+  right: 15px;
+  padding: 5px;
+}
+
+.theme-dark .deleteDynamic{
+  border-radius: 10px;
+  font-size: 0px;
+  margin: 0px;
+  transition: all .3s ease;
+  background-color: red;
+  color: red;
+  font-weight: 600;
+  padding: 0px;
+  color: white;
+  cursor: pointer;
+}
+
+.theme-dark .minus{
+  border-radius: 20px;
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.theme-dark .actionContainer:hover .theme-dark .deleteDynamic{
+  font-size: 15px;
+  padding: 5px;
+}
+.theme-dark .actionContainer:hover .theme-dark .minus{
+  font-size: 0px;
+  padding: 0px;
+}
+
+
+.theme-dark .addDynamic{
+  border-radius: 10px;
+  font-size: 0px;
+  margin: 0px;
+  transition: all .3s ease;
+  background-color: green;
+  color: green;
+  font-weight: 600;
+  padding: 0px;
+  color: white;
+  cursor: pointer;
+}
+
+.theme-dark .plus{
+  border-radius: 20px;
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  background-color: green;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.theme-dark .actionContainer:hover .addDynamic{
+  font-size: 15px;
+  padding: 5px;
+}
+
+.theme-dark .actionContainer:hover .plus{
+  font-size: 0px;
+  padding: 0px;
+}
+
+.theme-dark .btn-confirm{
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  color: white;
+  font-weight: 550;
+  cursor: pointer;
+  background-color: rgba(0, 128, 0, 0.864);
+  transition: all .4s ease;
+  letter-spacing: 0.5px;
+}
+.theme-dark .btn-confirm:hover{
+  background-color:  rgba(4, 104, 4, 0.864);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.theme-dark .flex{
+  display: flex;
+}
+
+.theme-dark .just-content-end{
+  justify-content: end;
+}
+
+.ulEspecialidades{
+  max-height: 180px;
+  overflow: auto;
+}
+.ulCargos{
+  max-height: 180px;
+  overflow: auto;
+}
+.elementList{
+  max-height: 180px;
+  overflow: auto;
+}
+#tableProblems{
+  height: 250px;
 }
