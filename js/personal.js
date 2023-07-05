@@ -118,12 +118,12 @@ function removePersonal(element) {
     $(element).closest(li).find('.addPersonal').show();
     $(element).hide();
     li.remove();
-    $('#sortablePersonal1').append(li)
+    $('#sortablePersonal1').append(li);
 
-    removeProductStorage(idProduct)
-    console.log(GetPersonalStorage())
+    removeProductStorage(idProduct);
+
+    console.log(GetPersonalStorage());
     removePersonalFromResume(idProduct);
-
 }
 
 function removePersonalFromResume(id) {
@@ -285,9 +285,11 @@ async function AddCargoGivenArray(empresaId,valor){
 
 function AddCargo(empresaId){
     let string = $('#CargoName').val()
+    console.log("STRINGS",string);
     if(string !== ""){
 
         const arrayCargos  = string.split(",")
+        console.log("ARRAY CARGOS",arrayCargos);
         $.ajax({
             type: "POST",
             url: "ws/personal/Personal.php",
@@ -330,8 +332,8 @@ function GetEspecialidad(empresaId){
             "empresaId":empresaId
         }),
         dataType: 'json',
-        success: async function(data) {
-            console.log(data);
+        success: async function(data){
+            console.log("ESPECIALIDADES",data);
             $('#especialidad_select').empty();
             $('#especialidad_select').append(new Option("", ""));
             data.especialidades.forEach(esp => {

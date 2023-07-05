@@ -291,8 +291,6 @@ $active = 'personal';
     <script src="/js/personal.js"></script>
 
     <script>
-        const EMPRESA_ID = $('#empresaId').text();
-        
         $('#btnConfirmEspecialidad').on('click',function(){
             AddEspecialidad(EMPRESA_ID);
         });
@@ -856,7 +854,7 @@ $active = 'personal';
                                 ulEspecialidades.append(`<li> <p class="especialidadName">${el}</p>
                                                             <div class="container-end">
                                                                 <div class="actionContainer">
-                                                                    <p onclick="AddEspecialidad(this)" class="addDynamic">Agregar</p><i class="fa-solid fa-plus plus"></i>
+                                                                    <p onclick="AddEspecialidadFromModal(this)" class="addDynamic">Agregar</p><i class="fa-solid fa-plus plus"></i>
                                                                 </div>
                                                                 <div class="actionContainer">
                                                                     <p  onclick="removeLi(this)" class="deleteDynamic">Quitar</p><i class="fa-solid fa-minus minus"></i>
@@ -869,7 +867,7 @@ $active = 'personal';
                                 ulCargos.append(`<li> <p class="cargoName">${el}</p>
                                                     <div class="container-end">
                                                         <div class="actionContainer">
-                                                            <p onclick="AddEspecialidad(this)" class="addDynamic">Agregar</p><i class="fa-solid fa-plus plus"></i>
+                                                            <p onclick="AddCargoFromModal(this)" class="addDynamic">Agregar</p><i class="fa-solid fa-plus plus"></i>
                                                         </div>
                                                         <div class="actionContainer">
                                                             <p onclick="removeLi(this)" class="deleteDynamic">Quitar</p><i class="fa-solid fa-minus minus"></i>
@@ -995,7 +993,7 @@ $active = 'personal';
         }
 
 
-        async function AddEspecialidad(element){
+        async function AddEspecialidadFromModal(element){
 
             let valor = $(element).closest('li').find('.cargoName').text();
             let li = $(element).closest('li');
@@ -1032,7 +1030,7 @@ $active = 'personal';
             }
         }
 
-        async function AddCargo(element){
+        async function AddCargoFromModal(element){
 
             let valor = $(element).closest('li').find('.cargoName').text();
             let li = $(element).closest('li');

@@ -64,7 +64,7 @@ $active = 'inventario';
                                 if (count($categorias) === 0) {
                                     echo '<li><a href="">Haz click aquí para poder Crear tus categorías</a></li>';
                                 } else {
-                                    foreach ($categorias as $key => $value) {
+                                    foreach ($categorias as $key => $value){
                                         $catNombre = $value->nombre;
 
                                         echo '<li> <a class="' . strtolower($catNombre) . ' categoria dropdown-item">' . ucfirst($catNombre) . ' &raquo</a>';
@@ -269,6 +269,9 @@ $active = 'inventario';
 
     const IDEMPRESA = document.getElementById('empresaId').textContent;
 
+    const EMPRESA_ID = $('#empresaId').text();
+
+
     $('#buttonProductosMasiva').on('click', function() {
         $('#masivaProductoCreation').modal('show');
     })
@@ -386,7 +389,8 @@ $active = 'inventario';
                 url: "ws/categoria_item/categoria.php",
                 data: JSON.stringify({
                     action: "AddCategorias",
-                    request: {arrayCategorias}
+                    request: arrayCategorias, 
+                    empresaId:EMPRESA_ID
                 }),
                 dataType: 'json',
                 success: async function(data) {
@@ -411,7 +415,8 @@ $active = 'inventario';
                 url: "ws/categoria_item/item.php",
                 data: JSON.stringify({
                     action: "AddItems",
-                    request: {arrayItems}
+                    request: arrayItems,
+                    empresaId:EMPRESA_ID
                 }),
                 dataType: 'json',
                 success: async function(data) {
@@ -729,7 +734,7 @@ $active = 'inventario';
             $.ajax({
                 type: "POST",
                 url: "ws/productos/addProductos.php",
-                data: JSON.stringify(arrayRequest),
+                data: JSON.stringify({arrayRequest:arrayRequest,empresaId: EMPRESA_ID}),
                 dataType: 'json',
                 success: async function(data) {
                     console.log(data);
@@ -809,7 +814,7 @@ $active = 'inventario';
                     // }
                 },
                 error: function(data) {
-                    console.log(data.responseText);
+                    console.log(data);
                 }
             })
 

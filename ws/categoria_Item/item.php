@@ -15,7 +15,8 @@ if ($_POST) {
             break;
         case 'AddItems':
             $request = $data->request;
-            $items = AddItems($request);
+            $empresaId = $data->empresaId;
+            $items = AddItems($request,$empresaId);
             echo json_encode($items);
             break;
         default:
@@ -49,18 +50,17 @@ function GetItems($empresaId){
 
 }
 
-function AddItems($request){
+function AddItems($request,$empresaId){
     $conn =  new bd();
     $conn->conectar();
     $arrayIdsInserted = [];
     $today = date('Y-m-d');
 
-    // return count($request->arrayCategorias);
-    for($i = 0 ; $i < count($request->arrayItems); $i++){
+    for($i = 0 ; $i < count($request); $i++){
 
         $queryInsertCategoria = "INSERT INTO intec.item
-                        (item, createAt,  IsDelete)
-                        VALUES('".$request->arrayItems[$i]."','".$today."',0)";
+                        (item, createAt,  IsDelete,empresa_id)
+                        VALUES('".trim($request[$i])."', '".$today."', 0, $empresaId)";
         if($conn->mysqli->query($queryInsertCategoria)){
             array_push($arrayIdsInserted,$conn->mysqli->insert_id);
         }
