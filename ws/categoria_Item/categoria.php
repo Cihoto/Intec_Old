@@ -19,7 +19,8 @@ if ($_POST) {
             break;
         case 'AddCategorias':
             $request = $data->request;
-            $categorias = AddCategorias($request);
+            $empresaId = $data->empresaId;
+            $categorias = AddCategorias($request,$empresaId);
             echo json_encode($categorias);
             break;
         default:
@@ -41,7 +42,7 @@ function GetCategorias($empresaId){
                             INNER JOIN categoria_has_item chi on chi.categoria_id = c.id 
                             INNER JOIN producto p on p.categoria_has_item_id =chi.id 
                             where p.empresa_id = $empresaId
-                            GROUP BY c.nombre ";
+                            GROUP BY c.nombre";
 
     $responseBd = $conn->mysqli->query($querySelectCategorias);
 
@@ -54,18 +55,19 @@ function GetCategorias($empresaId){
 }
 
 
-function AddCategorias($request){
+function AddCategorias($request,$empresaId){
     $conn =  new bd();
     $conn->conectar();
     $arrayIdsInserted = [];
     $today = date('Y-m-d');
 
-    // return count($request->arrayCategorias);
-    for($i = 0 ; $i < count($request->arrayCategorias); $i++){
+    // return $request;
+
+    for($i = 0 ; $i < count($request); $i++){
 
         $queryInsertCategoria = "INSERT INTO intec.categoria
-                        (nombre, createAt,IsDelete)
-                        VALUES('".$request->arrayCategorias[$i]."','".$today."',0)";
+                        (nombre, createAt,IsDelete,empresa_id)
+                        VALUES('".trim($request[$i])."','".$today."',0,$empresaId)";
 
         if($conn->mysqli->query($queryInsertCategoria)){
             array_push($arrayIdsInserted,$conn->mysqli->insert_id);
