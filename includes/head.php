@@ -34,6 +34,9 @@
       type="image/png"
     />
     
+    <!-- FULLCALENDAR -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
     <link rel="stylesheet" href="./assets/css/shared/iconly.css" />
 </head>
 
