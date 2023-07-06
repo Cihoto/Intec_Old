@@ -1,6 +1,7 @@
 <?php
 
 if ($_POST) {
+
     require_once('../bd/bd.php');
 
     $json = file_get_contents('php://input');
@@ -29,11 +30,15 @@ if ($_POST) {
             $idProject = $data->idProject;
             $result = UpdateProjectDataStatus($idProject);
             break;
+        case 'GetAllMyProjects':
+            $empresa_id = $data->empresaId;
+            $result = json_encode(GetAllMyProjects($empresa_id));
+            break;
         default:
             $result = false;
             break;
     }
-
+    
     // Devolver la respuesta como JSON
     header('Content-Type: application/json');
     echo $result;
@@ -272,6 +277,33 @@ function getMyProjects($request)
         }
     }
     return $projects;
+}
+
+function GetAllMyProjects($empresa_id){
+
+    $conn =  new bd();
+    $conn->conectar();
+    $projects = [];
+
+    $queryGetAllMyProjects = "SELECT p.id, 
+                                p.nombre_proyecto, 
+                                p.fecha_inicio, 
+                                p.fecha_termino,
+                                e.estado 
+                            FROM proyecto p 
+                            INNER JOIN proyecto_has_estado phe on phe.proyecto_id = p.id 
+                            INNER JOIN estado e on e.id = phe.estado_id 
+                            where p.empresa_id = $empresa_id";
+    
+    if($responseBd = $conn->mysqli->query($queryGetAllMyProjects)){
+        while($dataProjects = $responseBd->fetch_object()){
+            $projects [] = $dataProjects;
+        }
+        return $projects;
+    }else{
+        return array("error"=>true, "message"=>"NO DATA RECOVERED");
+    }
+
 }
 
 function UpdateProjectData($request)

@@ -54,14 +54,12 @@ function GetCategorias($empresaId){
 
 }
 
-
 function AddCategorias($request,$empresaId){
+    
     $conn =  new bd();
     $conn->conectar();
     $arrayIdsInserted = [];
     $today = date('Y-m-d');
-
-    // return $request;
 
     for($i = 0 ; $i < count($request); $i++){
 
@@ -73,7 +71,6 @@ function AddCategorias($request,$empresaId){
             array_push($arrayIdsInserted,$conn->mysqli->insert_id);
         }
     }
-
     return $arrayIdsInserted;
 }
 
