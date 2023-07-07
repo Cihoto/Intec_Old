@@ -1,3 +1,8 @@
+<?php
+  $isDetails = true;
+  //Variables que manipulan condiciones if en Form proyecto
+  $detalle = true;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +13,7 @@ $active = 'dashboard';
 
 <body>
   <script src="./assets/js/initTheme.js"></script>
-  <?php  require_once('./includes/Constantes/empresaId.php')?>
+  <?php require_once('./includes/Constantes/empresaId.php') ?>
   <div id="app">
 
     <?php require_once('./includes/sidebar.php') ?>
@@ -84,7 +89,7 @@ $active = 'dashboard';
 
 
             <!-- calendario -->
-            <div class="col-md-7 col-12">
+            <div class="col-md-7 col-10">
               <div class="card">
                 <div class="card-body px-4 py-4-5">
 
@@ -143,6 +148,9 @@ $active = 'dashboard';
             </div>
           </div>
         </div>
+
+
+        <button id="changedateevent">CAMBIAR FECHA EVENTO</button>
 
         <!-- info in grid right -->
         <!-- <div class="col-12">
@@ -213,19 +221,42 @@ $active = 'dashboard';
         <!-- </section> -->
       </div>
 
+      <?php include_once('./includes/Modal/detallesProyecto.php') ?>
+
       <?php require_once('./includes/footer.php') ?>
 
     </div>
   </div>
 
   <?php require_once('./includes/footerScriptsJs.php') ?>
+  <?php require_once('./includes/Modal/detallesProyecto.php');?>
+  <?php require_once('./includes/Modal/cliente.php');?>
+  <?php require_once('./includes/Modal/direccion.php');?>
 
 </body>
+
+<script src="/js/Funciones/UpdateProject.js"></script>
+<script src="/js/clientes.js"></script>
+<script src="/js/direccion.js"></script>
+<script src="/js/personal.js"></script>
+<script src="/js/vehiculos.js"></script>
+<script src="/js/productos.js"></script>
+<script src="/js/project.js"></script>
+<script src="/js/Funciones/NewProject.js"></script>
+<script src="/js/localeStorage.js"></script>
+<script src="/js/valuesValidator/validator.js"></script>
+<script src="/js/ClearData/clearFunctions.js"></script>
+<script src="/js/ProjectResume/viatico.js"></script>
+<script src="/js/ProjectResume/subArriendo.js"></script>
+<script src="/js/ProjectResume/projectResume.js"></script>
+<script src="/js/Funciones/assigments.js"></script>
+<script src="/js/Cargo_Especialidad/Testing/calendarviewResume.js"></script>
+
 <script>
-
   const EMPRESA_ID = $('#empresaId').text();
+  let calendar;
 
-  async function GetCalendarProjects(empresaId){
+  async function GetCalendarProjects(empresaId) {
     return $.ajax({
       type: "POST",
       url: "ws/proyecto/proyecto.php",
@@ -241,59 +272,79 @@ $active = 'dashboard';
     })
   }
 
-  document.addEventListener('DOMContentLoaded', async function() {
+  $('#changedateevent').on('click',function(){
+    // console.log(calendar.getEvent());
+
+    let calendarData = calendar.getEvents();
+    console.log(calendarData);
+
+
+    let specificEvent = calendar.getEventById( 75 )
+
+
     
-    const events = await(GetCalendarProjects(EMPRESA_ID));
+  })
+
+  document.addEventListener('DOMContentLoaded', async function() {
+
+    const events = await (GetCalendarProjects(EMPRESA_ID));
     let calendarEventObj = [];
 
     console.log(events);
 
     events.forEach(element => {
-      let color  = "white";
+
+      console.log(element.id);
+      let color = "white";
       let textColor = "black";
-      if(element.estado === 'creado'){
+      if (element.estado === 'creado') {
         color = "yellow";
         let textColor = "black";
 
       }
-      if(element.estado === 'confirmado'){
+      if (element.estado === 'confirmado') {
         color = "green";
         let textColor = "white";
 
       }
-      if(element.estado === 'finalizado'){
+      if (element.estado === 'finalizado') {
         color = "blue";
         let textColor = "white";
 
       }
 
       calendarEventObj.push({
-        title: element.nombre_proyecto, // a property!
-        start: element.fecha_inicio, // a property!
-        end: element.fecha_termino, // a property! ** see important note below about 'end' **
+        id: element.id,
+        title: element.nombre_proyecto, 
+        start: element.fecha_inicio, 
+        end: element.fecha_termino, 
         color: color,
         textColor: textColor
       })
 
     });
 
-    // [{ // this object will be "parsed" into an Event Object
-    //     title: 'The Title', // a property!
-    //     start: '2023-07-19', // a property!
-    //     end: '2023-07-20', // a property! ** see important note below about 'end' **
-    //     color: 'yellow',
-    //     textColor: 'black'
-    //   }]
-
-    
-
     var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      eventClick: function(info) {
+
+        // ViewResume(projectId)
+
+        console.log(`ID ${info.event.id}`);
+        ViewResume(info.event.id);
+        // alert('Event: ' + info.event.title);
+        // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+        // alert('View: ' + info.view.type);
+        // change the border color just for fun
+        // info.el.style.borderColor = 'red';
+      },
       events: calendarEventObj
     })
     calendar.render();
 
   });
+
+
 </script>
 
 </html>
