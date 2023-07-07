@@ -291,6 +291,9 @@ $active = 'personal';
     <script src="/js/personal.js"></script>
 
     <script>
+        
+        const EMPRESA_ID = $('#empresaId').text();
+
         $('#btnConfirmEspecialidad').on('click',function(){
             AddEspecialidad(EMPRESA_ID);
         });
