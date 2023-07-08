@@ -1,7 +1,7 @@
 <?php
-  $isDetails = true;
-  //Variables que manipulan condiciones if en Form proyecto
-  $detalle = true;
+$isDetails = true;
+//Variables que manipulan condiciones if en Form proyecto
+$detalle = true;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,60 +33,24 @@ $active = 'dashboard';
         <!-- main section -->
         <!-- <section class="row"> -->
         <!-- info central grid -->
-        <div class="col-12">
+        <div class="col-12 justify-content-center">
           <!-- primer  -->
-          <div class="row">
+          <div class="row justify-content-center mb-5">
 
-            <div class="row col-md-5 col-12 justify-content-center align-items-center">
-              <!-- eventos -->
-              <div class="col-10">
-                <div class="card">
-                  <div class="card-body px-4 py-4-5">
-                    <a href="proyectos.php">
-                      <div class="row">
-                        <!-- icono del cuadro info -->
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                          <!-- color recuadro -->
-                          <div class="stats-icon purple mb-2">
-                            <!-- logo interno icono -->
-                            <i class="iconly-boldCalendar"></i>
-                          </div>
-                        </div>
-                        <!-- fin icono -->
-                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7  d-flex justify-content-center align-items-center">
-                          <h5 class="text-muted font-semibold">
-                            Proximos Eventos
-                          </h5>
-                        </div>
+            <div class="col-md-5 col-12 mh-100 ">
+              <div class="card">
+                <div class="card-body p-4 mh-75">
+                  <ul id="project-resume">
+                    <li class="headerLi">
+                      <div class="projectData">
+                        <p class="projectName lipad">Nombre</p>
+                        <p class="projectDate lipad">Fecha</p>
                       </div>
-                    </a>
-                  </div>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <!-- fin eventos -->
-
-              <!-- inventario -->
-              <div class="col-10">
-                <div class="card">
-                  <div class="card-body px-4 py-4-5">
-                    <a href="inventario.php">
-                      <div class="row">
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                          <div class="stats-icon blue mb-2">
-                            <i class="fa-solid fa-warehouse"></i>
-                          </div>
-                        </div>
-                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7 d-flex justify-content-center align-items-center">
-                          <h5 class="text-muted font-semibold">Inventario</h5>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <!-- fin inventario -->
             </div>
-
 
             <!-- calendario -->
             <div class="col-md-7 col-10">
@@ -110,6 +74,58 @@ $active = 'dashboard';
             <!-- fin calendario -->
 
           </div>
+
+
+          <div class="row justify-content-around">
+            <!-- eventos -->
+            <div class="col-lg-3 col-md-4 col-sm-5 col-10 ">
+              <div class="card">
+                <div class="card-body px-4 py-4-5">
+                  <a href="proyectos.php">
+                    <div class="row">
+                      <!-- icono del cuadro info -->
+                      <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
+                        <!-- color recuadro -->
+                        <div class="stats-icon purple mb-2">
+                          <!-- logo interno icono -->
+                          <i class="iconly-boldCalendar"></i>
+                        </div>
+                      </div>
+                      <!-- fin icono -->
+                      <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7  d-flex justify-content-center align-items-center">
+                        <h5 class="text-muted font-semibold">
+                          Proximos Eventos
+                        </h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- fin eventos -->
+
+            <!-- inventario -->
+            <div class="col-lg-3 col-md-4 col-sm-5 col-10 ">
+              <div class="card">
+                <div class="card-body px-4 py-4-5">
+                  <a href="inventario.php">
+                    <div class="row">
+                      <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
+                        <div class="stats-icon blue mb-2">
+                          <i class="fa-solid fa-warehouse"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7 d-flex justify-content-center align-items-center">
+                        <h5 class="text-muted font-semibold">Inventario</h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- fin inventario -->
+          </div>
+
 
           <div class="row">
             <div class="col-12">
@@ -229,9 +245,9 @@ $active = 'dashboard';
   </div>
 
   <?php require_once('./includes/footerScriptsJs.php') ?>
-  <?php require_once('./includes/Modal/detallesProyecto.php');?>
-  <?php require_once('./includes/Modal/cliente.php');?>
-  <?php require_once('./includes/Modal/direccion.php');?>
+  <?php require_once('./includes/Modal/detallesProyecto.php'); ?>
+  <?php require_once('./includes/Modal/cliente.php'); ?>
+  <?php require_once('./includes/Modal/direccion.php'); ?>
 
 </body>
 
@@ -272,20 +288,42 @@ $active = 'dashboard';
     })
   }
 
-  $('#changedateevent').on('click',function(){
+  $('#changedateevent').on('click', function() {
     // console.log(calendar.getEvent());
 
     let calendarData = calendar.getEvents();
     console.log(calendarData);
 
 
-    let specificEvent = calendar.getEventById( 75 )
+    let specificEvent = calendar.getEventById(75)
 
 
-    
+
   })
 
-  document.addEventListener('DOMContentLoaded', async function() {
+  async function fillListProjects(){
+    let eventos = await GetCalendarProjects(EMPRESA_ID);
+    let ul = $('#project-resume');
+
+    console.log("eventos",eventos);
+
+    eventos.forEach((element)=>{
+      let li = `<li class="headerLi">
+                  <div class="projectData">
+                    <p class="projectName lipad">${element.nombre_proyecto}</p>
+                    <p class="projectDate lipad">${element.fecha_inicio} / ${element.fecha_termino}</p>
+                  </div>
+                </li>`
+      ul.append(li);
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', async function(){
+
+    fillListProjects();
+
+
+
 
     const events = await (GetCalendarProjects(EMPRESA_ID));
     let calendarEventObj = [];
@@ -315,9 +353,9 @@ $active = 'dashboard';
 
       calendarEventObj.push({
         id: element.id,
-        title: element.nombre_proyecto, 
-        start: element.fecha_inicio, 
-        end: element.fecha_termino, 
+        title: element.nombre_proyecto,
+        start: element.fecha_inicio,
+        end: element.fecha_termino,
         color: color,
         textColor: textColor
       })
@@ -345,7 +383,7 @@ $active = 'dashboard';
   });
 
 
-  function ViewResume(projectId){
+  function ViewResume(projectId) {
 
     // $('#resumen').show();
     ResetClienteForm();
@@ -537,7 +575,10 @@ $active = 'dashboard';
           response.asignados.viaticos.forEach(asignado => {
             SetViatico(asignado.proyecto_id, asignado.valor, asignado.detalle);
           });
-        } else {}
+        } else {
+
+        }
+
         if (response.asignados.totalIngresos.length > 0) {
           response.asignados.totalIngresos.forEach(asignado => {
             console.log("TOTAL INGRESOS", asignado);
@@ -547,7 +588,6 @@ $active = 'dashboard';
           });
         } else {
           SetTotalProject("", 0, "");
-
         }
         // GetResumeProjectList();
       },
@@ -556,12 +596,12 @@ $active = 'dashboard';
   }
 
 
-  $('#clienteSelect').on('change',function(){
+  $('#clienteSelect').on('change', function() {
 
     $('#clientDataBtn').text("Guardar");
     const SelectValue = $(this).val();
 
-    if(SelectValue === "" || SelectValue === "new"){
+    if (SelectValue === "" || SelectValue === "new") {
 
       ResetClienteForm();
 
@@ -570,24 +610,23 @@ $active = 'dashboard';
   })
 
 
-  function DropAllSelectedProducts(){
-    $('.detailsProduct-box').each((key,element)=>{
-        $(element).remove();
+  function DropAllSelectedProducts() {
+    $('.detailsProduct-box').each((key, element) => {
+      $(element).remove();
     })
   }
 
-  function DropVehiculos(){
-    $('#sortable1 li').each((key,element)=>{
-        $(element).remove()
+  function DropVehiculos() {
+    $('#sortable1 li').each((key, element) => {
+      $(element).remove()
     })
   }
 
-  function DropDragPersonal(){
-    $('#sortablePersonal2 li').each((key,element)=>{
-        $(element).remove()
+  function DropDragPersonal() {
+    $('#sortablePersonal2 li').each((key, element) => {
+      $(element).remove()
     })
   }
-
 </script>
 
 </html>

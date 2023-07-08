@@ -949,3 +949,56 @@ table.dataTable tbody td .productName {
 #tableProblems{
   height: 250px;
 }
+
+#project-resume{
+  list-style: none;
+  padding: 0px;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height:450px;
+  transition: all .4s ease;
+}
+#project-resume li{
+  padding: 5px;
+  background-color: #1818556f;
+  border: none;
+  border-radius: 8px;
+  margin-top: 3px;
+  text-align: center;
+  transition: all .4s ease;
+
+}
+.theme-dark #project-resume li{
+  padding: 5px;
+  background-color: #1818556f;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  margin-top: 3px;
+  text-align: center;
+  transition: all .4s ease;
+
+}
+.theme-dark #project-resume li p{
+  transition: all .4s ease;
+
+  color: white;
+}
+
+.projectData{
+  display: flex;
+  justify-content: space-between;
+}
+
+.lipad{
+  padding: 7px;
+  color: black;
+  width: 50%;
+  text-align: center;
+}
+
+.headerLi{
+  position: sticky;
+  top: 0px;
+}
