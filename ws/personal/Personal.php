@@ -147,17 +147,18 @@ function AddPersonal($request,$empresaId){
         $cargo = $req->cargo;
     }
 
-    $queryPersona = "INSERT INTO intec.persona
+    $queryPersona = "INSERT INTO persona
     (nombre, apellido, rut, telefono, email)
     VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$telefono."', '".$correo."')";
 
     $conn->mysqli->query($queryPersona);
     $idPersona = $conn->mysqli->insert_id;
 
-    $queryInsert = "INSERT INTO intec.personal
+    $queryInsert = "INSERT INTO personal
     (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
     VALUES(".$idPersona.",".$cargo.",".$especialidad.",".$idContrato.",'".$today."', 0, $empresaId, $neto)";
 
+    return $queryInsert;
 
     if($conn->mysqli->query($queryInsert)){
         return array("success"=>array("message"=>"Se ha ingresado a ".$nombre." ".$apellido." al sistema"));
@@ -186,10 +187,16 @@ function setviatico($request){
         $idProject = $req->idProject;
         $valor = $req->valor;
         $detalle = $req->detalle;
+
+        $queryInsertViatico = "INSERT INTO viatico (detalle,valor) VALUES ('$detalle','$valor')";
+
+        $conn->mysqli->query($queryInsertViatico);
+
+        $viaticoId = $conn->mysqli->insert_id;
         
-        $query = "INSERT INTO intec.proyecto_has_viatico
-                    (proyecto_id, valor, detalle)
-                    VALUES($idProject,'".$valor."', '".$detalle."')";
+        $query = "INSERT INTO proyecto_has_viatico
+                    (proyecto_id, viatico_id)
+                    VALUES($idProject, $viaticoId)";
 
         if ($conn->mysqli->query($query)) {
 
@@ -212,10 +219,10 @@ function setArriendos($request){
         $idProject = $req->idProject;
     }
 
-    $queryIfAssigned = "SELECT * from intec.arriendos_proyecto php where php.id_proyecto = $idProject";
+    $queryIfAssigned = "SELECT * from arriendos_proyectos php where php.proyecto_id = $idProject";
 
     if($conn->mysqli->query($queryIfAssigned)->num_rows>0){
-        $qdelete = "DELETE FROM arriendos_proyecto WHERE id_proyecto =$idProject";
+        $qdelete = "DELETE FROM arriendos_proyectos WHERE proyecto_id =$idProject";
         $conn->mysqli->query($qdelete);
     }
 
@@ -224,9 +231,9 @@ function setArriendos($request){
         $valor = $req->valor;
         $detalle = $req->detalle;
 
-        $query = "INSERT INTO intec.arriendos_proyecto
-                  (id_proyecto, detalle_arriendo, valor)
-                    VALUES($idProject, '".$detalle."', ".intval($valor) .");";
+        $query = "INSERT INTO arriendos_proyectos
+                (proyecto_id, detalle_arriendo, valor)
+                VALUES($idProject, '".$detalle."', ".intval($valor).")";
 
         if ($conn->mysqli->query($query)) {
 
@@ -244,6 +251,7 @@ function setArriendos($request){
 function SetTotalProject($request){
     $conn = new bd();
     $conn->conectar();
+    $today = date('Y-m-d');
 
     // return json_encode($request);
 
@@ -251,19 +259,26 @@ function SetTotalProject($request){
         $idProject = $req->idProject;
     }
 
-    $queryIfTotal = "SELECT * from intec.arriendos_proyecto php where php.id_proyecto = $idProject";
+    $queryIfTotal = "SELECT * FROM ingresos_has_proyecto WHERE proyecto_id =  $idProject";
 
     if($conn->mysqli->query($queryIfTotal)->num_rows>0){
-        $qdelete = "DELETE FROM proyecto_has_ingresos WHERE id_proyecto =$idProject";
+        $qdelete = "DELETE FROM ingresos_has_proyecto WHERE id_proyecto = $idProject";
         $conn->mysqli->query($qdelete);
     }
 
     foreach($request as $req){
-        $queryInsertTotal = "INSERT INTO intec.proyecto_has_ingresos
-                            (id_proyecto, total)
-                            VALUES($req->idProject, ".intval($req->valor).");";
-        $conn->mysqli->query($queryInsertTotal);
 
+        $queryInsertIngreso = "INSERT INTO ingresos (ingreso, monto)
+        VALUES('Ingreso Cobro Evento', ".intval($req->valor).")";
+
+        $conn->mysqli->query($queryInsertIngreso);
+        $idIngreso = $conn->mysqli->insert_id;
+
+        $queryInsertTotal = "INSERT INTO u136839350_intec.ingresos_has_proyecto
+        (ingresos_id, proyecto_id, fecha)
+        VALUES($idIngreso, $req->idProject, '$today')";
+
+        $conn->mysqli->query($queryInsertTotal);
     }
 }
 
@@ -315,7 +330,7 @@ function AddEspecialidad($request,$empresaId){
     // return count($request->arrayCategorias);
     for($i = 0 ; $i < count($request->arrayCargos); $i++){
 
-        $queryInsertCargo = "INSERT INTO intec.especialidad
+        $queryInsertCargo = "INSERT INTO especialidad
         (especialidad, createAt, IsDelete, empresa_id)
         VALUES('".trim($request->arrayCargos[$i])."', '".$today."', 0, $empresaId);";
 
@@ -337,7 +352,7 @@ function AddCargo($request,$empresaId){
     // return count($request->arrayCategorias);
     for($i = 0 ; $i < count($request->arrayCargos); $i++){
         
-        $queryInsertCargo = "INSERT INTO intec.cargo (cargo,empresa_id)
+        $queryInsertCargo = "INSERT INTO cargo (cargo,empresa_id)
         VALUES('".trim($request->arrayCargos[$i])."', $empresaId)";
 
         if($conn->mysqli->query($queryInsertCargo)){
@@ -417,11 +432,14 @@ function getAllPersonalData($empresaId)
                     INNER JOIN tipo_contrato tc on tc.id = p.tipo_contrato_id 
                     where emp.id = $empresaId";
 
-    if ($responseBd = $conn->mysqli->query($queryPersonal)) {
+    if ($responseBd = $conn->mysqli->query($queryPersonal)){
         while ($dataPersonal = $responseBd->fetch_object()) {
+
             $personal[] = $dataPersonal;
+
         }
     }
+
     $conn->desconectar();
     return $personal;
 }
@@ -451,7 +469,7 @@ function addPersonalToProject($request)
         $idProject = $req->idProject;
         $idPersonal = $req->idPersonal;
         $costo = $req->cost;
-        $query = "INSERT INTO intec.personal_has_proyecto
+        $query = "INSERT INTO personal_has_proyecto
                             (personal_id, proyecto_id,costo)
                             VALUES($idPersonal, $idProject,$costo)";
 
@@ -525,7 +543,7 @@ function addPersonalMasiva($request, $empresaId){
         $idEspecialidad = 0;
         $idCargo = 0;
         
-        $queryPersona = "INSERT INTO intec.persona
+        $queryPersona = "INSERT INTO persona
                         (nombre, apellido, rut, email, telefono)
                         VALUES('".$nombre." ', '".$apellido."', '".$rut."', '".$correo."', '$telefono')";
 
@@ -581,9 +599,9 @@ function addPersonalMasiva($request, $empresaId){
         }
 
         if($idEspecialidad === 0 || $idCargo === 0){
-            $conn->mysqli->query("DELETE FROM intec.persona where id = $idPersona");
+            $conn->mysqli->query("DELETE FROM persona where id = $idPersona");
         }else{
-            $query = "INSERT INTO intec.personal
+            $query = "INSERT INTO personal
                 (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
                 VALUES(".$idPersona.",".$idCargo.",".$idEspecialidad.",".$idContrato.",'".$today."', 0, $empresaId, $neto)";
 

@@ -34,6 +34,15 @@ if ($_POST) {
             $empresa_id = $data->empresaId;
             $result = json_encode(GetAllMyProjects($empresa_id));
             break;
+        case 'GetAllProjects':
+            $empresa_id = $data->empresaId;
+            $result = json_encode(GetAllProjects($empresa_id));
+            break;
+        case 'GetCalendarProjects':
+            $empresa_id = $data->empresaId;
+            $status = $data->status;
+            $result = json_encode(GetCalendarProjects($empresa_id,$status));
+            break;
         default:
             $result = false;
             break;
@@ -83,7 +92,7 @@ function addProject($request)
         $fecha_termino = "'" . $fecha_termino . "'";
     }
 
-    $query = "INSERT INTO intec.proyecto
+    $query = "INSERT INTO proyecto
             (nombre_proyecto, lugar_id, fecha_inicio, fecha_termino, createAt, IsDelete , cliente_id, empresa_id,comentarios)
             VALUES('" . $nombre_proyecto . "', $lugar_id,$fecha_inicio, $fecha_termino,'" . $today . "', 0, $cliente_id, 1,'" . $comentarios . "')";
 
@@ -95,9 +104,9 @@ function addProject($request)
         $response = $conn->mysqli->query($queryProjectStatus)->fetch_assoc();
         $idStatus = $response["id"];
 
-        $queryCreateStatus = "INSERT INTO intec.proyecto_has_estado
+        $queryCreateStatus = "INSERT INTO proyecto_has_estado
                                         (proyecto_id, estado_id, fecha)
-                                        VALUES($id_project, $idStatus, '" . $today . "')";
+                                        VALUES($id_project, $idStatus, '".$today."')";
 
         $conn->mysqli->query($queryCreateStatus);
 
@@ -134,34 +143,53 @@ function getProjectResume($request)
 
     if ($viewasignados) {
         $queryVehiclesAsignados = "SELECT v.id, v.patente
-                                                from vehiculo v 
-                                            INNER JOIN proyecto_has_vehiculo phv ON phv.vehiculo_id = v.id 
-                                            INNER JOIN proyecto p on p.id = phv.proyecto_id 
-                                            WHERE p.id = $idProject";
+        from vehiculo v 
+        INNER JOIN proyecto_has_vehiculo phv ON phv.vehiculo_id = v.id 
+        INNER JOIN proyecto p on p.id = phv.proyecto_id 
+        WHERE p.id = $idProject";
+
         $queryPersonalAsignados = "SELECT p.id ,CONCAT(per.nombre,' ',per.apellido) as nombre,
-                                                c.cargo , e.especialidad, php.costo, tc.contrato 
-                                            from personal p 
-                                            INNER JOIN persona per on per.id = p.persona_id 
-                                            INNER JOIN personal_has_proyecto php on php.personal_id = p.id 
-                                            INNER JOIN proyecto pro on pro.id  = php.proyecto_id 
-                                            INNER JOIN cargo c on c.id = p.cargo_id 
-                                            INNER JOIN especialidad e on e.id = p.especialidad_id 
-                                            INNER JOIN tipo_contrato tc on tc.id = p.tipo_contrato_id 
-                                            where pro.id = $idProject";
+        c.cargo , e.especialidad, php.costo, tc.contrato 
+        from personal p 
+        INNER JOIN persona per on per.id = p.persona_id 
+        INNER JOIN personal_has_proyecto php on php.personal_id = p.id 
+        INNER JOIN proyecto pro on pro.id  = php.proyecto_id 
+        INNER JOIN cargo c on c.id = p.cargo_id 
+        INNER JOIN especialidad e on e.id = p.especialidad_id 
+        INNER JOIN tipo_contrato tc on tc.id = p.tipo_contrato_id 
+        where pro.id = $idProject";
+
         $queryClienteAssigned = "SELECT c.id ,per.nombre, per.apellido, per.rut, per.telefono,per.email,
-                                                df.razon_social, df.nombre_fantasia,df.rut as rut_df, df.direccion, df.correo
-                                            FROM proyecto p
-                                            INNER JOIN cliente c on c.id = p.cliente_id 
-                                            INNER JOIN persona per on per.id = c.persona_id_contacto 
-                                            INNER JOIN datos_facturacion df on df.id = c.datos_facturacion_id 
-                                            INNER JOIN empresa e on e.id = p.empresa_id 
-                                            where p.id = $idProject";
+        df.razon_social, df.nombre_fantasia,df.rut as rut_df, df.direccion, df.correo
+        FROM proyecto p
+        INNER JOIN cliente c on c.id = p.cliente_id 
+        INNER JOIN persona per on per.id = c.persona_id_contacto 
+        INNER JOIN datos_facturacion df on df.id = c.datos_facturacion_id 
+        INNER JOIN empresa e on e.id = p.empresa_id 
+        WHERE p.id = $idProject";
+
         $queryProductsAssigned = "SELECT p.nombre , p.precio_arriendo, p.id,php.cantidad  FROM proyecto_has_producto php 
-                                            INNER JOIN producto p on p.id  = php.producto_id 
-                                            Where php.proyecto_id = $idProject";
+        INNER JOIN producto p on p.id  = php.producto_id 
+        WHERE php.proyecto_id = $idProject";
+
         $queryViaticosAssigned = "SELECT * from proyecto_has_viatico phv WHERE phv.proyecto_id = $idProject";
-        $querySubarriendos = "SELECT * FROM arriendos_proyecto ap WHERE id_proyecto = $idProject";
-        $queryTotalIngresos = "SELECT * FROM proyecto_has_ingresos WHERE id_proyecto = $idProject";
+
+        // $querySubarriendos = "SELECT * FROM proyecto_has_arriendos pha 
+        // INNER JOIN arriendos a ON a.id = pha.arriendos_id
+        // WHERE pha.proyecto_id =  $idProject";
+
+        // $querySubarriendos = "SELECT * FROM arriendos_proyectos ap where ap.proyecto_id = $idProject";
+        $querySubarriendos = "SELECT  a.id, a.item, CONCAT(per.nombre,' ',per.apellido,' - ', df.rut) AS detalle,pha.costo
+        FROM arriendos a
+        INNER JOIN proveedor p on p.id = a.proveedor_id
+        INNER JOIN persona per on per.id = p.persona_id_contacto 
+        INNER JOIN datos_facturacion df on df.id = p.datos_facturacion_id
+        INNER JOIN proyecto_has_arriendos pha on pha.arriendos_id = a.id 
+        WHERE pha.proyecto_id =  $idProject";
+
+        $queryTotalIngresos = "SELECT * FROM ingresos_has_proyecto ihp 
+        INNER JOIN ingresos i on i.id = ihp.ingresos_id 
+        WHERE ihp.proyecto_id = $idProject";
     }
 
     $queryProject = "SELECT  p.nombre_proyecto, p.fecha_inicio, p.fecha_termino,p.comentarios,
@@ -279,6 +307,40 @@ function getMyProjects($request)
     return $projects;
 }
 
+function GetAllProjects($empresa_id){
+    $conn = new bd();
+    $conn->conectar();
+    $allProjects = [];
+
+    $queryGetAll = "SELECT p.id, p.nombre_proyecto, 
+    CONCAT(per.nombre,' ', per.apellido) as nombreCliente, 
+    CONCAT(d.direccion, ' ',d.numero,', ',co.comuna,', ',re.region) as direccion,
+    p.fecha_inicio ,p.fecha_termino
+    FROM proyecto p
+    LEFT  JOIN lugar l on l.id = p.lugar_id 
+    LEFT JOIN direccion d on d.id = l.direccion_id 
+    LEFT JOIN cliente c on c.id  = p.cliente_id         
+    LEFT JOIN persona per on per.id = c.persona_id_contacto
+    LEFT JOIN comuna co on co.id = d.comuna_id 
+    LEFT JOIN region re on re.id = co.region_id 
+    where  p.empresa_id = $empresa_id";
+
+    if($responseBd = $conn->mysqli->query($queryGetAll)){
+
+        if($responseBd->num_rows > 0){
+            while($dataAllProjects = $responseBd->fetch_object()){
+                $allProjects[] = $dataAllProjects;
+            }
+            return array("status"=> "success","data"=> $allProjects,"message"=>"Se han encontrado". $responseBd->num_rows ." eventos");
+        }else{
+            return array("status"=> "success", "data"=> $allProjects, "message"=> "No se han encontrado eventos");
+        }
+    }else{
+        return array("status"=> "error", "data"=> $allProjects, "message"=> "No se ha podido completar el requerimiento, por favor intente nuevamente");
+    }
+
+}
+
 function GetAllMyProjects($empresa_id){
 
     $conn =  new bd();
@@ -294,6 +356,41 @@ function GetAllMyProjects($empresa_id){
                             INNER JOIN proyecto_has_estado phe on phe.proyecto_id = p.id 
                             INNER JOIN estado e on e.id = phe.estado_id 
                             where p.empresa_id = $empresa_id";
+    
+    if($responseBd = $conn->mysqli->query($queryGetAllMyProjects)){
+        while($dataProjects = $responseBd->fetch_object()){
+            $projects [] = $dataProjects;
+        }
+        return $projects;
+    }else{
+        return array("error"=>true, "message"=>"NO DATA RECOVERED");
+    }
+
+}
+
+
+
+function GetCalendarProjects($empresaId,$status){
+
+    $conn =  new bd();
+    $conn->conectar();
+    $projects = [];
+    $queryQuoteStatus = "";
+
+    if($status !== 0){
+        $queryQuoteStatus = "and phe.estado_id  = $status";
+    }
+
+    $queryGetAllMyProjects = "SELECT p.id, 
+    p.nombre_proyecto, 
+    p.fecha_inicio, 
+    p.fecha_termino,
+    e.estado 
+    FROM proyecto p 
+    INNER JOIN proyecto_has_estado phe on phe.proyecto_id = p.id 
+    INNER JOIN estado e on e.id = phe.estado_id 
+    where p.empresa_id = $empresaId $queryQuoteStatus";
+    // return $queryGetAllMyProjects;
     
     if($responseBd = $conn->mysqli->query($queryGetAllMyProjects)){
         while($dataProjects = $responseBd->fetch_object()){
@@ -354,7 +451,7 @@ function UpdateProjectData($request)
     }
 
 
-    $queryUpdateProject = "UPDATE intec.proyecto
+    $queryUpdateProject = "UPDATE proyecto
                 SET nombre_proyecto = $projectName, fecha_inicio = $fechaInicio, 
                 fecha_termino = $fechaTermino, comentarios = $comentarios,
                 modifiedAt = '".$today."'

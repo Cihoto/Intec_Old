@@ -36,7 +36,7 @@ if ($_POST){
             $lugar= $req->lugar;
             $direccion_id = $req->direccion_id;
         }
-        $query = "INSERT INTO intec.lugar
+        $query = "INSERT INTO lugar
                 (lugar, createAt, direccion_id)
                 VALUES('".$lugar."', '".$today."', $direccion_id )";
         if($conn->mysqli->query($query)){

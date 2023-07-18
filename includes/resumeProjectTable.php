@@ -121,7 +121,17 @@
 
             </tbody>
         </table>
-        <button class="btn btn-success spaced"  onclick="AddSubArriendo()" id="addViatico">Agregar</button>
+        <div class="row centered-spaced">
+            <button class="btn btn-success spaced col-md-5 col-10 mb-3"  onclick="GetArriendos()" id="addViatico">Agregar Existente</button>
+            <button class="btn btn-success spaced col-md-5 col-10"  onclick="OpenArriendoModal()" id="addViatico">Agregar Nuevo</button>
+            <div class="arriendosSelect">
+                <i class="fa-solid fa-chevron-up" id="closeDiv"></i>
+                <ul id="rentsUl" class="rentsUl">
+                    <li id="searchRentInput"><input type="text" placeholder="Buscar Arriendo" id="searchRent" onkeyup="searchRent()"></li>
+                    <li class="rentObj"><p>Generador</p></li>
+                </ul>
+            </div>
+        </div>
 
 
         <section class="section-cost">

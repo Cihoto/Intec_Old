@@ -244,7 +244,6 @@
     min-height: 200px;
     border: 1px solid white;
   }
-  
 
   .centered-spaced{
     display: flex;
@@ -1002,3 +1001,295 @@ table.dataTable tbody td .productName {
   position: sticky;
   top: 0px;
 }
+
+
+.containerList{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#projectView{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-top: 15px;
+  height: 150px;
+  overflow: visible;
+  /* margin-bottom: 500px; */
+}
+
+@media (max-width: 850px) {
+
+ #projectView{
+  justify-content: center;
+ }
+ .containerList{
+  justify-content: center;
+ }
+
+}
+
+.option-header{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.project-option{
+  min-width: 350px;
+  max-height: 120px;
+  background-color: #2212a8;
+  border-radius: 10px;
+  margin-right: 20px;
+  margin-top: 15px;
+  justify-content: center;
+  align-content: center;
+  border-radius: 10px 10px 0px 0px;
+}
+
+
+.project-option p {
+  text-align: center;
+  line-height: 120px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  font-size: 30px;
+  align-content: center;
+  margin:0px;
+
+}
+
+.sort-options{
+  height: 0px;
+  background-color: rgba(255, 0, 0, 0.349);
+  border-radius: 0px 0px 10px 10px;
+  margin-right: 20px;
+  width: auto;
+  z-index: 10000;
+}
+
+.selectable-option{
+  height: 0px;
+  display: flex;
+  background-color: #4525d274;
+  margin: 1px 0px;
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  transition: all .6s ease;
+}
+
+.selectable-option p{
+  visibility: hidden;
+  line-height: 100px;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.selectable-option:hover{
+  /* box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px; */
+  background-color: red
+}
+
+.option-header:hover .selectable-option{
+  height: 100px;
+  background-color: #4525d2fc;
+}
+.option-header:hover .selectable-option p{
+  visibility: visible;
+}
+
+#projects-display{
+  max-height: 650px;
+  overflow: scroll;
+}
+
+#calendar-container{
+  padding: 20px;
+  max-height: 650px;
+}
+
+
+/* STYLE FOR SPINNER CONTAINER */
+#loaderContainer{
+  position: absolute;
+  background-color: rgba(190, 182, 182, 0.511);
+  width: 100%;
+  height: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  visibility: hidden;
+  transition: all .3s ease;
+}
+#loaderContainer.active{
+  height: 100%;
+  visibility: visible !important;
+  transition: all .3s ease;
+}
+
+
+/* LOADER PARA CARGA DE DATOS PANTALLA COMPLETA */
+.loader {
+  width: 110px; /* control the size */
+  aspect-ratio: 1;
+  display: grid;
+  -webkit-mask: conic-gradient(from 45deg, #0003,#000);
+          mask: conic-gradient(from 45deg, #0003,#000);
+  animation: load .45s steps(10) infinite;
+}
+.loader,
+.loader:before {
+  --_g: linear-gradient(#17177c 0 0) 50%; /* update the color here */
+  background: 
+    var(--_g)/34% 8%  space no-repeat,
+    var(--_g)/8%  34% no-repeat space;
+}
+.loader:before {
+  content: "";
+  transform: rotate(135deg);
+}
+@keyframes load {
+  from {transform: rotate(0turn)}
+  to   {transform: rotate(1turn)}
+}
+
+.arriendos-form-container.active{
+  height: 80%;
+  transition: all .4s ease;
+}
+.active .formContainer{
+  height: auto;
+  visibility: visible;
+  padding: 40px;
+}
+
+.arriendos-form-container{
+  display: flex;
+  width: 80% ;
+  background-color: rgba(255, 0, 0, 0.415);
+  height: 0%;
+  bottom: 0px;
+  transition: all .4s ease;
+  margin-left: -31px;
+  justify-content: center;
+  z-index: 1000;
+}
+
+@media (max-width: 1200px) {
+
+  .arriendos-form-container{
+    width: 100%;
+  }
+ 
+}
+
+.formContainer{
+  margin: 10px;
+  width: calc(100% - 20px) ;
+  padding: 0px;
+  visibility: hidden;
+  height: 0px;
+  overflow-y: scroll;
+}
+.theme-dark hr{
+  color: white;
+}
+
+
+#rentsUl li{
+  display: flex;
+  align-content: center;
+  list-style: none;
+  transition: all .5s ease;
+  cursor: pointer;
+  /* margin-bottom: 2px; */
+}
+
+.rentObj{
+ transition: all .5s ease;
+}
+
+#rentsUl .rentObj:hover {
+  background-color: #435ebe;
+ 
+}
+#rentsUl .rentObj:hover p {
+  color: white;
+}
+.theme-dark #rentsUl li p{
+  color: white;
+}
+#rentsUl li p{
+  color: black;
+  list-style: none;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+  text-align: center;
+  line-height: 47px;
+}
+
+#searchRentInput{
+  position: sticky;
+  top: 0px;
+}
+
+#rentsUl li input{
+  margin-left: 5px;
+  height: 40px;
+  border-radius: 5px;
+  padding: 10px;
+  width: 50%;
+}
+#rentsUl{
+  margin-top: 15px;
+  width: 100%;
+  border-radius: 10px;
+  height: 0px;
+  visibility: hidden;
+  transition: all .8s cubic-bezier(0.66, 0.58, 0, 1.42);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+#rentsUl.active{
+  height: 250px;
+  visibility: visible;
+}
+.arriendosSelect{
+  height: 0px;
+  visibility: hidden;
+  transition: all .8s cubic-bezier(0.66, 0.58, 0, 1.42);
+  margin-bottom: 65px;
+}
+.arriendosSelect.active{
+  height: 250px;
+  visibility: visible;
+}
+
+.LogOut{
+  position: absolute;
+  bottom: 30px;
+  right: 10%;
+  left: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeSessionBtn{
+  border: none;
+}
+.theme-dark .closeSessionBtn{
+  background-color: #1e1e2d;
+}
+
+
+

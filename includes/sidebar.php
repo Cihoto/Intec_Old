@@ -3,9 +3,9 @@
     <div class="sidebar-header position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <div class="logo col-7">
-          <a href="index.php"
-            ><img src="./assets/images/logo/intech_horizontal.png" alt="Logo" srcset=""
-          /></a>
+          <a href="index.php">
+            <img src="./assets/images/logo/intech_horizontal.png" alt="Logo" srcset=""/>
+          </a>
         </div>
 
         <!-- iconos y barra cambio theme -->
@@ -196,7 +196,7 @@
           echo '<li class="sidebar-item">';
         }
         ?>
-          <a href="/TablaResumen.php" class="sidebar-link">
+          <a href="/login.php" class="sidebar-link">
             <i class="fa-solid fa-infinity"></i>
             <!-- <i class="bi bi-person-check"></i> -->
             <span>Pruebas</span>
@@ -205,5 +205,28 @@
 
       </ul>
     </div>
+    <div class="LogOut" >
+      <button  class="closeSessionBtn" onclick="closeSession()" >
+          <p style="color: #ca2b2b;font-size: 25px;"><i class="fa-solid fa-power-off" ></i> Cerrar Sesión</p>
+      </button>
+    </div>
   </div>
 </div>
+
+
+<script>
+  function closeSession(){
+    $.ajax({
+      type: "POST",
+      url: "ws/Sesion/sesion.php",
+      data:JSON.stringify({action:'CloseSession'}),
+      dataType: 'json',
+      success: async function(response){
+        console.log("RESPONSE DE SESSION",response);
+        if(response){
+          location.reload();
+        }
+      }
+    })
+  }
+</script>

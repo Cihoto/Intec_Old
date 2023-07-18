@@ -48,7 +48,7 @@ if ($_POST){
             $postal_code = $req->codigo_postal;
             $comuna_id = $req->comuna;
         }
-        $query = "INSERT INTO intec.direccion
+        $query = "INSERT INTO direccion
         (direccion, numero,  dpto, postal_code, comuna_id, empresa_id)
         VALUES('".$direccion."', '".$numero."','".$dpto."', '".$postal_code."', $comuna_id, 1)";
 

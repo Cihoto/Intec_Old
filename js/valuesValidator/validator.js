@@ -64,4 +64,15 @@ function ClpUnformatter(value){
 }
 
 
+function convertFormToJSON(form) {
+    return form.reduce(function(json, {
+        name,
+        value
+    }) {
+        json[name] = value
+        return json;
+    }, {});
+}
+
+
 

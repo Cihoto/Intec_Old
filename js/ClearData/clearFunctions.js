@@ -33,19 +33,18 @@ function deleteResumedata(element){
     if(isNumeric(value)){
         AddTotal(-value)
         $('#totalSubResume').text(CLPFormatter(previusValue-value));
+        $('#totalSubarriendosDes').text(CLPFormatter(previusValue-value))
+        CalcularUtilidad();
         $(element).closest("tr").remove();
         return true;
 
     }else{
-
         Swal.fire({
             icon: 'error',
             title: 'Ups!',
             text: 'Debes ingresar un numero'
         })
-
         return false;
-
     }
 }
 
