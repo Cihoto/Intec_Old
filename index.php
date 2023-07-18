@@ -166,7 +166,7 @@ $active = 'dashboard';
         </div>
 
 
-        <button id="changedateevent">CAMBIAR FECHA EVENTO</button>
+        <!-- <button id="changedateevent">CAMBIAR FECHA EVENTO</button> -->
 
         <!-- info in grid right -->
         <!-- <div class="col-12">
@@ -267,10 +267,12 @@ $active = 'dashboard';
 <script src="/js/ProjectResume/projectResume.js"></script>
 <script src="/js/Funciones/assigments.js"></script>
 <script src="/js/Cargo_Especialidad/Testing/calendarviewResume.js"></script>
+<script src="/js/calendar.js"></script>
 
 <script>
   const EMPRESA_ID = $('#empresaId').text();
   let calendar;
+  var calendarEl = document.getElementById('calendar');
 
   async function GetCalendarProjects(empresaId) {
     return $.ajax({
@@ -293,21 +295,16 @@ $active = 'dashboard';
 
     let calendarData = calendar.getEvents();
     console.log(calendarData);
-
-
-    let specificEvent = calendar.getEventById(75)
-
-
-
+    let specificEvent = calendar.getEventById(75);
   })
 
-  async function fillListProjects(){
+  async function fillListProjects() {
     let eventos = await GetCalendarProjects(EMPRESA_ID);
     let ul = $('#project-resume');
 
-    console.log("eventos",eventos);
+    console.log("eventos", eventos);
 
-    eventos.forEach((element)=>{
+    eventos.forEach((element) => {
       let li = `<li class="headerLi">
                   <div class="projectData">
                     <p class="projectName lipad">${element.nombre_proyecto}</p>
@@ -318,67 +315,67 @@ $active = 'dashboard';
     })
   }
 
-  document.addEventListener('DOMContentLoaded', async function(){
+  document.addEventListener('DOMContentLoaded', async function() {
 
     fillListProjects();
 
 
+    FillCalendar(0);
 
+    // const events = await (GetCalendarProjects(EMPRESA_ID));
+    // let calendarEventObj = [];
 
-    const events = await (GetCalendarProjects(EMPRESA_ID));
-    let calendarEventObj = [];
+    // console.log(events);
 
-    console.log(events);
+    // events.forEach(element => {
 
-    events.forEach(element => {
+    //   console.log(element.id);
+    //   let color = "white";
+    //   let textColor = "black";
+    //   if (element.estado === 'creado') {
+    //     color = "yellow";
+    //     let textColor = "black";
 
-      console.log(element.id);
-      let color = "white";
-      let textColor = "black";
-      if (element.estado === 'creado') {
-        color = "yellow";
-        let textColor = "black";
+    //   }
+    //   if (element.estado === 'confirmado') {
+    //     color = "green";
+    //     let textColor = "white";
 
-      }
-      if (element.estado === 'confirmado') {
-        color = "green";
-        let textColor = "white";
+    //   }
+    //   if (element.estado === 'finalizado') {
+    //     color = "blue";
+    //     let textColor = "white";
 
-      }
-      if (element.estado === 'finalizado') {
-        color = "blue";
-        let textColor = "white";
+    //   }
 
-      }
+    //   calendarEventObj.push({
+    //     id: element.id,
+    //     title: element.nombre_proyecto,
+    //     start: element.fecha_inicio,
+    //     end: element.fecha_termino,
+    //     color: color,
+    //     textColor: textColor
+    //   })
 
-      calendarEventObj.push({
-        id: element.id,
-        title: element.nombre_proyecto,
-        start: element.fecha_inicio,
-        end: element.fecha_termino,
-        color: color,
-        textColor: textColor
-      })
+    // });
 
-    });
+   
+    // calendar = new FullCalendar.Calendar(calendarEl, {
+    //   eventClick: function(info) {
 
-    var calendarEl = document.getElementById('calendar');
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      eventClick: function(info) {
+    //     // ViewResume(projectId)
 
-        // ViewResume(projectId)
-
-        console.log(`ID ${info.event.id}`);
-        ViewResume(info.event.id);
-        // alert('Event: ' + info.event.title);
-        // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-        // alert('View: ' + info.view.type);
-        // change the border color just for fun
-        // info.el.style.borderColor = 'red';
-      },
-      events: calendarEventObj
-    })
-    calendar.render();
+    //     console.log(`ID ${info.event.id}`);
+    //     ViewResume(info.event.id);
+    //     // alert('Event: ' + info.event.title);
+    //     // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+    //     // alert('View: ' + info.view.type);
+    //     // change the border color just for fun
+    //     // info.el.style.borderColor = 'red';
+    //   },
+    //   events: calendarEventObj
+    // })
+    // calendar.render();
 
   });
 

@@ -63,7 +63,7 @@ function AddCategorias($request,$empresaId){
 
     for($i = 0 ; $i < count($request); $i++){
 
-        $queryInsertCategoria = "INSERT INTO intec.categoria
+        $queryInsertCategoria = "INSERT INTO categoria
                         (nombre, createAt,IsDelete,empresa_id)
                         VALUES('".trim($request[$i])."','".$today."',0,$empresaId)";
 

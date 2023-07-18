@@ -23,7 +23,7 @@ if (isset($_POST['action'])) {
         $conn = new bd();
         $conn->conectar();
         $regiones = [];
-        $queryRegiones = 'Select id, region from region';
+        $queryRegiones = 'SELECT id, region FROM region';
         if($responseRegion = $conn->mysqli->query($queryRegiones)){
             while($dataRegiones = $responseRegion->fetch_object()){
                 $regiones[] = $dataRegiones;

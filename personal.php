@@ -1,36 +1,4 @@
-<?php
-require_once('./ws/bd/bd.php');
-$conn = new bd();
-$conn->conectar();
-$arregloPersonal = [];
 
-// $queryPersonal = 'SELECT p.id , per.nombre , per.apellido ,e.especialidad ,c.cargo, tc.contrato,per.rut FROM personal p 
-//                 INNER JOIN cargo c on c.id  = p.cargo_id 
-//                 INNER JOIN especialidad e on e.id  = p.especialidad_id 
-//                 INNER JOIN persona per on per.id = p.persona_id 
-//                 LEFT JOIN usuario u on u.id  = p.usuario_id 
-//                 INNER JOIN tipo_contrato tc on tc.id  = p.tipo_contrato_id 
-//                 INNER JOIN empresa emp on emp.id = p.empresa_id 
-//                 where emp.id = 1
-//                 AND p.IsDelete = 0';
-
-
-$queryContrato = 'select contrato FROM tipo_contrato tc';
-
-// //BUILD DATA PERSONAL
-// $responseDbPersonal = $conn->mysqli->query($queryPersonal);
-
-// while ($dataPersonal = $responseDbPersonal->fetch_object()) {
-//     $arregloPersonal[] = $dataPersonal;
-// }
-
-//BUILD TIPO CONTRATO DATA
-$responseDbTipoContrato = $conn->mysqli->query($queryContrato);
-
-while ($dataContratos = $responseDbTipoContrato->fetch_object()) {
-    $contratos[] = $dataContratos;
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +10,40 @@ $active = 'personal';
 
 <body>
     <script src="./assets/js/initTheme.js"></script>
+    <?php include_once('./includes/Constantes/empresaId.php');?>
+    <?php
+        require_once('./ws/bd/bd.php');
+        $conn = new bd();
+        $conn->conectar();
+        $arregloPersonal = [];
+
+        // $queryPersonal = 'SELECT p.id , per.nombre , per.apellido ,e.especialidad ,c.cargo, tc.contrato,per.rut FROM personal p 
+        //                 INNER JOIN cargo c on c.id  = p.cargo_id 
+        //                 INNER JOIN especialidad e on e.id  = p.especialidad_id 
+        //                 INNER JOIN persona per on per.id = p.persona_id 
+        //                 LEFT JOIN usuario u on u.id  = p.usuario_id 
+        //                 INNER JOIN tipo_contrato tc on tc.id  = p.tipo_contrato_id 
+        //                 INNER JOIN empresa emp on emp.id = p.empresa_id 
+        //                 where emp.id = 1
+        //                 AND p.IsDelete = 0';
+
+
+        $queryContrato = 'select contrato FROM tipo_contrato tc';
+
+        // //BUILD DATA PERSONAL
+        // $responseDbPersonal = $conn->mysqli->query($queryPersonal);
+
+        // while ($dataPersonal = $responseDbPersonal->fetch_object()) {
+        //     $arregloPersonal[] = $dataPersonal;
+        // }
+
+        //BUILD TIPO CONTRATO DATA
+        $responseDbTipoContrato = $conn->mysqli->query($queryContrato);
+
+        while ($dataContratos = $responseDbTipoContrato->fetch_object()) {
+            $contratos[] = $dataContratos;
+        }
+    ?>
 
 
     <div id="app">
@@ -50,7 +52,6 @@ $active = 'personal';
 
         <div id="main">
             <header class="mb-3">
-                <?php include_once('./includes/Constantes/empresaId.php');?>
                 <a href="#" class="burger-btn d-block d-xl-none">
                     <i class="bi bi-justify fs-3"></i>
                 </a>
@@ -318,6 +319,8 @@ $active = 'personal';
                 }),
                 dataType: 'json',
                 success: function(data){
+
+                    console.log("TODO EL PERSONAL",data);
 
                     if($('#AllPersonalTable tbody tr').length > 0){
                         $('#AllPersonalTable').empty();

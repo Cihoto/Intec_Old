@@ -156,7 +156,7 @@ function addVehicleToProject($request)
     foreach ($request as $req) {
 
         $idVehicle = $req->idVehicle;
-        $query = "INSERT INTO intec.proyecto_has_vehiculo
+        $query = "INSERT INTO proyecto_has_vehiculo
                 (proyecto_id, vehiculo_id)
                 VALUES($idProject, $idVehicle)";
         if ($conn->mysqli->query($query)) {
@@ -256,7 +256,7 @@ function addVehicle($vehicleData, $empresaId)
         }else{
             $idPersonal = "null";
         }
-        $query = "INSERT INTO intec.vehiculo
+        $query = "INSERT INTO vehiculo
         (patente, IsDelete, empresa_id, persona_id)
         VALUES('".$patente."', 0, $empresaId, $idPersonal)";
 

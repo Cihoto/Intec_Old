@@ -36,7 +36,7 @@ foreach ($productoArr as $key => $value) {
    
     if ($queryIdMarca->num_rows === 0) {
 
-        $queryInsertMarca = "INSERT INTO intec.marca
+        $queryInsertMarca = "INSERT INTO marca
         (marca, createAt,IsDelete)
         VALUES('$marca', '$today', 0)";
         $conn->mysqli->query($queryInsertMarca);
@@ -58,7 +58,7 @@ foreach ($productoArr as $key => $value) {
                 if($responseCategoria->num_rows > 0){
                     $insertedCategoria = $responseCategoria->fetch_object()->id;
                 }else{
-                    $queryCreateCategoria = "INSERT INTO intec.categoria(nombre, createAt, IsDelete,empresa_id)VALUES('" . $categoria . "','" . $today . "', 0, $empresaId)";
+                    $queryCreateCategoria = "INSERT INTO categoria(nombre, createAt, IsDelete,empresa_id)VALUES('" . $categoria . "','" . $today . "', 0, $empresaId)";
                     $conn->mysqli->query($queryCreateCategoria);
                     $insertedCategoria =  $conn->mysqli->insert_id;
                 }
@@ -69,13 +69,13 @@ foreach ($productoArr as $key => $value) {
                 if($responseItem->num_rows > 0){
                     $insertedItem = $responseItem->fetch_object()->id;
                 }else{
-                    $queryCreateItem = "INSERT INTO intec.item(item, createAt, IsDelete, empresa_id)VALUES('" . $item . "','" . $today . "', 0, $empresaId)";
+                    $queryCreateItem = "INSERT INTO item(item, createAt, IsDelete, empresa_id)VALUES('" . $item . "','" . $today . "', 0, $empresaId)";
                     $conn->mysqli->query($queryCreateItem);
                     $insertedItem = $conn->mysqli->insert_id;
                 }
             }
-            // echo "INSERT INTO intec.categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)";
-            $responseInsert = $conn->mysqli->query("INSERT INTO intec.categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)");
+            // echo "INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)";
+            $responseInsert = $conn->mysqli->query("INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)");
             echo $cathasitemId = $conn->mysqli->insert_id;
             $cathasitemId = $conn->mysqli->insert_id;
            
@@ -84,14 +84,14 @@ foreach ($productoArr as $key => $value) {
             $cathasitemId = $dataBdResponse->id;
         }
 
-        $queryProducto = "INSERT INTO intec.producto
+        $queryProducto = "INSERT INTO producto
         (nombre, marca_id, categoria_has_item_id, codigo_barra, precio_compra, precio_arriendo, createAt, IsDelete, empresa_id)
         VALUES('" . $nombre . "'," . $idMarca . "," . $cathasitemId . ", '11011001'," . $precioCompra . "," . $precioArriendo . ", '" . $today . "', 0,$empresaId)";
 
         if ($conn->mysqli->query($queryProducto)) {
             $idProducto = $conn->mysqli->insert_id;
 
-            $queryInventario = "INSERT INTO intec.inventario
+            $queryInventario = "INSERT INTO inventario
                                 (producto_id, cantidad, createAt)
                                 VALUES($idProducto, $stock , $today)";
 

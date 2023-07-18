@@ -278,3 +278,23 @@ function GetArriendosProject(){
 }
 
 
+
+// LOCAL RENTS  MANAGEMENT
+function SetRents(rent_id,nombre, valor,detalle){
+    if(localStorage.getItem("rentsData") === null){
+        localStorage.setItem("rentsData", JSON.stringify([{rent_id,nombre, valor,detalle}]))
+      }else{
+        let allDirs = JSON.parse(localStorage.getItem("rentsData"))
+        allDirs.push({rent_id,nombre, valor,detalle});
+        localStorage.setItem("rentsData",JSON.stringify(allDirs));
+    }
+}
+// LOCALE STORAGE MANAGEMENT FOR RENTS
+function GetRents(){
+    if(localStorage.getItem("rentsData") === null){
+        return false;
+    }
+    return JSON.parse(localStorage.getItem('rentsData'));
+}
+
+

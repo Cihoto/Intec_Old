@@ -199,7 +199,7 @@ if ($_POST) {
             $price = $req->price;
             $quantity = $req->quantity;
 
-            $query = "INSERT INTO intec.proyecto_has_producto
+            $query = "INSERT INTO proyecto_has_producto
                     (proyecto_id, producto_id, cantidad, arriendo)
                     VALUES($idProject, $idProduct, $quantity, $price);";
     
@@ -286,14 +286,14 @@ if ($_POST) {
 
                 if($queryItemHasId->num_rows === 0){
 
-                    $queryCreateItem = "INSERT INTO intec.item(item, createAt, IsDelete)VALUES('".$item."','".$today."',0)";
-                    $queryCreateCategoria = "INSERT INTO intec.categoria(nombre, createAt, IsDelete)VALUES('".$categoria."','".$today."',0)";
+                    $queryCreateItem = "INSERT INTO item(item, createAt, IsDelete)VALUES('".$item."','".$today."',0)";
+                    $queryCreateCategoria = "INSERT INTO categoria(nombre, createAt, IsDelete)VALUES('".$categoria."','".$today."',0)";
 
                     $conn->mysqli->query($queryCreateItem);
                     $insertedItem = $conn->mysqli->insert_id;
                     $conn->mysqli->query($queryCreateCategoria);
                     $insertedCategoria =  $conn->mysqli->insert_id;
-                    $conn->mysqli->query("INSERT INTO intec.categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)");
+                    $conn->mysqli->query("INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)");
                     array_push($jsonErrItemHasClass,array(
                         "nombre"=>$nombre,
                         "marca"=>$marca,
@@ -311,7 +311,7 @@ if ($_POST) {
                 
                 if(!$err){
 
-                    $queryProducto = "INSERT INTO intec.producto
+                    $queryProducto = "INSERT INTO producto
                     (nombre, marca_id, categoria_has_item_id, codigo_barra, precio_compra, precio_arriendo, createAt, IsDelete, empresa_id)
                     VALUES('".$nombre."',".$idMarca.",".$cathasitemId.", '11011001',".$precioCompra.",".$precioArriendo.", '".$today."', 0,1)";
                     
@@ -321,7 +321,7 @@ if ($_POST) {
 
                         $idProducto = $conn->mysqli->insert_id;
 
-                        $queryInventario = "INSERT INTO intec.inventario
+                        $queryInventario = "INSERT INTO inventario
                                         (producto_id, cantidad, createAt)
                                         VALUES($idProducto, $stock , $today)";
                                         

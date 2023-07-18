@@ -58,7 +58,7 @@ function AddItems($request,$empresaId){
 
     for($i = 0 ; $i < count($request); $i++){
 
-        $queryInsertCategoria = "INSERT INTO intec.item
+        $queryInsertCategoria = "INSERT INTO item
                         (item, createAt,  IsDelete,empresa_id)
                         VALUES('".trim($request[$i])."', '".$today."', 0, $empresaId)";
         if($conn->mysqli->query($queryInsertCategoria)){

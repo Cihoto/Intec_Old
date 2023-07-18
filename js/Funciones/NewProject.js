@@ -213,3 +213,22 @@ function FillPresonalDragAndDrop(empresaId) {
     }
   })
 }
+
+
+function AssignRents(arrayRents){
+  return $.ajax({
+    type: "POST",
+    url: 'ws/Arriendos/arriendos.php',
+    data: JSON.stringify({
+      action: 'AssignRentToProject',
+      request: arrayRents
+    }),
+    dataType: 'json',
+    success: function(data) {
+      // console.log("ARRIENDOS", data);
+    },
+    error: function(response) {
+      // console.log(response.responseText);
+    }
+  })
+}

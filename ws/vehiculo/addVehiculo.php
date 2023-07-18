@@ -23,7 +23,7 @@
         $empresaId = $value->empresaId;
         
      
-        $query = "INSERT INTO intec.vehiculo
+        $query = "INSERT INTO vehiculo
                 (patente, IsDelete, empresa_id)
                 VALUES('".$patente."', 0, $empresaId)";
         if($conn->mysqli->query($query)){
