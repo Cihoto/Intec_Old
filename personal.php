@@ -625,7 +625,7 @@ $active = 'personal';
 
         $('#excelTable>tbody').on('blur', 'td', function() {
 
-            let value = $(this).text()
+            let value = $(this).text();
 
             //obtencion de las propiedades del TD
             let tdListClass = $(this).attr("class").split(/\s+/);
@@ -651,8 +651,6 @@ $active = 'personal';
             let tdTitle = ""
 
             //atributos return a td
-            console.log("puede ser nulo ==>", notNull);
-            console.log("ES NULO==>", tdNull);
             if (!notNull && tdNull) {
                 errorCheck = false
                 tdTitle = "Ingrese un valor"
@@ -739,7 +737,6 @@ $active = 'personal';
                     }
                     return returnArray
                 })
-                console.log("requestArray", arrayRequest);
                 $.ajax({
                     type: "POST",
                     url: "ws/personal/Personal.php",
@@ -758,7 +755,6 @@ $active = 'personal';
                             let especialidades = [];
                             let contratos = [];
                             responseArray.forEach(el=>{
-                                console.log(`BUSCO ${el.row}`);
                                 if(el.problem === "Especialidad"){
                                     if(especialidades.includes(el.data.especialidad)){
                                     }else{
@@ -785,7 +781,6 @@ $active = 'personal';
                                     $(`#tableProblems .excelRow`).each((key,element)=>{
 
                                         let row = $(element).text();
-                                        console.log("ROWS DENTRO DE LA TABLA YA INSERTADOS",row);
                                         if(arrayRows.includes(row)){
 
                                         }else{
@@ -796,8 +791,8 @@ $active = 'personal';
                                     console.log("ARRAY ROWS",arrayRows);
 
                                     if(arrayRows.includes(`${el.row}`)){
+
                                         let element = $(`#tableProblems .excelRow:contains('${el.row}')`)
-                                        console.log("ECONTREEEEEEEEEEEEEEEEEEEE");
                                         if(el.problem === "Cargo"){
                                             let cargo = $(element).closest('tr').find('.cargo');
                                             if(!$(cargo).hasClass('err')){
@@ -828,19 +823,17 @@ $active = 'personal';
                                         }
                                     }else{
                                         let tr = `<tr><td class="excelRow">${el.row}</td>
-                                            <td>${el.data.nombre}</td>
-                                            <td>${el.data.apellido}</td>
-                                            <td>${el.data.rut}</td>
-                                            <td>${el.data.telefono}</td>
-                                            <td>${el.data.correo}</td>
+                                            <td class="nombre" >${el.data.nombre}</td>
+                                            <td class="apellido" >${el.data.apellido}</td>
+                                            <td class="rut" >${el.data.rut}</td>
+                                            <td class="telefono" >${el.data.telefono}</td>
+                                            <td class="correo" >${el.data.correo}</td>
                                             <td class="cargo ${el.problem === "Cargo" ? "err" :""}">${el.data.cargo}</td>
                                             <td class="especialidad ${el.problem === "Especialidad" ? "err" :""}">${el.data.especialidad}</td>
                                             <td class="contrato ${el.problem === "Contrato" ? "err" :""}">${el.data.contrato}</td></tr>`;
                                         table.append(tr);
                                     }
                                 }else{
-                                    console.log(`NO ENCONTRE FILAS AGREGO eXCEL ROW ${el.row}`);
-
                                     let tr = `<tr><td class="excelRow">${el.row}</td>
                                         <td>${el.data.nombre}</td>
                                         <td>${el.data.apellido}</td>
@@ -856,8 +849,6 @@ $active = 'personal';
 
                             let ulEspecialidades =$('#ulEspecialidades'); 
                             let ulCargos = $('#ulCargos');
-                            console.log(especialidades);
-                            console.log(cargos);
     
                             especialidades.forEach(el=>{
                                 ulEspecialidades.append(`<li> <p class="especialidadName">${el}</p>
@@ -885,10 +876,6 @@ $active = 'personal';
                                                 </li>`);
                             });
                         }
-
-
-
-                        
                     },
                     error: function(data) {
                         console.log(data);
@@ -906,11 +893,11 @@ $active = 'personal';
 
         //DELETE PERSONAL 
         $(".deletePersonal").on('click', function() {
+
             let tr = $(this).closest('tr');
-            let nombre = $(this).closest('tr').find('.nombre').text()
-            let apellido = $(this).closest('tr').find('.apellido').text()
-            console.log(apellido);
-            let idPersonal = $(this).closest('tr').find('.id').text()
+            let nombre = $(this).closest('tr').find('.nombre').text();
+            let apellido = $(this).closest('tr').find('.apellido').text();
+            let idPersonal = $(this).closest('tr').find('.id').text();
 
             Swal.fire({
                 icon: 'info',
@@ -943,7 +930,6 @@ $active = 'personal';
                             console.log(data.responseText);
                         }
                     })
-
                 } else {
                     console.log("Cancelado");
                 }
@@ -972,10 +958,8 @@ $active = 'personal';
                         'position':'bottom-end',
                         'showConfirmButton':false
                     }).then(()=>{
-                        $('#especialidadName').val("");
-                        $('#cargoEspecialidad').modal('hide');
+                        RemoveErrClass('especialidad', arrayEspecialidades);
                     })
-
                 }else{
                     Swal.fire({
                         'icon':'error',
@@ -985,8 +969,6 @@ $active = 'personal';
                         'position':'bottom-end',
                         'showConfirmButton':false
                     }).then(()=>{
-                        $('#especialidadName').val("");
-                        $('#cargoEspecialidad').modal('hide');
                     })
                 }
             }else{
@@ -1004,10 +986,10 @@ $active = 'personal';
 
         async function AddEspecialidadFromModal(element){
 
-            let valor = $(element).closest('li').find('.cargoName').text();
+            let valor = $(element).closest('li').find('.especialidadName').text();
             let li = $(element).closest('li');
 
-            const response = await Promise.all([AddCargoGivenArray(EMPRESA_ID,[valor])]);
+            const response = await Promise.all([AddEspecialidadGivenArray(EMPRESA_ID,[valor])]);
             if(response.length > 0){
                 li.hide('slow', function(){li.remove();});
                 Swal.fire({
@@ -1017,9 +999,9 @@ $active = 'personal';
                     'timer': 1500,
                     'position':'bottom-end',
                     'showConfirmButton':false
-                }).then(()=>{
-                    $('#especialidadName').val("");
-                    $('#cargoEspecialidad').modal('hide');
+                })
+                .then(()=>{
+                    RemoveErrClass('especialidad', [valor]);
                 })
 
             }else{
@@ -1040,7 +1022,6 @@ $active = 'personal';
         }
 
         async function AddCargoFromModal(element){
-
             let valor = $(element).closest('li').find('.cargoName').text();
             let li = $(element).closest('li');
 
@@ -1056,9 +1037,9 @@ $active = 'personal';
                     'timer': 1500,
                     'position':'bottom-end',
                     'showConfirmButton':false
-                }).then(()=>{
-                    $('#especialidadName').val("");
-                    $('#cargoEspecialidad').modal('hide');
+                })
+                .then(()=>{
+                    RemoveErrClass('cargo', [valor]);
                 })
 
             }else{
@@ -1070,24 +1051,20 @@ $active = 'personal';
                     'timer': 1500,
                     'position':'bottom-end',
                     'showConfirmButton':false
-                }).then(()=>{
-                    $('#especialidadName').val("");
-                    $('#cargoEspecialidad').modal('hide');
                 })
-
             }
         }
 
         async function AddCargoMasiva(){
 
             let names = $('#ulCargos li');
-            let arrayEspecialidades = [];
+            let arrayCargos = [];
 
             if(names.length > 0){
                 $(names).each((key,value)=>{
-                    arrayEspecialidades.push($(value).find('.cargoName').text());
+                    arrayCargos.push($(value).find('.cargoName').text());
                 })
-                const response = await Promise.all([AddCargoGivenArray(EMPRESA_ID,arrayEspecialidades)]);
+                const response = await Promise.all([AddCargoGivenArray(EMPRESA_ID,arrayCargos)]);
 
                 if(response.length > 0){
                     let li = $('#ulCargos');
@@ -1099,6 +1076,9 @@ $active = 'personal';
                         'timer': 1500,
                         'position':'bottom-end',
                         'showConfirmButton':false
+                    })
+                    .then(()=>{
+                        RemoveErrClass('cargo', arrayCargos)
                     })
 
                 }else{
@@ -1122,10 +1102,65 @@ $active = 'personal';
                     'position':'bottom-end',
                     'showConfirmButton':false
                 })
-
             }
         }
 
+
+        function RemoveErrClass(tipo,arrayToEvaulate){
+            const evaluateArray = arrayToEvaulate;
+            if(tipo ==="especialidad"){
+                const arrayEspecialidad = $('#tableProblems > tbody tr .especialidad');
+                $(arrayEspecialidad).each((key,element)=>{
+                    console.log($(element).text());
+                    if($(element).hasClass('err') && evaluateArray.includes($(element).text())){
+                        $(element).removeClass('err')
+                    }
+                })
+            }
+            if(tipo ==="cargo"){
+                const arrayEspecialidad = $('#tableProblems > tbody tr .cargo');
+                $(arrayEspecialidad).each((key,element)=>{
+                    if($(element).hasClass('err') && evaluateArray.includes($(element).text())){
+                        $(element).removeClass('err');
+                    }
+                });
+            }
+        }
+
+        function AddPersonalFromModalProblems(){
+            let arrayPersonal = [];
+
+            $('#tableProblems > tbody tr').each((key,element)=>{
+                if(!$(element).find('.cargo').hasClass('err') && !$(element).find('.especilidad').hasClass('err')){
+                    arrayPersonal.push({
+                        nombre : $(element).find('.nombre').text(),
+                        apellido : $(element).find('.apellido').text(),
+                        rut : $(element).find('.rut').text(),
+                        correo : $(element).find('.telefono').text(),
+                        telefono : $(element).find('.correo').text(),
+                        neto : $(element).find('.neto').text(),
+                        especialidad : $(element).find('.especialidad').text(),
+                        contrato : $(element).find('.contrato').text(),
+                        cargo : $(element).find('.cargo').text()
+                    });
+                }
+            });
+
+            if(arrayPersonal.length > 0){
+                $.ajax({
+                    type: "POST",
+                    url: "ws/personal/Personal.php",
+                    data: JSON.stringify({action:"addPersonalMasiva",request:arrayPersonal,empresaId:EMPRESA_ID}),
+                    dataType: 'json',
+                    success: function(data){
+
+                    }
+                })
+                .then(()=>{
+                    FillPersonalAllData(EMPRESA_ID);
+                })
+            }
+        }
 
         function removeLi(element){
             let li = $(element).closest('li');

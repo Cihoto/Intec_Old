@@ -276,6 +276,7 @@ async function AddCargoGivenArray(empresaId,valor){
         }),
         dataType: 'json',
         success: function(data){
+            console.log('ESPECIALIDADES AGREGADAS A LA BASE DE DATOS',data);
            return true;
         },error:function(){
            return false;
