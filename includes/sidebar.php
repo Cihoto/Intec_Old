@@ -188,20 +188,23 @@
             <span>Administración</span>
           </a>
         </li>
-
+        <?php if($empresaId === "1"):?>
         <?php
+        
         if($active == 'pruebas'){
           echo '<li class="sidebar-item active">';
         }else{
           echo '<li class="sidebar-item">';
         }
         ?>
+        
           <a href="/login.php" class="sidebar-link">
             <i class="fa-solid fa-infinity"></i>
             <!-- <i class="bi bi-person-check"></i> -->
             <span>Pruebas</span>
           </a>
         </li>
+        <?php endif;?>
 
       </ul>
     </div>

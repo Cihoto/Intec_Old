@@ -1290,6 +1290,24 @@ table.dataTable tbody td .productName {
 .theme-dark .closeSessionBtn{
   background-color: #1e1e2d;
 }
+#download-Excel{
+  cursor: pointer;
+  transition: all 1s ease;
+}
+#download-Excel:hover::after{
+  top:0px;
+  opacity: 1;
+}
+#download-Excel::after{
+  content: "Descargar Excel Tipo";
+  position: relative;
+  top:-10px;
+  width: 0px;
+  transition: all 1s ease;
+  color: #1D6F42;
+  opacity: 0;
+}
+
 
 
 

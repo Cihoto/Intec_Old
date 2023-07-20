@@ -59,13 +59,15 @@ if($responseBdVehiculo = $conn->mysqli->query($queryVehiculos)){
             <i class="bi bi-justify fs-3"></i>
           </a>
         </header>
-
-        <div class="page-header">
-          <h3>Vehiculos</h3>
+        <div class="page-header" style="margin-bottom: 30px;">
+            <div style="display:flex; align-items: center; " >
+                <h3 style="margin-right: 50px">Vehiculos</h3>
+                <a id="download-Excel" style="height: 20px; line-height: 20px;font-size: 30px;" href="./ExcelFiles/Vehiculos.xlsx" download="Carga Masiva Vehículo"><i class="fa-solid fa-file-excel" style="color: #1D6F42; "></i></a>
+            </div>
+            </div>
             <div class="col-8 col-lg-3 col-sm-4">
                 <div class="card">
                     <div class="row">
-
                         <div class="col-6">
                             <button
                                 type="button"
