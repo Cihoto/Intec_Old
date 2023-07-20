@@ -49,7 +49,7 @@ $active = 'proximosEventos';
       </header>
 
       <div class="page-header">
-        <h3>Proximos Eventos</h3>
+        <h3>Próximos Eventos</h3>
       </div>
 
       <div class="page-content">

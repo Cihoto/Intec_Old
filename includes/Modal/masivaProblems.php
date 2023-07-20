@@ -30,16 +30,6 @@
             <div class="sideContainer overflow-auto">
                 <div class="ulProblems">
                     <div class="problemContainer">
-                        <p id="especialidadesProblem">Estas especialidades no están ingresadas, ¿Desesas ingresarlas?</p>
-                        <ul id="ulEspecialidades" class="elementList">
-
-                        </ul>
-                        <hr>
-                        <div class="flex just-content-end">
-                            <button onclick="AddespecialidadMasiva()" class="btn-confirm">Agregar Todos</button>
-                        </div>
-                    </div>
-                    <div class="problemContainer">
                         <p id="especialidadesProblem">Estos cargos no están ingresadas, ¿Desesas ingresarlos?</p>
                         <ul id="ulCargos" class="elementList">
 
@@ -47,6 +37,16 @@
                         <hr>
                         <div class="flex just-content-end">
                             <button onclick="AddCargoMasiva()" class="btn-confirm">Agregar Todos</button>
+                        </div>
+                    </div>
+                    <div class="problemContainer">
+                        <p id="especialidadesProblem">Estas especialidades no están ingresadas, ¿Desesas ingresarlas?</p>
+                        <ul id="ulEspecialidades" class="elementList">
+
+                        </ul>
+                        <hr>
+                        <div class="flex just-content-end">
+                            <button onclick="AddespecialidadMasiva()" class="btn-confirm">Agregar Todos</button>
                         </div>
                     </div>
                     <div class="problemContainer">
@@ -64,7 +64,7 @@
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Cancelar</span>
                 </button>
-                <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                <button type="button" onclick="AddPersonalFromModalProblems()" class="btn btn-primary ml-1" data-bs-dismiss="modal">
                     <i class="bx bx-check d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Agregar nuevamente</span>
                 </button>
