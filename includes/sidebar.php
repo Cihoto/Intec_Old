@@ -117,13 +117,29 @@
             <span>Eventos</span>
           </a>
           <ul class="submenu">
-            <li class="submenu-item">
-              <a href="proximosEventos.php">Crear Evento</a>
-            </li>
+            <?php if($rol_id !== 3):?>
+              <li class="submenu-item">
+                <a href="proximosEventos.php">Crear Evento</a>
+              </li>
+            <?php endif;?>
             <li class="submenu-item">
               <a href="proyectos.php" >Lista de Eventos</a>
             </li>
           </ul>
+        </li>
+
+       
+        <?php
+        if($active == 'clientes'){
+          echo '<li class="sidebar-item active">';
+        }else{
+          echo '<li class="sidebar-item">';
+        }
+        ?>
+          <a href="/clientes.php" class="sidebar-link">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Clientes</span>
+          </a>
         </li>
 
         <?php
@@ -153,6 +169,9 @@
             <span>Vehiculos</span>
           </a>
         </li>
+
+
+        
 
         <?php
         if($active == '1' || $active == '2'){

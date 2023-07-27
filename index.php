@@ -14,6 +14,7 @@ $active = 'dashboard';
 <body>
   <script src="./assets/js/initTheme.js"></script>
   <?php require_once('./includes/Constantes/empresaId.php') ?>
+  <?php require_once('./includes/Constantes/rol.php') ?>
   <div id="app">
 
     <?php require_once('./includes/sidebar.php') ?>

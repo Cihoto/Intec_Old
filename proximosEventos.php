@@ -35,6 +35,7 @@ $active = 'proximosEventos';
 <body>
 
   <?php require_once('./includes/Constantes/empresaId.php') ?>
+  <?php require_once('./includes/Constantes/rol.php') ?>
 
   <script src="./assets/js/initTheme.js"></script>
   <div id="app">
@@ -105,12 +106,16 @@ $active = 'proximosEventos';
 
         <div class="card box">
           <div class="row" style="justify-content: end;">
+
+         
             <div class="col-3 mt-2 mb-2">
               <button class="btn btn-success" id="submitProject">Crear Proyecto</button>
             </div>
-            <div class="col-3 mt-2 mb-2">
-              <button class="btn btn-success" id="verarray">Ver array</button>
-            </div>
+            <?php if($empresaId === "1"):?>
+              <div class="col-3 mt-2 mb-2">
+                <button class="btn btn-success" id="verarray">Ver array</button>
+              </div>
+            <?php endif;?>
           </div>
         </div>
       </div>
@@ -205,6 +210,8 @@ $active = 'proximosEventos';
     FillPersonal(EMPRESA_ID);
     // CLEAR LOCALSTORGE
     localStorage.clear();
+    // FILL REGIONES
+    FillRegiones(EMPRESA_ID)
 
 
     $(document).on('click', '.logoRemove', function() {

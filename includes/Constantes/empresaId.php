@@ -14,4 +14,4 @@ if(!isset($_SESSION['empresa_id'])){
 // $empresaId = 1;
 ?>
 
-<p style="display: none;font-size: 40px;" id="empresaId"><?=$empresaId?></p>
+<p style="display:none;font-size: 40px;" id="empresaId"><?=$empresaId?></p>

@@ -83,6 +83,97 @@ function UpdateCliente(request){
     }})
 }
 
+function GetClientData(empresa_id){
+
+  return $.ajax({
+    type: "POST",
+    url: 'ws/cliente/cliente.php',
+    data: JSON.stringify({
+        "tipo": "getClientData",
+        'empresa_id': empresa_id
+    }),
+    dataType: 'json',
+    success: function(response) {
+      console.log(response);
+
+      if(response.success){
+        console.log(response.data);
+
+      }
+      if(response.error){
+        console.log(response.error);
+
+      }
+    },error:function(response){
+
+  }})
+}
+
+async function FillCientesDisplay(){
+  const dataClientes = await GetClientData(EMPRESA_ID);
+  console.log(dataClientes);
+  if(!dataClientes.success){
+    return
+  }
+
+  if(dataClientes.data.length > 0 ){
+    const container = $('#clients-container')
+
+    dataClientes.data.forEach(cliente => {
+      
+      let boxCliente = `<div class="client-box">
+
+          <h4>${cliente.nombre_fantasia}</h4>
+          <hr>
+          <div class="client-box-body">
+            <p>${cliente.nombre} ${cliente.apellido}</p>
+            <p>${cliente.rut_df}</p>
+            <p>${cliente.direccion}</p>
+            <p>${cliente.telefono}</p>
+            <p>${cliente.email}</p>
+          </div>
+        </div>`;
+    
+        container.append(boxCliente);
+    });
+
+  }
+}
+async function FillClientesTable(){
+
+  const dataClientes = await GetClientData(EMPRESA_ID);
+  console.log(dataClientes);
+  if(!dataClientes.success){
+    return
+  }
+
+  if(dataClientes.data.length > 0 ){
+    const tableClientes = $('#clientesTable > tbody');
+
+    if ($.fn.DataTable.isDataTable( '#clientesTable' )){
+      $('#clientesTable').DataTable().destroy();
+    }
+    tableClientes.empty();
+    dataClientes.data.forEach(cliente => {
+      let trClientes = 
+        `<tr><td>${cliente.nombre_fantasia}</td>
+        <td>${cliente.nombre} ${cliente.apellido}</td>
+        <td>${cliente.rut_df}</td>
+        <td>${cliente.direccion}</td>
+        <td>${cliente.telefono}</td>
+        <td>${cliente.email}</td></tr>`;
+      tableClientes.append(trClientes);
+    });
+  }
+  if ( ! $.fn.DataTable.isDataTable( '#clientesTable' ) ) {
+    $('#clientesTable').dataTable({
+      scrollY: 400,
+      ordering: true,
+      fixedHeader : true
+    });
+  }
+}
+
 
 function ResetClienteForm(){
   $("#clienteSelect").val("");

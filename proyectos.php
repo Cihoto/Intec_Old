@@ -17,12 +17,14 @@ $active = 'proximosEventos';
 <body>
   <script src="./assets/js/initTheme.js"></script>
   <?php include_once('./includes/Constantes/empresaId.php') ?>
+  <?php include_once('./includes/Constantes/rol.php') ?>
+
   <div id="app">
-  <div id="loaderContainer" class="">
-          <div class="centerLoader">
-            <div class="loader"></div>
-          </div>
-        </div>
+    <div id="loaderContainer" class="">
+      <div class="centerLoader">
+        <div class="loader"></div>
+      </div>
+    </div>
 
     <?php require_once('./includes/sidebar.php') ?>
     <?php require_once('./includes/Constantes/empresaId.php') ?>
@@ -39,7 +41,7 @@ $active = 'proximosEventos';
       </div>
 
       <div class="page-content">
-        
+
 
         <!-- aca va la info de la pagina -->
         <div class="containerList">
@@ -228,6 +230,8 @@ $active = 'proximosEventos';
 
   <script>
     const EMPRESA_ID = document.getElementById('empresaId').textContent;
+
+    var ROL_ID = <?php echo $_SESSION["rol_id"]; ?>;
     let listed;
     let actualizarCliente = "";
     let calendar;
@@ -245,7 +249,11 @@ $active = 'proximosEventos';
 
 
     $(document).ready(function() {
+
+      console.log("ESTE ES EL ID DEL ROL", ROL_ID)
       // VALIDAR FORM AGREGAR DIRECCION
+
+
       $('#direccionAddForm').validate({
         rules: {
           txtDir: {
@@ -263,7 +271,7 @@ $active = 'proximosEventos';
         },
         messages: {
           txtDir: {
-            required: "Debe ingresar un valor"
+            required: "LKAJSDLAKJDLAKDJSLAKSDJLAKJDS"
           },
           txtNumDir: {
             required: "Debe ingresar un valor"
@@ -278,60 +286,72 @@ $active = 'proximosEventos';
         submitHandler: function() {
 
           event.preventDefault();
-          // localStorage.clear();
-          console.log("ENVIO DE INFORMACION DE PRODUCTO NUEVO UNITARIO");
 
-          //CREAR LOCALE STORAGE TO DIRECCIONES
-          $("#direccionModal ").modal('hide');
-          //DATOS DE DIRECCION
-          let dir = $('#txtDir').val();
-          let numDir = $('#txtNumDir').val();
-          let depto = $('#txtDepto').val();
-          let region = $('#regionSelect').val();
-          let comuna = $('#comunaSelect').val();
-          let regionInput = $('#regionSelect option:selected').text();
-          let comunaInput = $('#comunaSelect option:selected').text();
-          let postal_code = $('#txtcodigo_postal').val();
-          let idDireccion = $('#idDireccionModal').text();
+          if (ROL_ID !== 3) {
 
-          $('#direccionInput').val(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
 
-          $('#lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
+            $("#direccionModal ").modal('hide');
+            //DATOS DE DIRECCION
+            let dir = $('#txtDir').val();
+            let numDir = $('#txtNumDir').val();
+            let depto = $('#txtDepto').val();
+            let region = $('#regionSelect').val();
+            let comuna = $('#comunaSelect').val();
+            let regionInput = $('#regionSelect option:selected').text();
+            let comunaInput = $('#comunaSelect option:selected').text();
+            let postal_code = $('#txtcodigo_postal').val();
+            let idDireccion = $('#idDireccionModal').text();
 
-          SetProjectData($('#inputProjectName').val(), $('#fechaInicio').val(), $('#fechaTermino').val(), $('#inputNombreCliente').val(), $('#commentProjectArea').val());
+            $('#direccionInput').val(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
 
-          if (localStorage.getItem("direccion") === null) {
-            localStorage.setItem("direccion", JSON.stringify([{
-              dir,
-              numDir,
-              depto,
-              region,
-              comuna,
-              regionInput,
-              comunaInput,
-              postal_code,
-              idDireccion
-            }]))
+            $('#lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
+
+            SetProjectData($('#inputProjectName').val(), $('#fechaInicio').val(), $('#fechaTermino').val(), $('#inputNombreCliente').val(), $('#commentProjectArea').val());
+
+            if (localStorage.getItem("direccion") === null) {
+              localStorage.setItem("direccion", JSON.stringify([{
+                dir,
+                numDir,
+                depto,
+                region,
+                comuna,
+                regionInput,
+                comunaInput,
+                postal_code,
+                idDireccion
+              }]))
+            } else {
+              let allDirs = JSON.parse(localStorage.getItem("direccion"))
+              allDirs.push({
+                dir,
+                numDir,
+                depto,
+                region,
+                comuna,
+                regionInput,
+                comunaInput,
+                postal_code,
+                idDireccion
+              });
+              localStorage.setItem("direccion", JSON.stringify(allDirs));
+            }
+
+            console.log(JSON.parse(localStorage.getItem('direccion')))
           } else {
-            let allDirs = JSON.parse(localStorage.getItem("direccion"))
-            allDirs.push({
-              dir,
-              numDir,
-              depto,
-              region,
-              comuna,
-              regionInput,
-              comunaInput,
-              postal_code,
-              idDireccion
-            });
-            localStorage.setItem("direccion", JSON.stringify(allDirs));
+            Swal.fire({
+              title: 'Lo sentimos',
+              text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+              icon: 'warning',
+              showCancelButton: false,
+              showConfirmButton: true,
+              confirmButtonText: "Entendido"
+            })
           }
 
-          console.log(JSON.parse(localStorage.getItem('direccion')))
 
         }
       })
+
 
       $('#projectForm').validate({
         rules: {
@@ -408,48 +428,48 @@ $active = 'proximosEventos';
     // HIDE LIST TYPE DISPLAY 
 
     // LIST HIDE 
-    function hideList(){
+    function hideList() {
       $('#projectList').hide();
     }
     // HIDE CALENDAR
-    function hideCalendar(){
+    function hideCalendar() {
       $('#calendar').hide();
     }
     //SHOW LIST  
-    function showList(){
+    function showList() {
       $('#projectList').show();
     }
     //SHOW CALENDAR
-    function showCalendar(){
+    function showCalendar() {
       $('#calendar').show();
     }
 
     $('#created-tab').on('click', function() {
-      
+
       FillCreated(EMPRESA_ID, 1);
     })
     $('#confirmed-tab').on('click', function() {
-      
+
       FillCreated(EMPRESA_ID, 2);
     })
     $('#finished-tab').on('click', function() {
-      
+
       FillCreated(EMPRESA_ID, 3);
     })
 
-    $('#listCreados').on('click',function(){
+    $('#listCreados').on('click', function() {
       $('#calendar').hide();
-      FillProjectList(EMPRESA_ID,1);
+      FillProjectList(EMPRESA_ID, 1);
     })
-    $('#listConfirmados').on('click',function(){
+    $('#listConfirmados').on('click', function() {
       $('#calendar').hide();
-      FillProjectList(EMPRESA_ID,2);
+      FillProjectList(EMPRESA_ID, 2);
     })
-    $('#listFinalizados').on('click',function(){
+    $('#listFinalizados').on('click', function() {
       $('#calendar').hide();
-      FillProjectList(EMPRESA_ID,3);
+      FillProjectList(EMPRESA_ID, 3);
     })
-    $('#allProjectList').on('click',function(){
+    $('#allProjectList').on('click', function() {
       $('#calendar').hide();
       GetAllProjects(EMPRESA_ID);
     })
@@ -458,25 +478,25 @@ $active = 'proximosEventos';
     // TODAS LAS FUNCIONES DE CALENDAR ESTAN EN SU ARCHIVO JS/CALENDAR.JS
 
     // ALL PROJECTS CALENDAR
-    $('#allProjectCalendar').on('click',async function(){
+    $('#allProjectCalendar').on('click', async function() {
       $('#projectList').hide();
       $('#calendar').show();
       await FillCalendar(0);
     })
     // FILL CALENDAR CREATED
-    $('#calendarCreados').on('click',async function(){
+    $('#calendarCreados').on('click', async function() {
       $('#projectList').hide();
       $('#calendar').show();
       await FillCalendar(1);
     })
     // FILL CALENDAR CONFIRMED
-    $('#calendarConfirmados').on('click',async function(){
+    $('#calendarConfirmados').on('click', async function() {
       $('#projectList').hide();
       $('#calendar').show();
       await FillCalendar(2);
     })
     // FILL CALENDAR FINISHED
-    $('#calendarFinalizados').on('click',async function(){
+    $('#calendarFinalizados').on('click', async function() {
       $('#projectList').hide();
       $('#calendar').show();
       await FillCalendar(3);
@@ -614,8 +634,8 @@ $active = 'proximosEventos';
           arriendosProject.forEach(element => {
 
             // SetRents(rent_id,nombre, valor,detalle)
-            
-            addSubRentToResumeTable(element.nombre,element.detalle,element.valor,element.rent_id)
+
+            addSubRentToResumeTable(element.nombre, element.detalle, element.valor, element.rent_id)
             // AddSubArriendoWithValues(element.detalle, element.valor);
 
           });
@@ -1115,7 +1135,7 @@ $active = 'proximosEventos';
 
 
 
-              SetRents(asignado.id, asignado.item, asignado.costo,asignado.detalle)
+              SetRents(asignado.id, asignado.item, asignado.costo, asignado.detalle)
 
               // SetArriendosProject(asignado.id_proyecto, parseInt(asignado.valor), asignado.detalle_arriendo);
             });
@@ -1140,7 +1160,7 @@ $active = 'proximosEventos';
           // GetResumeProjectList();
         },
         error: function(err) {}
-      }).then(()=>{
+      }).then(() => {
 
         $('#loaderContainer').removeClass('active');
       })

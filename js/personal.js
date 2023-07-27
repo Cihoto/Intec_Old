@@ -80,50 +80,79 @@ function FillAvailablepersonal(empresaId,fechaInicio,fechaTermino){
 
 function AddPersonal(el){
 
-    let idProd = el.closest('li').className;
-    let li = el.closest('li');
-    let valor = CLPFormatter(el.previousElementSibling.value);
-    let notFormattedValue = el.previousElementSibling.value;
-    let tipoContrato = $(el).closest('li').find('.tipoContrato').text();
 
-    let nombrePersonal = el.closest('li').innerText;
-    let idPersonal = el.closest('li').className;
+    if (ROL_ID !== 3) {       
 
-    let tbodyPersonal = $('#projectPersonal tbody > tr');
+        let idProd = el.closest('li').className;
+        let li = el.closest('li');
+        let valor = CLPFormatter(el.previousElementSibling.value);
+        let notFormattedValue = el.previousElementSibling.value;
+        let tipoContrato = $(el).closest('li').find('.tipoContrato').text();
+    
+        let nombrePersonal = el.closest('li').innerText;
+        let idPersonal = el.closest('li').className;
+    
+        let tbodyPersonal = $('#projectPersonal tbody > tr');
+    
+        if (notFormattedValue === undefined || notFormattedValue === "" || notFormattedValue === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Ups!',
+                text: 'Ingresa el costo de este trabajador antes de asignarlo a este evento'
+            })
+        } else {
+    
+            $(el).hide();
+            $(el).closest(li).find('.removePersonal').show();
+            li.remove()
+    
+            $('#sortablePersonal2').append(li)
+            PersonalLocalStorage(idPersonal, nombrePersonal, notFormattedValue,tipoContrato);
+            TotalCosts(notFormattedValue);
+            changePersonalTableResume("add");
+        }
 
-    if (notFormattedValue === undefined || notFormattedValue === "" || notFormattedValue === 0) {
+       } else {
         Swal.fire({
-            icon: 'info',
-            title: 'Ups!',
-            text: 'Ingresa el costo de este trabajador antes de asignarlo a este evento'
+          title: 'Lo sentimos',
+          text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+          icon: 'warning',
+          showCancelButton: false,
+          showConfirmButton: true,
+          confirmButtonText: "Entendido"
         })
-    } else {
+      }
 
-        $(el).hide();
-        $(el).closest(li).find('.removePersonal').show();
-        li.remove()
-
-        $('#sortablePersonal2').append(li)
-        PersonalLocalStorage(idPersonal, nombrePersonal, notFormattedValue,tipoContrato);
-        TotalCosts(notFormattedValue);
-        changePersonalTableResume("add");
-    }
 }
 
 function removePersonal(element) {
 
-    let li = $(element).closest('li');
-    let idProduct = li.attr('class');
+    if (ROL_ID !== 3) {    
 
-    $(element).closest(li).find('.addPersonal').show();
-    $(element).hide();
-    li.remove();
-    $('#sortablePersonal1').append(li);
+        let li = $(element).closest('li');
+        let idProduct = li.attr('class');
+    
+        $(element).closest(li).find('.addPersonal').show();
+        $(element).hide();
+        li.remove();
+        $('#sortablePersonal1').append(li);
+    
+        removeProductStorage(idProduct);
+    
+        console.log(GetPersonalStorage());
+        removePersonalFromResume(idProduct);
 
-    removeProductStorage(idProduct);
+    } else {
+        Swal.fire({
+          title: 'Lo sentimos',
+          text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+          icon: 'warning',
+          showCancelButton: false,
+          showConfirmButton: true,
+          confirmButtonText: "Entendido"
+        })
+    }
 
-    console.log(GetPersonalStorage());
-    removePersonalFromResume(idProduct);
 }
 
 function removePersonalFromResume(id) {

@@ -1298,6 +1298,7 @@ table.dataTable tbody td .productName {
   top:0px;
   opacity: 1;
 }
+
 #download-Excel::after{
   content: "Descargar Excel Tipo";
   position: relative;
@@ -1306,6 +1307,46 @@ table.dataTable tbody td .productName {
   transition: all 1s ease;
   color: #1D6F42;
   opacity: 0;
+}
+
+#clients-container{
+  /* background-color: rgba(255, 0, 0, 0.257); */
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  max-height: 80vh;
+  min-height: 80vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+#clients-container h4{
+  text-align: center;
+  color: white;
+}
+
+#clients-container::-webkit-scrollbar{
+  display: none;
+}
+
+.client-box{
+  width: 30%;
+  margin: 10px;
+  height: 350px;
+  border-radius: 10px;
+  background-color: #1e1e2d;
+  padding: 5px;
+}
+
+.client-box{
+  color: white;
+  text-align: left;
+}
+
+.client-box-body{
+  padding: 5px;
 }
 
 

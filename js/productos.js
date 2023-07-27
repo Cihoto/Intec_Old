@@ -1,5 +1,5 @@
 function FillProductos(empresaId) {
-  if ($.fn.DataTable.isDataTable('#tableProducts')){
+  if ($.fn.DataTable.isDataTable('#tableProducts')) {
     $('#tableProducts').DataTable().destroy();
     $('#tableDrop > tr').each((key, element) => {
       $(element).remove();
@@ -27,7 +27,7 @@ function FillProductos(empresaId) {
       });
 
       $('#tableProducts').DataTable({
-        scrollX:true,
+        scrollX: true,
         fixedHeader: true
       })
     }
@@ -36,16 +36,16 @@ function FillProductos(empresaId) {
 
 function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
 
-  if ($.fn.DataTable.isDataTable('#tableProducts')){
+  if ($.fn.DataTable.isDataTable('#tableProducts')) {
     $('#tableProducts').DataTable().destroy();
     $('#tableDrop > tr').each((key, element) => {
       $(element).remove();
     })
   }
   let arrayProductosAssigned;
-  if (GetProductsStorage()){
+  if (GetProductsStorage()) {
     arrayProductosAssigned = GetProductsStorage();
-  }else{
+  } else {
     arrayProductosAssigned = [];
   }
 
@@ -87,10 +87,10 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
             assigned = producto.assigned;
           }
 
-          let stock ;
+          let stock;
 
           // let trSearchable = $("#tableDrop > tr").find(`#${producto.id}`)
-          
+
           let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
 
           if (trSearchable.prevObject.length === 1) {
@@ -98,9 +98,9 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
             stock = oldStock;
             // console.log(`RESTE ${assigned} A ${oldStock} DENTRO DEL EACH DE JQUERY`);
             stock = oldStock - parseInt(assigned);
-            
+
             $(trSearchable.prevObject).find('.productStock').text(stock);
-          }else{
+          } else {
             stock = parseInt(producto.stock) - parseInt(sumaExistencias) - parseInt(assigned);
           }
 
@@ -108,11 +108,11 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
           console.log(`ID DE PRODUCTO ${producto.id}`);
 
           if (producto.fecha_inicio !== null && producto.fecha_termino !== null) {
-            
+
 
             if (fecha_inicio > producto.fecha_inicio && fecha_inicio > producto.fecha_termino ||
-              fecha_termino < producto.fecha_inicio && fecha_termino < producto.fecha_termino){
-                console.log("DISPONIBLE");
+              fecha_termino < producto.fecha_inicio && fecha_termino < producto.fecha_termino) {
+              console.log("DISPONIBLE");
 
               console.log("Estoy dentro dE IF DE FECHAS DISPONIBLES Y PRODUCTOS LIBERADOS");
               console.log(`ESTE STOCK ME ESTA LLEGANDO A LA FECHA LIBERADA ${stock}`);
@@ -121,20 +121,20 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
               let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
 
               if (trSearchable.prevObject.length === 1) {
-    
+
                 console.log("ALLLLLLLL ENCONTRE UN ID DENTRO DE LA TABLA");
                 let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
-  
-                if(producto.estado === "2"){
+
+                if (producto.estado === "2") {
                   console.log(`DISPONIBLE LE SUMO ${assigned}`);
                   stock = oldStock + parseInt(assigned);
                 }
 
                 $(trSearchable.prevObject).find('.productStock').text(stock);
-              }else{
+              } else {
                 // console.log("DISPONIBLE NO ENCONTRE HAGO APPEND");
 
-                if(producto.estado === "2"){
+                if (producto.estado === "2") {
                   console.log(`DISPONIBLE LE SUMO ${assigned}`);
                   // stock = stock - parseInt(producto.assigned)
                   stock = stock + parseInt(assigned);
@@ -150,51 +150,51 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
                 $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
               }
 
-            }else{
-              
+            } else {
+
               // console.log(`ESTE STOCK ME ESTA LLEGANDO A LA FECHA NO LIBERADA ${stock}`);
               // console.log(`LE SUMANDIO RESTANDO ${producto.assigned}`);
-                // stock = stock - parseInt(producto.assigned);
-                // console.log("NOOOOOOO DISPONIBLE");
+              // stock = stock - parseInt(producto.assigned);
+              // console.log("NOOOOOOO DISPONIBLE");
 
-                let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
+              let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
 
-                if (trSearchable.prevObject.length === 1){
-                  console.log("FECHA NO LIBERADA ENCONTRE UN ID DENTRO DE LA TABLA");
-                  let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
-                  if(producto.estado !== "2"){
-                    console.log(`NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
-                    // stock = stock - parseInt(producto.assigned)
-                    stock = oldStock + parseInt(assigned);
-                  }
-                  $(trSearchable.prevObject).find('.productStock').text(stock);
+              if (trSearchable.prevObject.length === 1) {
+                console.log("FECHA NO LIBERADA ENCONTRE UN ID DENTRO DE LA TABLA");
+                let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
+                if (producto.estado !== "2") {
+                  console.log(`NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
+                  // stock = stock - parseInt(producto.assigned)
+                  stock = oldStock + parseInt(assigned);
+                }
+                $(trSearchable.prevObject).find('.productStock').text(stock);
 
-                }else{
+              } else {
 
-                  if(producto.estado !== "2"){
-                    console.log(` NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
-                    stock = stock + parseInt(assigned)
-                  }
-                  // console.log("NOOOOOOO DISPONIBLE NO ENCONTRE HAGO APPEND");
+                if (producto.estado !== "2") {
+                  console.log(` NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
+                  stock = stock + parseInt(assigned)
+                }
+                // console.log("NOOOOOOO DISPONIBLE NO ENCONTRE HAGO APPEND");
 
-                  let td = `<td class="productId" style="display:none">${producto.id}</td>
+                let td = `<td class="productId" style="display:none">${producto.id}</td>
                               <td class=""> ${producto.categoria}</td>
                               <td class=""> ${producto.item}</td>
                               <td class="productName">${producto.nombre}</td>
                               <td class="productPrice"> ${producto.precio_arriendo} </td>
                               <td class="productStock">${stock}</td>
                               <td><input style="margin-right:8px" class="addProdInput quantityToAdd" id="" type="number" min="1" max="${stock}"/><i class="fa-solid fa-plus addItem" onclick="AddProduct(this)"></i></td>`
-                  $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
+                $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
 
-                }
-                // console.log(`ESTE STOCK ESTA SIENDO APPEND ${stock}`);
+              }
+              // console.log(`ESTE STOCK ESTA SIENDO APPEND ${stock}`);
 
             }
-          }else{
-              let stock = parseInt(producto.stock);
-              if(producto.estado === 2){
-                stock = stock 
-              }
+          } else {
+            let stock = parseInt(producto.stock);
+            if (producto.estado === 2) {
+              stock = stock
+            }
           }
 
           if (producto.fecha_inicio === null && producto.fecha_termino === null) {
@@ -207,28 +207,28 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
             // console.log(`ALL ESTADO ${producto.estado}`);
 
             let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
-            console.log("EL TR A BUSCAR",trSearchable.prevObject);
-            console.log("EL LARGOOOOO TR A BUSCAR",trSearchable.prevObject.length);
+            console.log("EL TR A BUSCAR", trSearchable.prevObject);
+            console.log("EL LARGOOOOO TR A BUSCAR", trSearchable.prevObject.length);
 
             if (trSearchable.prevObject.length === 1) {
-  
+
               // console.log("ALLLLLLLL ENCONTRE UN ID DENTRO DE LA TABLA");
               let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
 
-              if(producto.estado !== "2"){
+              if (producto.estado !== "2") {
                 // console.log(`ALL LE SUMO   ${producto.assigned}`);
                 stock = stock + parseInt(assigned)
               }
-             
-              $(trSearchable.prevObject).find('.productStock').text(stock);
-            }else{
 
-              if(producto.estado !== "2"){
+              $(trSearchable.prevObject).find('.productStock').text(stock);
+            } else {
+
+              if (producto.estado !== "2") {
                 // console.log(`ALL LE SUMO   ${producto.assigned}`);
                 // stock = stock - parseInt(producto.assigned)
                 stock = stock + parseInt(assigned);
               }
-             
+
               console.log("SIN FECHA  NO ENCONTRE HAGO APPEND");
 
 
@@ -261,7 +261,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
         })
       }
       $('#tableProducts').DataTable({
-        scrollX:true,
+        scrollX: true,
         fixedHeader: true,
         responsive: true
       })
@@ -296,14 +296,30 @@ function removeProduct(idProduct) {
 
 function RemoveProductFromResume(id) {
 
-  let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
 
-  tdProductos.each((index, td) => {
-    if ($(td).text() === id) {
-      $(td).closest('tr').remove();
-    }
-  })
-  SetResumeProductsValue();
+  if (ROL_ID !== 3) {
+
+    let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
+
+    tdProductos.each((index, td) => {
+      if ($(td).text() === id) {
+        $(td).closest('tr').remove();
+      }
+    })
+    SetResumeProductsValue();
+
+  } else {
+    Swal.fire({
+      title: 'Lo sentimos',
+      text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: "Entendido"
+    })
+  }
+
+
 }
 
 function AppendProductToResume(tipo) {
@@ -333,41 +349,60 @@ function AppendProductToResume(tipo) {
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
 function AddProduct(el) {
+  if (ROL_ID !== 3) {
+    let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
 
-  let quantityToAdd = $(el).closest("td").find('.quantityToAdd').val();
-  let productId = $(el).closest("tr").find('.productId').text();
-  let productName = $(el).closest("tr").find('.productName').text();
-  let productPrice = $(el).closest("tr").find('.productPrice').text();
-
-  let stock = parseInt($(el).closest("tr").find('.productStock').text());
-
-  let finalStock = stock - parseInt(quantityToAdd);
-
-
-  if (quantityToAdd === 0 || quantityToAdd === undefined || quantityToAdd === null || quantityToAdd === "") {
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Ups!',
-      text: `Debes agregar la cantidad de ${productName} que deseas añadir`,
+    tdProductos.each((index, td) => {
+      if ($(td).text() === id) {
+        $(td).closest('tr').remove();
+      }
     })
-    return;
-  }
-  if (finalStock < 0) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Ups!',
-      text: `Has seleccionado más ${productName} de los que dispones`,
-    })
+    SetResumeProductsValue();
+
+    let quantityToAdd = $(el).closest("td").find('.quantityToAdd').val();
+    let productId = $(el).closest("tr").find('.productId').text();
+    let productName = $(el).closest("tr").find('.productName').text();
+    let productPrice = $(el).closest("tr").find('.productPrice').text();
+
+    let stock = parseInt($(el).closest("tr").find('.productStock').text());
+
+    let finalStock = stock - parseInt(quantityToAdd);
+
+
+    if (quantityToAdd === 0 || quantityToAdd === undefined || quantityToAdd === null || quantityToAdd === "") {
+
+      Swal.fire({
+        icon: 'info',
+        title: 'Ups!',
+        text: `Debes agregar la cantidad de ${productName} que deseas añadir`,
+      })
+      return;
+    }
+    if (finalStock < 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ups!',
+        text: `Has seleccionado más ${productName} de los que dispones`,
+      })
+    } else {
+
+      $(el).closest("tr").find('.productStock').text(finalStock);
+      $(el).closest("td").find('.quantityToAdd').val("");
+      AddDivProduct(productName, productPrice, productId, quantityToAdd);
+      let totalPrice = productPrice * quantityToAdd;
+      ProductsStorage(productId, productName, productPrice, quantityToAdd, totalPrice);
+      TotalCosts(totalPrice);
+      AppendProductToResume("add");
+    }
   } else {
-
-    $(el).closest("tr").find('.productStock').text(finalStock);
-    $(el).closest("td").find('.quantityToAdd').val("");
-    AddDivProduct(productName, productPrice, productId, quantityToAdd);
-    let totalPrice = productPrice * quantityToAdd;
-    ProductsStorage(productId, productName, productPrice, quantityToAdd, totalPrice);
-    TotalCosts(totalPrice);
-    AppendProductToResume("add");
+    Swal.fire({
+      title: 'Lo sentimos',
+      text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: "Entendido"
+    })
   }
 
 }
