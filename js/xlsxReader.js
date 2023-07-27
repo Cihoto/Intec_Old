@@ -57,9 +57,7 @@ function getArrayLength(countableArray){
 const excelInput = document.getElementById('excel_input');
 async function xlsxReadandWrite(arrayHead){
 
-
     // try{
-        
         const content = await readXlsxFile(excelInput.files[0])
         const arrayCount = getArrayLength(arrayHead.xlsxData)
         const excel = new Excel(content);
@@ -72,6 +70,9 @@ async function xlsxReadandWrite(arrayHead){
         let xlsxNull = [];
         let xslxMinLength = [];
         let xlsxMaxLength = [];
+
+        console.table(arrayHead);
+        console.table (headers);
 
 
 
@@ -138,14 +139,19 @@ async function xlsxReadandWrite(arrayHead){
         arrayHead.xlsxData.forEach((arh,index) => {
 
             let name = arh.name;
+            console.log(`COMPARAR ${name} con ${xlsxHead[index]}`);
             if(name !== xlsxHead[index]){
                 counterErrHead ++
+                console.log('-------------------------------------');
+                console.log('SE SUMA 1 ERROR');
             }
         })
+        console.log("",counterErrHead);
         
         console.log("ARRAY HEAD COMING", arrayHead.xlsxData );
         console.log("ARRAY HEAD ", xlsxHead);
         console.log(counterErrHead);
+
         if(counterErrHead == 0){
             let cell = ""
             let ifNull=""

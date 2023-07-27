@@ -1,4 +1,5 @@
 <!-- MODAL DIRECCION PROYECTO-->
+
 <div class="modal fade"  id="proyectosModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
     <div class="modal-dialog modal-full" role="document">
         <div class="modal-content" style="padding: 20px;">
@@ -24,6 +25,8 @@
                 <?php require_once('./includes/projectAssigments.php')?>
 
             <?php  endif;?>
+
+            <?php  if($rol_id !== 3):?>
             <div class="card box">
                 <div class="row" style="justify-content: end;">
                 
@@ -46,6 +49,7 @@
                     </div>
                 </div>
             </div>
+            <?php endif;?>
         </div>
     </div>
 </div>

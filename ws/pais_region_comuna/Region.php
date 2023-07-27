@@ -1,8 +1,11 @@
 <?php
-if (isset($_POST['action'])) {
+if ($_POST) {
     require_once('../bd/bd.php');
 
-    $action = $_POST['action'];
+    $json = file_get_contents('php://input');
+    $data = json_decode($json);
+
+    $action = $data->action;
 
     // Realiza la acción correspondiente según el valor de 'action'
     switch ($action) {

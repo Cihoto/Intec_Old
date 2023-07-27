@@ -2,18 +2,17 @@ function FillRegiones(empresaId){
 
     $.ajax({
         type: "POST",
-        url: "ws/cliente/cliente.php",
+        url: "ws/pais_region_comuna/Region.php",
         dataType: 'json',
         data: JSON.stringify({
-          "tipo": "getClientesByEmpresa",
-          request: empresaId
+          "action": "getRegiones"
         }),
         success: function(response) {
-  
-          console.log("response", response);
-        //   $('#clienteSelect').append(new Option("", ""));
-          response.forEach(response => {
-            $('#clienteSelect').append(new Option(response.nombre_cliente, response.id))
+
+          $('#regionSelect').empty();
+          $('#regionSelect').append(new Option("", ""));
+          response.forEach(dir => {
+            $('#regionSelect').append(new Option(`${dir.region}`, dir.id))
           })
         }
       })
@@ -93,6 +92,7 @@ function GetComunas(){
       idRegion: idRegion
     }),
     success: function(response){
+      console.log(response);
 
       $('#comunaSelect').empty();
       $('#comunaSelect').append(new Option("", ""));

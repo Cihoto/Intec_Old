@@ -11,6 +11,7 @@ $active = 'personal';
 <body>
     <script src="./assets/js/initTheme.js"></script>
     <?php include_once('./includes/Constantes/empresaId.php');?>
+    <?php include_once('./includes/Constantes/rol.php');?>
     <?php
         require_once('./ws/bd/bd.php');
         $conn = new bd();
@@ -62,6 +63,7 @@ $active = 'personal';
                     <h3 style="margin-right: 50px; line-height: 34px;text-align: center;">Inventario</h3>
                     <a id="download-Excel" style="height: 20px; line-height: 20px;font-size: 30px;" href="./ExcelFiles/PersonalM.xlsx" download="Carga Masiva Personal"><i class="fa-solid fa-file-excel" style="color: #1D6F42; "></i></a>
                 </div>
+                <?php if($rol_id !== 3):?>
                 <div class="row justify-content-center">
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">
@@ -89,6 +91,7 @@ $active = 'personal';
                         </div>
                     </div>
                 </div>
+                <?php  endif;?>
             </div>
             <?php include_once('./includes/Modal/cargoEspecialidad.php')?>
 
@@ -1166,10 +1169,7 @@ $active = 'personal';
             let li = $(element).closest('li');
             li.hide('slow', function(){li.remove();});
         }
-
     </script>
 
 </body>
-
-
 </html>

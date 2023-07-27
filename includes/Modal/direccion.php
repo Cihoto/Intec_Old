@@ -13,31 +13,31 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="dirSelect">Búscar Dirección</label>
-                        <select class="form-select" name="dirSelector" id="dirSelect" aria-label="">
+                        <select <?php echo $disabled; ?> class="form-select" name="dirSelector" id="dirSelect" aria-label="">
                             <option value=""></option>
                         </select>
                     </div>
                     <hr/>
                     <div class="form-group" style="margin-top: 50px;">
                         <label for="txtDir">Dirección</label>
-                        <input type="text" name="txtDir" id="txtDir" placeholder="Dir" class="form-control">
+                        <input <?php echo $disabled; ?> type="text" name="txtDir" id="txtDir" placeholder="Dir" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label for="txtNumDir">Número </label>
-                        <input type="number" name="txtNumDir" id="txtNumDir" placeholder="Num" class="form-control">
+                        <input <?php echo $disabled; ?> type="number" name="txtNumDir" id="txtNumDir" placeholder="Num" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="txtDepto">Depto </label>
-                        <input type="text" name="txtDepto" id="txtDepto" placeholder="Depto/Bloque/Casa" class="form-control">
+                        <input <?php echo $disabled; ?> type="text" name="txtDepto" id="txtDepto" placeholder="Depto/Bloque/Casa" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="txtcodigo_postal">Codigo postal </label>
-                        <input type="text" name="txtcodigo_postal" id="txtcodigo_postal" placeholder="Código postal" class="form-control">
+                        <input <?php echo $disabled; ?> type="text" name="txtcodigo_postal" id="txtcodigo_postal" placeholder="Código postal" class="form-control">
                     </div>
 
                     <label for="regionSelect">Región</label>
-                    <select class="form-select" onchange="GetComunas()" name="regionSelect" id="regionSelect" aria-label="Default select example">
+                    <select <?php echo $disabled; ?> class="form-select" onchange="GetComunas()" name="regionSelect" id="regionSelect" aria-label="Default select example">
                         <option value=""></option>
                         <?php foreach ($regiones as $region) : ?>
                             <option value="<?= $region->id ?>"><?= $region->region ?></option>
@@ -45,10 +45,11 @@
                     </select>
 
                     <label for="comunaSelect">Comuna</label>
-                    <select class="form-select" name="comunaSelect" id="comunaSelect" aria-label="Default select example">
+                    <select <?php echo $disabled; ?> class="form-select" name="comunaSelect" id="comunaSelect" aria-label="Default select example">
 
                     </select>
                 </div>
+                <?php  if($rol_id !== 3):?>
                 <div class="modal-footer row" style="justify-content: space-between;">
                     <button type="button" class="btn btn-danger col-4" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
@@ -59,6 +60,7 @@
                         <span class="d-none d-sm-block">Guardar</span>
                     </button>
                 </div>
+                <?php endif;?>
             </form>
         </div>
     </div>

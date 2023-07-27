@@ -74,7 +74,8 @@ foreach ($productoArr as $key => $value) {
                     $insertedItem = $conn->mysqli->insert_id;
                 }
             }
-            // echo "INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)";
+            //  echo "INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)";
+            // return "INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)";
             $responseInsert = $conn->mysqli->query("INSERT INTO categoria_has_item(categoria_id, item_id)VALUES($insertedCategoria, $insertedItem)");
             echo $cathasitemId = $conn->mysqli->insert_id;
             $cathasitemId = $conn->mysqli->insert_id;
