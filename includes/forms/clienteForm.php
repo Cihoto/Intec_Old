@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <?php  if($rol_id !== 3):?>
+    <?php  if(in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
         <div style="display: flex; margin-top: 50px; justify-content:space-between">
             <button class="btn btn-success" style="justify-self: start;" onclick="CleanCliente()">Limpiar Formulario</button>
             <button type="submit" id="addCliente" class="btn btn-success" >

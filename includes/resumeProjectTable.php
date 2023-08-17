@@ -99,7 +99,7 @@
                 </tr>
             </tbody>
         </table>
-        <?php if($rol_id !== 3):?>
+        <?php if (in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
         <button class="btn btn-success spaced"  onclick="AddViatico()" id="addViatico">Agregar</button>
         <?php endif;?>
         <h4>Sub arriendos</h4>
@@ -123,7 +123,7 @@
             </tbody>
         </table>
 
-        <?php if($rol_id !== 3):?>
+        <?php if (in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
         <div class="row centered-spaced">
             <button class="btn btn-success spaced col-md-5 col-10 mb-3"  onclick="GetArriendos()" id="addViatico">Agregar Existente</button>
             <button class="btn btn-success spaced col-md-5 col-10"  onclick="OpenArriendoModal()" id="addViatico">Agregar Nuevo</button>
@@ -135,7 +135,6 @@
             </div>
         </div>
         <?php  endif;?>
-
 
         <section class="section-cost">
             <p>Costos del evento</p>

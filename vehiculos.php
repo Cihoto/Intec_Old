@@ -64,7 +64,7 @@ $active = 'vehiculos';
                 </div>
             </div>
 
-            <?php if($rol_id !== 3):?>
+            <?php if (in_array("13", $rol_id) || in_array("1", $rol_id) ||  in_array("2", $rol_id)):?>
             <div class="col-8 col-lg-3 col-sm-4">
                 <div class="card">
                     <div class="row">
@@ -73,16 +73,13 @@ $active = 'vehiculos';
                                 Agregar vehículo
                             </button>
                         </div>
-
                         <div class="col-6">
                             <button type="button" id="addVehicle" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#xlarge">
                                 Agregar Vehículos masivo
                             </button>
                             <input class="form-control form-control-sm" id="excel_input" type="file" />
                         </div>
-
                     </div>
-
                 </div>
             </div>
             <?php endif;?>

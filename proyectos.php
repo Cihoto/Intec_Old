@@ -199,7 +199,6 @@ $active = 'proximosEventos';
           </div>
         </div>
       </div>
-
       <?php
       require_once('./includes/footer.php');
       require_once('./includes/Modal/detallesProyecto.php');
@@ -231,7 +230,8 @@ $active = 'proximosEventos';
   <script>
     const EMPRESA_ID = document.getElementById('empresaId').textContent;
 
-    var ROL_ID = <?php echo $_SESSION["rol_id"]; ?>;
+    var ROL_ID = <?php echo json_encode($rol_id);?>
+
     let listed;
     let actualizarCliente = "";
     let calendar;
@@ -248,12 +248,8 @@ $active = 'proximosEventos';
     })
 
 
-    $(document).ready(function() {
-
-      console.log("ESTE ES EL ID DEL ROL", ROL_ID)
-      // VALIDAR FORM AGREGAR DIRECCION
-
-
+    $(document).ready(function(){
+      
       $('#direccionAddForm').validate({
         rules: {
           txtDir: {
@@ -271,7 +267,7 @@ $active = 'proximosEventos';
         },
         messages: {
           txtDir: {
-            required: "LKAJSDLAKJDLAKDJSLAKSDJLAKJDS"
+            required: "Debe ingresar un valor"
           },
           txtNumDir: {
             required: "Debe ingresar un valor"
@@ -287,7 +283,7 @@ $active = 'proximosEventos';
 
           event.preventDefault();
 
-          if (ROL_ID !== 3) {
+          if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("7")){
 
 
             $("#direccionModal ").modal('hide');

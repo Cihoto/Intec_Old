@@ -179,6 +179,7 @@ $active = 'proximosEventos';
 
 
   const EMPRESA_ID = document.getElementById('empresaId').textContent;
+  var ROL_ID = <?php echo json_encode($rol_id);?>
 
   // console.log(EMPRESA_ID);
   $(document).ready(function() {

@@ -76,7 +76,7 @@ function GetAvailableVehicles(empresaId, fechaInicio, fechaTermino) {
 function AddVehiculo(el) {
 
 
-    if (ROL_ID !== 3) {
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
 
         let li = el.closest('li')
         let idVehiculo = $(li).attr('class').trim();
@@ -113,7 +113,7 @@ function AddVehiculo(el) {
 
 function removeVehicle(element) {
 
-    if (ROL_ID !== 3) {
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
         let li = $(element).closest('li');
         let idVehiculoDelete = li.attr('class');
         let patente = li.text();

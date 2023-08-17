@@ -298,3 +298,21 @@ async function GetCalendarProjects(empresaId,status) {
   }
 
 
+async function GetEventsByClient(cliente_id){
+    return $.ajax({
+        type: "POST",
+        url: "ws/proyecto/proyecto.php",
+        dataType: 'json',
+        data: JSON.stringify({
+        "action": "GetEventsByClient",
+        "cliente_id": cliente_id
+        }),
+        success: function(response){
+
+        },error: function(error){
+
+        }
+    })
+}
+
+

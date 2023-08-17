@@ -78,6 +78,8 @@
           </a>
         </li>
 
+        <?php if (in_array("5", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
+
         <?php
         if($active == 'inventario' || $active == 'inv2'){
           echo '<li class="sidebar-item has-sub active">';
@@ -104,7 +106,9 @@
             </li>
           </ul>
         </li>
+        <?php endif;?>
 
+        <?php if (in_array("7", $rol_id)||in_array("8", $rol_id)||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
         <?php
         if($active == 'proximosEventos' || $active == 'crearEventos'){
           echo '<li class="sidebar-item has-sub active">';
@@ -117,7 +121,7 @@
             <span>Eventos</span>
           </a>
           <ul class="submenu">
-            <?php if($rol_id !== 3):?>
+            <?php if (in_array("7", $rol_id)):?>
               <li class="submenu-item">
                 <a href="proximosEventos.php">Crear Evento</a>
               </li>
@@ -127,8 +131,10 @@
             </li>
           </ul>
         </li>
+        <?php endif;?>
+        
 
-       
+        <?php if (in_array("10", $rol_id)):?>
         <?php
         if($active == 'clientes'){
           echo '<li class="sidebar-item active">';
@@ -141,7 +147,9 @@
             <span>Clientes</span>
           </a>
         </li>
+        <?php endif;?>
 
+        <?php if (in_array("12", $rol_id)||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
         <?php
         if($active == 'personal' || $active == 'personal2'){
           echo '<li class="sidebar-item active">';
@@ -155,7 +163,10 @@
             <span>Personal</span>
           </a>
         </li>
+        <?php endif;?>
 
+
+        <?php if (in_array("14", $rol_id)||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
         <?php
         if($active == 'vehiculos'){
           echo '<li class="sidebar-item active">';
@@ -169,8 +180,7 @@
             <span>Vehiculos</span>
           </a>
         </li>
-
-
+        <?php endif;?>
         
 
         <?php
@@ -194,19 +204,23 @@
           </ul>
         </li> -->
 
+        <?php if (in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
         <?php
-        if($active == 'usuario'){
+        if($active == 'administracion'){
           echo '<li class="sidebar-item active">';
         }else{
           echo '<li class="sidebar-item">';
         }
         ?>
-          <a href="index.php" class="sidebar-link">
+          <a href="/administracion.php" class="sidebar-link">
             <i class="fa-solid fa-users-gear"></i>
             <!-- <i class="bi bi-person-check"></i> -->
             <span>Administración</span>
           </a>
         </li>
+        <?php endif;?>
+
+
         <?php if($empresaId === "1"):?>
         <?php
         

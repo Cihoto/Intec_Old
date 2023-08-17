@@ -79,9 +79,7 @@ function FillAvailablepersonal(empresaId,fechaInicio,fechaTermino){
 }
 
 function AddPersonal(el){
-
-
-    if (ROL_ID !== 3) {       
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("11")){     
 
         let idProd = el.closest('li').className;
         let li = el.closest('li');
@@ -127,7 +125,7 @@ function AddPersonal(el){
 
 function removePersonal(element) {
 
-    if (ROL_ID !== 3) {    
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("11")){    
 
         let li = $(element).closest('li');
         let idProduct = li.attr('class');
@@ -393,6 +391,20 @@ function GetCargo(empresaId){
         }
     })
 
+}
+
+async function GetPersonalByEmpresa(empresaId){
+   return  $.ajax({
+        type: "POST",
+        url: "ws/personal/Personal.php",
+        data: JSON.stringify({
+            action: "GetPersonalByEmpresa",
+            "empresa_id": empresaId
+        }),
+        dataType: 'json',
+        success: async function(response){
+        }
+    })
 }
 
 
