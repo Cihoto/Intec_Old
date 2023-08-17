@@ -42,6 +42,10 @@ if ($_POST) {
             $request = $data->request;
             $result = AddClientMasiva($request);
             break;
+        case 'getClientInformation':
+            $cliente_id = $data->cliente_id;
+            $result = getClientInformation($cliente_id);
+            break;
         default:
             $result = false;
             break;
@@ -242,7 +246,7 @@ if ($_POST) {
         $conn->conectar();
         $clientData = [];
 
-        $queryGetClientData = "SELECT df.rut as rut_df, df.nombre_fantasia, df.direccion,
+        $queryGetClientData = "SELECT c.id AS cliente_id ,df.rut AS rut_df, df.nombre_fantasia, df.direccion,
         df.direccion,p.nombre ,p.apellido ,p.telefono,p.email
         FROM cliente c
         INNER JOIN datos_facturacion df on df.id = c.datos_facturacion_id 
@@ -352,6 +356,31 @@ if ($_POST) {
         $conn->mysqli->query($queryUpdateDatosFacturacion);
         $conn->mysqli->query($queryUpdatePersona);
 
+    }
+
+    function getClientInformation($cliente_id){
+        $conn =  new bd();
+        $conn->conectar();
+        $clientInfo = [];
+
+        $queryGetClientData = "SELECT  per.nombre, per.apellido, per.rut as rut_persona, per.email  as email_persona , per.telefono,
+        df.rut as rut_razon_social, df.razon_social, df.nombre_fantasia, df.direccion,df.correo 
+        FROM cliente c
+        INNER JOIN datos_facturacion df on df.id = c.datos_facturacion_id 
+        INNER JOIN persona per on per.id = c.persona_id_contacto 
+        where c.id = $cliente_id";
+
+
+        if($responseDbClientInfo = $conn->mysqli->query($queryGetClientData)){
+            while($dataCliente = $responseDbClientInfo->fetch_object()){
+                $clienteInfo [] = $dataCliente;
+            }
+            $conn->desconectar();
+            return json_encode(array("success"=>true, "data"=>$clienteInfo));
+        }else{
+            $conn->desconectar();
+            return json_encode(array("success"=>true, "message"=>"Ha ocurrido un error, por favor intente nuevamente"));
+        }
     }
 
 

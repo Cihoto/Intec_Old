@@ -49,7 +49,7 @@
 
                     </select>
                 </div>
-                <?php  if($rol_id !== 3):?>
+                <?php  if(in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
                 <div class="modal-footer row" style="justify-content: space-between;">
                     <button type="button" class="btn btn-danger col-4" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>

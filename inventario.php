@@ -126,16 +126,15 @@ $active = 'inventario';
                 <h3 style="margin-right: 50px">Inventario</h3>
                 <a id="download-Excel" style="height: 20px; line-height: 20px;font-size: 30px;" href="./ExcelFiles/ProductosM.xlsx" download="Carga Masiva Equipos"><i class="fa-solid fa-file-excel" style="color: #1D6F42; "></i></a>
             </div>
-            <?php  if($rol_id !== 3):?>
+            <?php  if(in_array("1", $rol_id) ||in_array("2", $rol_id) ||in_array("6", $rol_id)):?>
                 <div class="row">
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">
                             <button type="button" id="buttonProductoUnitario" class="btn btn-success">
-                                Agregar
+                                Agregar Nuevo Producto
                             </button>
                         </div>
                     </div>
-
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">
                             <button type="button" class="btn btn-success" id="buttonProductosMasiva" data-bs-toggle="modal" data-bs-target="#masivaProductoCreation">

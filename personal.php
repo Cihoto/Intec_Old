@@ -60,10 +60,10 @@ $active = 'personal';
 
             <div class="page-header">
                 <div style="display:flex; align-items: center; margin-bottom: 30px;" >
-                    <h3 style="margin-right: 50px; line-height: 34px;text-align: center;">Inventario</h3>
+                    <h3 style="margin-right: 50px; line-height: 34px;text-align: center;">Personal</h3>
                     <a id="download-Excel" style="height: 20px; line-height: 20px;font-size: 30px;" href="./ExcelFiles/PersonalM.xlsx" download="Carga Masiva Personal"><i class="fa-solid fa-file-excel" style="color: #1D6F42; "></i></a>
                 </div>
-                <?php if($rol_id !== 3):?>
+                <?php if (in_array("11", $rol_id) || in_array("1", $rol_id) ||  in_array("2", $rol_id)):?>
                 <div class="row justify-content-center">
                     <div class="col-8 col-lg-3 col-sm-4">
                         <div class="card">

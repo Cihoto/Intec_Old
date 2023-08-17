@@ -43,6 +43,10 @@ if ($_POST) {
             $status = $data->status;
             $result = json_encode(GetCalendarProjects($empresa_id,$status));
             break;
+        case 'GetEventsByClient':
+            $cliente_id = $data->cliente_id;
+            $result = json_encode(GetEventsByClient($cliente_id));
+            break;
         default:
             $result = false;
             break;
@@ -494,5 +498,29 @@ function UpdateProjectDataStatus($idProject)
         return true;
     } else {
         return false;
+    }
+}
+
+function GetEventsByClient($cliente_id){
+    $conn =  new bd();
+    $conn->conectar();
+
+    $record = [];
+
+    $queryGetRecord = "SELECT  p.*, d.*, c.comuna ,r.region  
+    FROM proyecto p 
+    LEFT JOIN lugar l on l.id = p.lugar_id 
+    LEFT JOIN direccion d on d.id = l.direccion_id
+    LEFT JOIN comuna c on c.id = d.comuna_id 
+    LEFT JOIN region r on r.id = c.region_id  
+    WHERE p.cliente_id = $cliente_id";
+
+    if($resposneDbRecord = $conn->mysqli->query($queryGetRecord)){
+        while($dataRecord = $resposneDbRecord->fetch_object()){
+            $record [] = $dataRecord;
+        }
+        return array("success"=>true, "data"=>$record);
+    }else{
+        return array("error"=>true, "message"=>"Ha ocurrido un error, por favor intente nuevamente");
     }
 }

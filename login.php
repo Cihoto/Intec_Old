@@ -123,6 +123,7 @@
                 }),
                 dataType: 'json',
                 success: async function(data) {
+                    console.log(data);
                     RemoveClassFromEmailInput();
                    if(data){
                     $('#emailInput').addClass('success')

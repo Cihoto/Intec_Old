@@ -26,7 +26,7 @@
 
             <?php  endif;?>
 
-            <?php  if($rol_id !== 3):?>
+            <?php if (in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)):?>
             <div class="card box">
                 <div class="row" style="justify-content: end;">
                 

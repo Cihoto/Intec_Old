@@ -61,6 +61,13 @@ if ($_POST) {
             $response = getAvailablePersonal($request);
             echo json_encode($response);
             break;
+        case 'GetPersonalByEmpresa':
+            // Recibe el parámetro request
+            $empresa_id = $data->empresa_id;
+            // Llama a la función getAvailablePersonal y devuelve el resultado
+            $response = GetPersonalByEmpresa($empresa_id);
+            echo json_encode($response);
+            break;
         case 'AddEspecialidad':
             // Recibe el parámetro request
             $request = $data->request;
@@ -617,7 +624,27 @@ function addPersonalMasiva($request, $empresaId){
         return array('error'=>array("inserted"=>$counterInserted,'total'=>count($request),'arrErr'=>$arrayNoCompleteData));
     }
 
+}
 
+
+function GetPersonalByEmpresa($empresa_id){
+    $conn=  new bd();
+    $conn->conectar();
+    $personal = [];
+
+    $queryGetPersonal = "SELECT CONCAT(per.nombre,' ',per.apellido) as nombre, p.id as personal_id,per.email FROM personal p
+    INNER JOIN persona per ON per.id = p.persona_id 
+    LEFT JOIN usuario u ON u.id = p.usuario_id 
+    WHERE u.id is NULL AND p.empresa_id  = $empresa_id";
+
+    if($responseDb = $conn->mysqli->query($queryGetPersonal)){
+        while ( $dataPersonal = $responseDb->fetch_object()) {
+            $personal[] = $dataPersonal;
+        }
+        return array("success"=>true,"data"=>$personal);
+    }else{
+        return array('error'=>true,"message"=>"No se ha podido completar la solicitud, por favor intente nuevamente");
+    }
 }
 
 

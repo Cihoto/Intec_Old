@@ -156,12 +156,13 @@ async function FillClientesTable(){
     tableClientes.empty();
     dataClientes.data.forEach(cliente => {
       let trClientes = 
-        `<tr><td>${cliente.nombre_fantasia}</td>
+        `<tr cliente_id="${cliente.cliente_id}"><td>${cliente.nombre_fantasia}</td>
         <td>${cliente.nombre} ${cliente.apellido}</td>
         <td>${cliente.rut_df}</td>
         <td>${cliente.direccion}</td>
         <td>${cliente.telefono}</td>
-        <td>${cliente.email}</td></tr>`;
+        <td>${cliente.email}</td>
+        <td class="viewClientData"><i class="fa-solid fa-info"></i></td></tr>`;
       tableClientes.append(trClientes);
     });
   }
@@ -173,6 +174,23 @@ async function FillClientesTable(){
     });
   }
 }
+
+function getClientInformation(cliente_id){
+  return $.ajax({
+    type: "POST",
+    url: 'ws/cliente/cliente.php',
+    data: JSON.stringify({
+        "tipo": "getClientInformation",
+        'cliente_id': cliente_id
+    }),
+    dataType: 'json',
+    success: function(response) {
+
+    },error:function(error){
+
+  }})
+}
+
 
 
 function ResetClienteForm(){

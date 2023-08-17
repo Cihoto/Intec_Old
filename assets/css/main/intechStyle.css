@@ -133,7 +133,7 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset; 
    }
 
-  input[type=text],input[type=number],input[type=date],textarea {
+  input[type=text],input[type=number],input[type=date],input[type=password],textarea {
    border:1px solid gray;
    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;         
   }
@@ -1090,6 +1090,23 @@ table.dataTable tbody td .productName {
   font-size: 20px;
 }
 
+
+.form-control.err{
+
+  background-color: rgba(255, 0, 0, 0.265) !important;
+  border: 1px solid red !important;
+}
+.form-control.success{
+
+  background-color: rgba(0, 128, 0, 0.265) !important;
+  border: 1px solid green !important;
+}
+
+#txtemail.error{
+  background-color: rgba(255, 0, 0, 0.208) !important;
+  border: 1px solid red !important;
+}
+
 .selectable-option:hover{
   /* box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px; */
   background-color: red
@@ -1347,6 +1364,545 @@ table.dataTable tbody td .productName {
 
 .client-box-body{
   padding: 5px;
+}
+
+.action-container{
+  display: flex;
+  height: 80px;
+  align-content: center;
+  align-items: center;
+  padding: 10px;
+
+}
+.action-box{
+  display: flex;
+  border: 1.5px solid rgb(11, 139, 11);
+  border-radius: 8px;
+  padding: 10px;
+  align-items: center;
+  align-content: center;
+  cursor: pointer;
+  transition: all .9s;
+  font-size: 24px;
+  color: white;
+  background-color: green;
+  height: 40px;
+}
+
+.action-box::after{
+ content: 'Agregar usuario';
+ visibility: unset;
+ opacity: 0;
+ margin-left: 4px;
+ font-size: 0px;
+ transition: all .4s;
+}
+.action-box:hover{
+  scale: 1.1;
+}
+.action-box:hover::after{
+  visibility: visible;
+  opacity: 1;
+  width: auto;
+  font-size: 24px;
+}
+.action-box p{
+  line-height: 100%;
+  text-align: center;
+  color: white;
+}
+
+
+/* DELETE USER ACTION BOX */
+.action-box-delete{
+  display: flex;
+  border: 1.5px solid red;
+  border-radius: 8px;
+  padding: 10px;
+  align-items: center;
+  align-content: center;
+  cursor: pointer;
+  transition: all .4s;
+  font-size: 24px;
+  color: white;
+  background-color: rgba(139, 11, 11, 0.319);;
+  height: 40px;
+  width: 10%;
+}
+
+.action-box-delete::after{
+ content: 'Eliminar usuario';
+ visibility: unset;
+ opacity: 0;
+ margin-left: 4px;
+ font-size: 0px;
+ transition: all .4s;
+ text-align: center;
+}
+.action-box-delete:hover{
+  scale: 1.05;
+  background-color: rgba(255, 0, 0, 0.696);
+  width: 50%;
+}
+.action-box-delete:hover::after{
+  visibility: visible;
+  opacity: 1;
+  width: auto;
+  font-size: 24px;
+}
+.action-box-delete p{
+  line-height: 100%;
+  text-align: center;
+  color: white;
+}
+
+@media (mix-width: 1301px) {
+
+  .action-box-delete{
+    width: 12%;
+  }
+  .action-box-delete:hover{
+    width: 65%;
+  }
+ 
+}
+@media (max-width: 1300px) {
+
+  .action-box-delete{
+    width: 12%;
+  }
+  .action-box-delete:hover{
+    width: 65%;
+  }
+ 
+}
+@media (max-width: 1100px) {
+
+  .action-box-delete{
+    width: 12%;
+  }
+  .action-box-delete:hover{
+    width: 55%;
+  }
+ 
+}
+@media (max-width: 680px) {
+
+  .action-box-delete{
+    width: 20%;
+  }
+  .action-box-delete:hover{
+    width: 75%;
+  }
+ 
+}
+@media (max-width: 530px) {
+
+  .action-box-delete{
+    width: 35%;
+  }
+  .action-box-delete:hover{
+    scale: 1.05;
+    background-color: rgba(255, 0, 0, 0.696);
+    width: 98%;
+    height: 70px;
+  }
+ 
+}
+@media (max-width: 380px) {
+
+  .action-box-delete{
+    width: 40%;
+  }
+  .action-box-delete:hover{
+    scale: 1.05;
+    background-color: rgba(255, 0, 0, 0.696);
+    width: 99%;
+    height: 80px;
+  }
+ 
+}
+
+
+/* END DELETE USER ACTION BOX */
+#newUserPersonalData{
+  transition: all .3s ease;
+}
+#newUserPersonalData.hidden{
+  height: 0px;
+  opacity: 0;
+  visibility: hidden;
+}
+.existingPersonal{
+  padding: 10px;
+  border: 1px solid rgb(3, 97, 3);
+  background-color: #c6cb2e55;
+  border-radius: 5px;
+}
+.existingPersonal.greenback{
+  background-color: #1d6f4255;
+}
+.select2-results__option{
+  color: black;
+  font-weight: 600;
+}
+
+.adm-container{
+  display: flex;
+  width: 100%;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  flex-direction: column;
+}
+.center-element{
+  justify-content: center;
+  align-items: center;
+}
+.row-direction{
+  flex-direction: row !important;
+}
+.colum-direction{
+  flex-direction: row !important;
+}
+
+.user-options-info{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sticky-head{
+  position: sticky;
+  top:-30px;
+  right: -30px;
+  left:-30px;
+  background-color: white;
+  z-index: 1000;
+
+}
+
+.theme-dark .sticky-head{
+  background-color: #151521;
+}
+
+
+@media (max-width: 650px) {
+  .user-options-info{
+    flex-direction: column !important;
+  }
+}
+.rol-options-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.user-item{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center ;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.487);
+}
+.user-config-description{
+  padding: 15px 30px 0px 10px;
+}
+#users{
+  display: flex;
+  width: 100%;
+  min-height: 80vh;
+  max-height: 80vh;
+  flex-direction: row;
+  transition: all 1s ease;
+}
+#users.hidden{
+  position: relative;
+  top: 10px;
+  opacity: 0;
+  visibility: hidden;
+  height: 0%;
+  margin-left: -1000px;
+}
+.collapsableFormContainer{
+  transition: all 1s ease;
+}
+.collapsableFormContainer.hidden{
+  opacity: 0;
+  visibility: hidden;
+  height: 0px;
+}
+
+@media (max-width: 1000px) {
+
+  #users{
+    flex-direction: column;
+  }
+  .user-container{
+    width: 100% !important;
+    margin: 0px !important;
+  }
+  .user-element{
+    
+    width: 33%;
+  }
+
+  .user-options{
+    width: 100% !important;
+    margin: 0px 0px !important;
+    overflow-y: scroll;
+  }
+ 
+}
+
+@media (max-width: 1000px) {
+  .user-element{
+   transition: width .45s ease !important;
+   transition: box-shadow .45s  !important;
+  }
+}
+
+@media (max-width: 580px) {
+  .user-element{
+    width: 65% !important;
+  }
+  
+}
+@media (max-width: 400px) {
+  .user-element{
+    width: 85% !important;
+  }
+  
+}
+@media (max-width: 350px) {
+  .user-element{
+    width: 95% !important;
+  }
+  
+}
+@media (max-width: 1400px) {
+  .rol-item-container{
+    width: 80% !important;
+  }
+  
+}
+@media (max-width: 800px) {
+  .rol-item-container{
+    width: 85% !important;
+  }
+}
+
+
+@media (max-width: 500px) {
+  .rol-item-container{
+    width: 100% !important;
+  }
+  #rol-Container{
+    width: 110% !important;
+  }
+  
+}
+
+.user-container{
+  width: 45%;
+  min-height: 100%;
+  max-height: 100%;
+  margin: 10px 0px 10px 10px;
+  /* background-color: #1e1e2d; */
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding :30px 0px 0px 0px ;
+  border: 2px solid rgba(0, 0, 0, 0.571);
+  border-radius: 10px;
+}
+
+.user-container::-webkit-scrollbar{
+  display: none;
+}
+
+.user-options{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  min-height: 100%;
+  max-height: 100%;
+  /* background-color: rgba(0, 0, 255, 0.185); */
+  margin: 10px 10px 10px 0px;
+  padding: 30px;
+  border: 2px solid rgba(0, 0, 0, 0.571);
+  border-radius: 10px;
+}
+
+#rol-Container{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  transition: all .8s ease;
+}
+#rol-Container.hidden{
+  opacity: 0;
+  visibility: hidden;
+}
+.rol-item-container{
+  display: flex;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  margin: 20px;
+  border: 1.5px solid black;
+  border-radius: 10px;
+  height: 80px;
+  width: 40%;
+  transition: all .5s ease;
+}
+
+.rol-prop{
+  position: relative;
+  align-items: center;
+  left: -25px ;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+.rol-prop p{
+  margin-top: 16%;
+}
+
+.rol-item-container.active{
+  border: 2.5px solid green;
+  background-color: rgba(0, 128, 0, 0.192);
+}
+
+#userList{
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.user-element{
+  margin: 20px 5px;
+  height: 200px;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding: 10px;
+  cursor: pointer;
+  transition: all .65s cubic-bezier(0.9, 1.9, 0.6, 1.15);
+}
+
+.user-element.active{
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  background-color: #48b14b;
+  color: white;
+  width: 150%;
+}
+
+.user-element:hover{
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  background-color: #435ebe;
+  color: white;
+}
+
+.user-element:hover h5{
+  color: white;
+}
+
+
+.saveChanges{
+  display: flex;
+  justify-content: end;
+  position: relative;
+  top: -40px;
+  transition: all .3s ease;
+}
+
+@media (max-width: 650px) {
+  .saveChanges{
+    top:0px
+  }
+  
+}
+
+.checkbox-wrapper-22 .switch {
+  display: inline-block;
+  height: 30px;
+  position: relative;
+  width: 50px;
+}
+
+.checkbox-wrapper-22{
+  box-sizing: border-box;
+  position: relative;
+  top: -35px;
+  left: 10px;
+}
+
+.checkbox-wrapper-22 .switch input {
+  display:none;
+}
+
+.checkbox-wrapper-22 .slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.checkbox-wrapper-22 .slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 23px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 23px;
+}
+
+.checkbox-wrapper-22 input:checked + .slider {
+  background-color: #66bb6a;
+}
+
+.checkbox-wrapper-22 input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.checkbox-wrapper-22 .slider.round {
+  border-radius: 34px;
+}
+
+.checkbox-wrapper-22 .slider.round:before {
+  border-radius: 50%;
+}
+
+/* CHECKBUTTONS FOR USERS OPTIONS */
+
+
+.check-btn-user {
+  display: grid;
+  place-content: center;
+}
+
+.check-btn-user::before{
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+}
+
+.check-btn-user:checked::before {
+  transform: scale(1);
+}
+
+
+.recordEvent{
+  border: 1px solid black !important;
+  background-color: #28283d !important;
 }
 
 
