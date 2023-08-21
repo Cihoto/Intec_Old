@@ -23,12 +23,8 @@ function FillClientes(empresaId){
 
 $('#clienteSelect').on('change',function(){
 
-
 let idCliente = this.value;
-
 console.log(idCliente);
-
-
 $.ajax({
     type: "POST",
     url: "ws/cliente/cliente.php",
@@ -39,6 +35,7 @@ $.ajax({
     }),
     success: function(response) {
 
+      console.log(response);
       console.log(response.cliente);
 
       response.cliente.forEach(cli => {

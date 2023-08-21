@@ -42,6 +42,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
       $(element).remove();
     })
   }
+  
   let arrayProductosAssigned;
   if (GetProductsStorage()) {
     arrayProductosAssigned = GetProductsStorage();
@@ -353,11 +354,11 @@ function AddProduct(el) {
   // if (ROL_ID !== 3) {
     let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
 
-    tdProductos.each((index, td) => {
-      if ($(td).text() === id) {
-        $(td).closest('tr').remove();
-      }
-    })
+    // tdProductos.each((index, td) => {
+    //   if ($(td).text() === id) {
+    //     $(td).closest('tr').remove();
+    //   }
+    // })
     SetResumeProductsValue();
 
     let quantityToAdd = $(el).closest("td").find('.quantityToAdd').val();

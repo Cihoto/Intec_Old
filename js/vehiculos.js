@@ -12,6 +12,14 @@ function searchVehiculoDrag() {
 }
 
 function FillVehiculos(empresaId) {
+
+   $('#sortable1 li').each((key,element)=>{
+    element.remove();
+   })
+
+    
+
+
     $.ajax({
         type: "POST",
         url: "ws/vehiculo/Vehiculo.php",
