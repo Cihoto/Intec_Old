@@ -12,7 +12,9 @@ if(!isset($_SESSION['empresa_id'])){
 // $rol_id = 3;
 
 $disabled = "";
-if(!in_array("7", $rol_id) || !in_array("1", $rol_id) || !in_array("2", $rol_id)){
+if(in_array("7", $rol_id) || in_array("1", $rol_id) || in_array("2", $rol_id)){
+
+}else{
     $disabled = "readonly ='readonly'";
 }
 

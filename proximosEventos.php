@@ -50,7 +50,7 @@ $active = 'proximosEventos';
       </header>
 
       <div class="page-header">
-        <h3>Próximos Eventos</h3>
+        <h3>Nuevo Evento</h3>
       </div>
 
       <div class="page-content">
@@ -616,7 +616,7 @@ $active = 'proximosEventos';
 
         if ($('#inputNombreCliente').val() !== "") {
           console.table(requestCliente);
-          const resultCliente = await Promise.all([addCliente(requestCliente)])
+          const resultCliente = await Promise.all([addCliente(requestCliente)]);
           idCliente = resultCliente[0].idCliente
 
           // DATOS PARA LA CRECION BASE DE UN PROYECTO
@@ -625,11 +625,12 @@ $active = 'proximosEventos';
           let nombreCliente = $('#inputNombreCliente').val();
         }
 
-        //REQUEST LUGAR
+        //PUT CLIENT ID VALUE ON "" WHEN INPUT IS EMPTY ON PROJECT REQUEST
         if ($('#inputNombreCliente').val() === "") {
           idCliente = "";
         }
-
+        
+        //PUT PLACE ID VALUE ON "" WHEN INPUT IS EMPTY ON PROJECT REQUEST
         if ($('#direccionInput').val() === "") {
           id_direccion = "";
           id_lugar = "";
@@ -641,10 +642,12 @@ $active = 'proximosEventos';
           fecha_inicio: fechaInicio,
           fecha_termino: fechaTermino,
           cliente_id: idCliente,
-          comentarios: comentarios
-          // empresa_id:1
+          comentarios: comentarios,
+          empresa_id: EMPRESA_ID
         }
-        // console.log(requestProject);
+        console.log("REQUEST PROJECT");
+        console.log(requestProject);
+        console.log("REQUEST PROJECT");
 
         const responseProject = await Promise.all([createProject(requestProject)])
         idProject = responseProject[0].id_project;
@@ -783,7 +786,6 @@ $active = 'proximosEventos';
             // console.log(response.responseText);
           }
         })
-
       }
     })
   })
@@ -859,8 +861,6 @@ $active = 'proximosEventos';
   })
 
   $('#getAvailableProducts').on('click', function() {
-
-
     let navItem = $(this).find('.projectAssigmentTab')
     if ($(navItem).hasClass('active')) {
       $(navItem).removeClass('active')
@@ -886,7 +886,6 @@ $active = 'proximosEventos';
           }
         })
       }
-
       if ($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== "") {
         FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
       }

@@ -73,9 +73,8 @@ if ($_POST) {
                 $clienteExist = $responseBdClienteId->fetch_object()->id;
                 if($clienteExist !== ""){
                     $conn->mysqli->query("UPDATE proyecto
-                                            SET cliente_id = $clienteExist
-                                            WHERE id = $idProject");
-        
+                    SET cliente_id = $clienteExist
+                    WHERE id = $idProject");
                     return json_encode(json_encode(array("idCliente"=>$clienteExist)));
                 }
             }if(isset($req->idCliente) && !isset($req->idProject)){
@@ -83,7 +82,7 @@ if ($_POST) {
                 $responseBdClienteId = $conn->mysqli->query("SELECT id FROM cliente c where c.id = $idCliente");
                 $clienteExist = $responseBdClienteId->fetch_object()->id;
                 if($clienteExist !== ""){
-                    return json_encode(json_encode(array("idCliente"=>$clienteExist)));
+                    return json_encode(array("idCliente"=>$clienteExist));
                 }
             }   
         }
@@ -116,7 +115,7 @@ if ($_POST) {
             $idDf = $conn->mysqli->insert_id;
 
             $queryCliente = "INSERT INTO cliente
-            (datos_facturacion_id, persona_id_contacto, id_empresa)
+            (datos_facturacion_id, persona_id_contacto, empresa_id)
             VALUES($idDf, $idPer, $empresaId);";
 
             if($conn->mysqli->query($queryCliente)){
@@ -167,7 +166,7 @@ if ($_POST) {
         if($conn->mysqli->query($queryCliente)){
             $idCliente = $conn->mysqli->insert_id;
             $conn->desconectar();
-            return json_encode(json_encode(array("idCliente"=>$idCliente)));
+            return json_encode(array("idCliente"=>$idCliente));
         }else{
             $conn->desconectar();
             return false;
@@ -313,7 +312,7 @@ if ($_POST) {
         }else{
             return false;
         }
-        return json_encode(json_encode(array("cliente"=>$clientes)));
+        return json_encode(array("cliente"=>$clientes));
         
     }
 
