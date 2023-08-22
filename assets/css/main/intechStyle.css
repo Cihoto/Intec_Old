@@ -1906,5 +1906,19 @@ table.dataTable tbody td .productName {
 }
 
 
+#clientFactData{
+  height: 0px;
+  visibility: hidden;
+  opacity: 0;
+  transition: height .5s ease;
+}
+
+#clientFactData.active{
+  height: auto;
+  visibility: visible;
+  opacity: 1;
+}
+
+
 
 

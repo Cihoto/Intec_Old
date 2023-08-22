@@ -33,7 +33,12 @@
         </div>
     </div>
     <hr />
-    <div class="row mt-4">
+
+    <div class="checkbox-wrapper-1 existingPersonal col-md-4 col-5 d-flex justify-content-space-between ">
+        <input id="clientHasFacturacion" class="substituted" type="checkbox" aria-hidden="true" />
+        <label for="clientHasFacturacion">Desplegar datos de facturación</label>
+    </div>
+    <div class="row mt-4" id="clientFactData">
         <div style="display: flex;">
             <h4>Datos de facturación</h4>
         </div>

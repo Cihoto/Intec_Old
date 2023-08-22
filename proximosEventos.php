@@ -223,6 +223,17 @@ $active = 'proximosEventos';
 
     })
 
+    // SHOW BILLING DATA 
+    $('#clientHasFacturacion').on('click',function(){
+      if($(this).is(':checked')){
+
+        $('#clientFactData').addClass('active');
+      }else{
+
+        $('#clientFactData').removeClass('active');
+      }
+    })
+
     // VALIDAR FORM AGREGAR DIRECCION
     $('#direccionAddForm').validate({
       rules: {
@@ -420,7 +431,7 @@ $active = 'proximosEventos';
           required: true
         },
         txtRut: {
-          required: true
+          required: false
         },
         txtCorreo: {
           required: true
@@ -429,19 +440,19 @@ $active = 'proximosEventos';
           required: true
         },
         txtRut: {
-          required: true
+          required: false
         },
         txtRazonSocial: {
-          required: true
+          required: false
         },
         txtNombreFantasia: {
-          required: true
+          required: false
         },
         txtDireccionDatosFacturacion: {
-          required: true
+          required: false
         },
         txtCorreoDatosFacturacion: {
-          required: true
+          required: false
         }
       },
       messages: {
@@ -489,8 +500,8 @@ $active = 'proximosEventos';
         let nombreFantasia = $('#inputNombreFantasia').val();
         let direccionDatosFacturacion = $('#inputDireccionDatosFacturacion').val();
         let correoDatosFacturacion = $('#inputCorreoDatosFacturacion').val();
-        $('#inputNombreCliente').val(`${nombreFantasia} | ${rut}`);
-        $(".clienteProjectResume").text(`${nombreFantasia} | ${rut}`);
+        $('#inputNombreCliente').val(`${nombreCliente} ${apellidos}`);
+        $(".clienteProjectResume").text(`${nombreCliente} ${apellidos}`);
         $("#clienteModal ").modal('hide');
       }
     })
@@ -555,9 +566,7 @@ $active = 'proximosEventos';
         let correoDatosFacturacion = $('#inputCorreoDatosFacturacion').val()
         let idClienteReq = $('#clienteSelect').val();
 
-        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {
-          idClienteReq = ""
-        }
+
 
 
         let requestCliente = {
@@ -571,11 +580,20 @@ $active = 'proximosEventos';
           razonSocial: razonSocial,
           nombreFantasia: nombreFantasia,
           direccionDatosFacturacion: direccionDatosFacturacion,
-          correoDatosFacturacion: correoDatosFacturacion,
-          idCliente: idClienteReq === "" ? "" : parseInt(idClienteReq)
+          correoDatosFacturacion: correoDatosFacturacion
         }
 
-        console.table(requestCliente);
+        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {
+        }else{
+          requestCliente.push({"idCliente":idClienteReq})
+          
+        }
+
+        console.log("----------------------------");
+        console.log("----------------------------");
+        console.log(requestCliente);
+        console.log("----------------------------");
+        console.log("----------------------------");
 
         //DATOS DE DIRECCION
         let dir = $('#txtDir').val()
@@ -598,13 +616,9 @@ $active = 'proximosEventos';
           comuna: comuna
         }]
 
-
-
         if ($('#direccionInput').val() !== "") {
           const resultDireccion = await Promise.all([addDir(requestDir)]);
-
           id_direccion = resultDireccion[0].id_direccion;
-
           let lugarRequest = [{
             lugar: dir,
             direccion_id: id_direccion
@@ -617,10 +631,15 @@ $active = 'proximosEventos';
         if ($('#inputNombreCliente').val() !== "") {
           console.table(requestCliente);
           const resultCliente = await Promise.all([addCliente(requestCliente)]);
+
+          console.log("RESPONSE CLIENTE ADD AJAX PHP");
+          console.log("RESPONSE CLIENTE ADD AJAX PHP");
+          console.log(resultCliente);
+          console.log("RESPONSE CLIENTE ADD AJAX PHP");
+          console.log("RESPONSE CLIENTE ADD AJAX PHP");
           idCliente = resultCliente[0].idCliente
 
           // DATOS PARA LA CRECION BASE DE UN PROYECTO
-
           let direccion = $('#direccionInput').val();
           let nombreCliente = $('#inputNombreCliente').val();
         }
@@ -636,6 +655,12 @@ $active = 'proximosEventos';
           id_lugar = "";
         }
 
+        console.log("ID CLIENTE");
+        console.log("ID CLIENTE");
+        console.log(idCliente);
+        console.log("ID CLIENTE");
+        console.log("ID CLIENTE");
+
         let requestProject = {
           nombre_proyecto: projectName,
           lugar_id: id_lugar,
@@ -645,14 +670,15 @@ $active = 'proximosEventos';
           comentarios: comentarios,
           empresa_id: EMPRESA_ID
         }
-        console.log("REQUEST PROJECT");
+
+        console.log("REQUEST PARA PROYECTO");
+        console.log("REQUEST PARA PROYECTO");
         console.log(requestProject);
-        console.log("REQUEST PROJECT");
+        console.log("REQUEST PARA PROYECTO");
+        console.log("REQUEST PARA PROYECTO");
 
         const responseProject = await Promise.all([createProject(requestProject)])
         idProject = responseProject[0].id_project;
-
-
         let arrayVehiclesID = []
         $('#sortable2 > li').each(function() {
 

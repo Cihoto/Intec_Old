@@ -110,7 +110,7 @@
 
         <?php if (in_array("7", $rol_id)||in_array("8", $rol_id)||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
         <?php
-        if($active == 'proximosEventos' || $active == 'crearEventos'){
+        if($active == 'proximosEventos' || $active == 'crearEventos' || $active === "eventos"){
           echo '<li class="sidebar-item has-sub active">';
         }else{
           echo '<li class="sidebar-item has-sub">';
@@ -121,9 +121,14 @@
             <span>Eventos</span>
           </a>
           <ul class="submenu">
-            <?php if (in_array("7", $rol_id)):?>
+            <?php if (in_array("7", $rol_id) ||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
               <li class="submenu-item">
                 <a href="proximosEventos.php">Crear Evento</a>
+              </li>
+            <?php endif;?>
+            <?php if (in_array("7", $rol_id) ||in_array("1", $rol_id) ||in_array("2", $rol_id)):?>
+              <li class="submenu-item">
+                <a href="projectPackages.php">Crear paquetes de recursos</a>
               </li>
             <?php endif;?>
             <li class="submenu-item">

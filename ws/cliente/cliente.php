@@ -75,7 +75,7 @@ if ($_POST) {
                     $conn->mysqli->query("UPDATE proyecto
                     SET cliente_id = $clienteExist
                     WHERE id = $idProject");
-                    return json_encode(json_encode(array("idCliente"=>$clienteExist)));
+                    return json_encode(array("idCliente"=>$clienteExist));
                 }
             }if(isset($req->idCliente) && !isset($req->idProject)){
                 $idCliente = $req->idCliente;
@@ -120,7 +120,7 @@ if ($_POST) {
 
             if($conn->mysqli->query($queryCliente)){
                 $idCliente = $conn->mysqli->insert_id;
-                return json_encode(json_encode(array("idCliente"=>$idCliente)));
+                return json_encode(array("idCliente"=>$idCliente));
             }else{
                 return false;
             }
