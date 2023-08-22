@@ -42,7 +42,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
       $(element).remove();
     })
   }
-  
+
   let arrayProductosAssigned;
   if (GetProductsStorage()) {
     arrayProductosAssigned = GetProductsStorage();
@@ -273,6 +273,41 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
 }
 
 
+function GetAllProductsByBussiness(empresaId) {
+  return $.ajax({
+    type: "POST",
+    url: "ws/productos/Producto.php",
+    dataType: 'json',
+    data: JSON.stringify({
+      "action": "getProductos",
+      empresaId: empresaId
+    }),
+    success: function (response) {
+      // console.log(response);
+    }, error: function (error) {
+      console.log(error);
+    }
+  })
+}
+
+async function GetProductDataById(product_id) {
+  return $.ajax({
+    type: "POST",
+    url: "ws/productos/Producto.php",
+    dataType: 'json',
+    data: JSON.stringify({
+      "action": "GetProductDataById",
+      product_id: product_id
+    }),
+    success: function (response) {
+      // console.log(response);
+    }, error: function (error) {
+      console.log(error);
+    }
+  })
+}
+
+
 function SetResumeProductsValue() {
 
   let personalCost = $('.valorProductoResume')
@@ -298,7 +333,7 @@ function removeProduct(idProduct) {
 function RemoveProductFromResume(id) {
 
 
-  if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("7")){
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
 
     let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
 
@@ -350,8 +385,8 @@ function AppendProductToResume(tipo) {
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
 function AddProduct(el) {
-  if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("7")){
-  // if (ROL_ID !== 3) {
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
+    // if (ROL_ID !== 3) {
     let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
 
     // tdProductos.each((index, td) => {

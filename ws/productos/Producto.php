@@ -30,6 +30,15 @@ if ($_POST) {
             echo json_encode($productos);
             break;
         
+        case 'GetProductDataById':
+            // Recibe el parámetro empresaId
+            $product_id = $data->product_id;
+            
+            // Llama a la función getProductos y devuelve el resultado
+            $productos = GetProductDataById($product_id);
+            echo json_encode($productos);
+            break;
+        
         case 'addProd':
             // Recibe el parámetro jsonCreateProd
             $jsonCreateProd = $data->request;
@@ -121,21 +130,29 @@ if ($_POST) {
         $conn->conectar();
 
         $productos = [];
-        $queryRegiones = "SELECT p.id, p.nombre, c.nombre as categoria, i.item, p.precio_arriendo, inv.cantidad FROM producto p 
-                            INNER JOIN empresa e on e.id = p.empresa_id 
-                            INNER JOIN categoria_has_item chi on chi.id = p.categoria_has_item_id 
-                            INNER JOIN categoria c on c.id = chi.categoria_id 
-                            INNER JOIN item i on i.id  = chi.item_id 
-                            INNER JOIN inventario inv on inv.producto_id  = p.id 
-                            WHERE e.id = $empresaId";
+        $queryProductos = "SELECT p.id, p.nombre, c.nombre as categoria, i.item, p.precio_arriendo, inv.cantidad FROM producto p 
+        INNER JOIN empresa e on e.id = p.empresa_id 
+        INNER JOIN categoria_has_item chi on chi.id = p.categoria_has_item_id 
+        INNER JOIN categoria c on c.id = chi.categoria_id 
+        INNER JOIN item i on i.id  = chi.item_id 
+        INNER JOIN inventario inv on inv.producto_id  = p.id 
+        WHERE e.id = $empresaId";
 
-        if($responseProductos = $conn->mysqli->query($queryRegiones)){
+        if($responseProductos = $conn->mysqli->query($queryProductos)){
             while($dataProductos = $responseProductos->fetch_object()){
                 $productos[] = $dataProductos;
             }
         }
         $conn->desconectar();
         return $productos;
+    }
+
+    function GetProductDataById($product_id){
+        $conn =  new bd();
+        $conn->conectar();
+
+        $queryGetProduct = "SELECT * FROM productos ";
+
     }
 
 

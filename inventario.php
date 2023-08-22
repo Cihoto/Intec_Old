@@ -149,7 +149,7 @@ $active = 'inventario';
                                 Agregar una nueva categoría o ítem
                             </button>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <?php endif;?>
             </div>
