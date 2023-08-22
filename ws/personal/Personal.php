@@ -140,7 +140,7 @@ if ($_POST) {
 function AddPersonal($request,$empresaId){
     $conn = new bd();
     $conn->conectar();
-    $today= date('Y-d-m');
+    $today= date('Y-m-d');
 
     foreach($request as $req){
         $nombre = $req->nombre;
@@ -165,7 +165,7 @@ function AddPersonal($request,$empresaId){
     (persona_id, cargo_id, especialidad_id, tipo_contrato_id, createAt, IsDelete, empresa_id,neto)
     VALUES(".$idPersona.",".$cargo.",".$especialidad.",".$idContrato.",'".$today."', 0, $empresaId, $neto)";
 
-    return $queryInsert;
+    // return $queryInsert;
 
     if($conn->mysqli->query($queryInsert)){
         return array("success"=>array("message"=>"Se ha ingresado a ".$nombre." ".$apellido." al sistema"));
