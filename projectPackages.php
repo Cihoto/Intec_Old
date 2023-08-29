@@ -51,6 +51,7 @@ $active = 'eventos';
                             <thead>
                                 <th>Nombre</th>
                                 <th></th>
+                                <th></th>
                             </thead>
                             <tbody>
 
@@ -180,6 +181,9 @@ $active = 'eventos';
                                 </div>
                             </div>
                         </section>
+                        <footer class="row justify-content-end">
+                            <button class="btn btn-success col-4" id="EditPackage">Editar Paquete</button>
+                        </footer>
                     </div>
                 </div>
 
@@ -204,18 +208,21 @@ $active = 'eventos';
         let productsArrayNonEditableObj = [];
         let arrayCreatedPackages = [];
         let openEdit = false;
+        let editPackageId = '';
 
         // const EMPRESA_ID = $('#empresaId').text();
         $(document).ready(async function() {
-
-            $('.swal2-popup').attr('tab-index', 3);
-            $('.swal2-modal').attr('tab-index', 3);
-            $('.swal2-show').attr('tab-index', 3);
             arrayPackage = [];
             // GET ALL PRODUCTS BY BUSSINESS AND SEND JSON TO FUNCTION, FILL TABLE AND CONVERT IT TO DATATABLE
             // THIS LIST IS MADE FOR CONSTRUCT A NEW EVENT STANDARD PACKAGE
             productsArrayNonEditableObj = await GetAllProductsByBussiness(EMPRESA_ID);
             FillPackageProductsTable(productsArrayNonEditableObj);
+            fillPackagesByBussiness();
+            
+        })
+
+        async function fillPackagesByBussiness(){
+            $('#packagePreView > tbody tr').remove();
 
             const myStandardPackages = await GetAllStandardPackages(EMPRESA_ID);
 
@@ -224,14 +231,65 @@ $active = 'eventos';
                     let tr = `<tr package_id="${package.id}">
                     <td>${package.nombre}</td>
                     <td><i class="fa-solid fa-eye viewPackageContent"></i></td>
+                    <td style="color:red"><i class="fa-solid fa-delete-left deletePackage"></i></td>
                     </tr>`;
                     $('#packagePreView > tbody').append(tr)
                 });
 
                 arrayCreatedPackages = myStandardPackages.data;
             }
+        }
 
+
+        // DELETE PACKAGE ON FONT AWEOME ICON CLICK EVENT
+        $(document).on('click','.deletePackage',function(){
+
+            const package_id = $(this).closest('tr').attr('package_id');
+            
+    
+    
+            Swal.fire({
+                title: 'Quieres eliminar este paquete de recursos?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                denyButtonText: `Cancelar`,
+                showCancelButton:false,
+                'icon':'error'
+            }).then(async (result) => {
+                if (result.isConfirmed){
+                    const responseDelete = await deletePackage(package_id,EMPRESA_ID);
+
+                    if(responseDelete.success){
+                        $(this).closest('tr').remove();
+                        Swal.fire('Eliminado exitosamente', '', 'success',2000)
+                    }
+                } else if (result.isDenied){
+
+                }
+            })
         })
+       
+
+
+        
+
+        function deletePackage(package_id,empresa_id){
+            return $.ajax({
+                type: "POST",
+                url: "ws/standard_package/standard_package.php",
+                data: JSON.stringify({
+                    action: "deletePackage",
+                    package_id: package_id,
+                    empresa_id :empresa_id
+                }),
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(response) {}
+            })
+        }
 
 
         /* FILL PRODUCTS BY GIVES JSON ARRAY AND TRANSFORM TRABLE TO DATATABLE TO SORT IT AND ADD SELECTED PRODUCT TO STANDARD
@@ -277,8 +335,7 @@ $active = 'eventos';
         }
 
 
-        $(document).on('click', '.viewPackageContent', async function() {
-
+        $(document).on('click', '.viewPackageContent', async function(){
             openEdit = true;
             arrayPackage=[];
 
@@ -287,11 +344,16 @@ $active = 'eventos';
             $('#PackageEdit-tab').addClass('active');
             $('#PackageEdit').addClass('show active');
 
-            const id_package = $(this).closest('tr').attr('package_id');
+            editPackageId = $(this).closest('tr').attr('package_id');
 
             const productos = await GetAllProductsByBussiness(EMPRESA_ID);
             FillPackageProductsTableModal(productos);
-            const packageDetails = await GetPackageDetails(id_package);
+
+            const packageDetails = await GetPackageDetails(editPackageId);
+
+            console.log(packageDetails);
+
+            $('#packageNameEdit').val(packageDetails.data[0].nombre)
 
             $('#packageResumeView > tbody tr').remove();
 
@@ -316,6 +378,78 @@ $active = 'eventos';
                 })
             })
         })
+
+
+        // CAPTURE CLICK ON EDIT BUTTON
+        $('#EditPackage').on('click',async function(){
+            if($('#packageNameEdit').val() === ""){
+                Swal.fire({
+                    title:'Ups!',
+                    text:'Debes ingresar un nombre para el paquete',
+                    icon:'warning',
+                    showConfirmButton:false,
+                    timer:2000
+                })
+                return
+            }
+            if(arrayPackage.length === 0){
+                Swal.fire({
+                    title:'Ups!',
+                    text:'Debes ingresar equipos al paquete para poder actualizarlo',
+                    icon:'warning',
+                    showConfirmButton:false,
+                    timer:2000
+                })
+                return
+            }
+
+            const responseUpdate = await editPackage(editPackageId,arrayPackage);
+            console.log(responseUpdate);
+
+            if(responseUpdate.error){
+                Swal.fire({
+                    title:'Excelente!',
+                    text: responseUpdate.message,
+                    icon:'error',
+                    showConfirmButton:false,
+                    timer:2000
+                })
+            }
+            if(responseUpdate.success){
+
+                $('#home-tab').addClass('active');
+                $('#home').addClass('show active');
+                $('#PackageEdit-tab').removeClass('active');
+                $('#PackageEdit').removeClass('show active');
+                arrayPackages = [];
+
+                Swal.fire({
+                    title:'Ups!',
+                    text: responseUpdate.message,
+                    icon:'success',
+                    showConfirmButton:false,
+                    timer:2000
+                })
+
+            }
+        })
+
+        function editPackage(package_idUpdate,arrayPackageUpdate){
+            return $.ajax({
+                type: "POST",
+                url: "ws/standard_package/standard_package.php",
+                data: JSON.stringify({
+                    'action': "editPackage",
+                    'package_id': package_idUpdate,
+                    'data':arrayPackageUpdate
+                }),
+                dataType: 'json',
+                success: async function(data){
+
+                },
+                error: function(response){}
+            })
+        }
 
         // EDIT PACKAGE BIUTTON ONLY IF VARIABLE OPENIEDT IS TRUE
         $('#PackageEdit-tab').on('click', async function() {
@@ -463,12 +597,6 @@ $active = 'eventos';
                 })
 
                 if (newQuantity) {
-
-                    console.log("NEW QUANTITY");
-                    console.log(newQuantity);
-                    console.log("NEW QUANTITY");
-
-
                     const producto = productsArrayNonEditableObj.find((product) => {
                         if (product.id === newQuantity.id) {
 
@@ -496,8 +624,6 @@ $active = 'eventos';
                     if (producto) {
 
                         $('#packageResume > tbody tr').remove();
-
-
 
                         arrayPackage.forEach((resumeProd) => {
 
@@ -580,12 +706,6 @@ $active = 'eventos';
                 })
 
                 if (newQuantity) {
-
-                    console.log("NEW QUANTITY");
-                    console.log(newQuantity);
-                    console.log("NEW QUANTITY");
-
-
                     const producto = productsArrayNonEditableObj.find((product) => {
                         if (product.id === newQuantity.id) {
 
@@ -743,6 +863,14 @@ $active = 'eventos';
 
             if (responsePackageCreation) {
                 arrayPackage = [];
+
+                fillPackagesByBussiness();
+
+                $('#home-tab').addClass('active');
+                $('#home').addClass('show active');
+                $('#EventRecord-tab').removeClass('active');
+                $('#EventRecord').removeClass('show active');
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Excelente',
