@@ -1919,6 +1919,16 @@ table.dataTable tbody td .productName {
   opacity: 1;
 }
 
+.my-swal-zindexed{
+  /* background-color: red !important; */
+  z-index: 40000 !important;
+}
 
+#swal2-input{
+  z-index: 40000 !important;
+}
+.swal2-popup {
+  z-index: 40000 !important;
+}
 
 
