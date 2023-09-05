@@ -68,6 +68,21 @@ if ($_POST) {
             $assignProductResponse = assignProductToProject($request);
             echo json_encode($assignProductResponse);
             break;
+        case 'GetUnavailableProductsByDate':
+            // Recibe el parámetro jsonCreateProd
+            $request = $data->request;
+            $empresa_id = $data->empresa_id;
+            // Llama a la función addProd y devuelve el resultado
+            $response = GetUnavailableProductsByDate($request,$empresa_id);
+            echo json_encode($response);
+            break;
+        case 'GetAllProductsByBussiness':
+            // Recibe el parámetro jsonCreateProd
+            $empresa_id = $data->empresa_id;
+            // Llama a la función addProd y devuelve el resultado
+            $response = GetAllProductsByBussiness($empresa_id);
+            echo json_encode($response);
+            break;
         default:
             echo 'Invalid action.';
             break;
@@ -353,5 +368,62 @@ if ($_POST) {
         return json_encode(array("total"=>count($jsonCreateProd),"errMarca"=>$jsonErrMarca,"errHasItem"=>$jsonErrItemHasClass));
     }
 
+    function GetUnavailableProductsByDate($request,$empresa_id){
+        $conn = new bd();
+        $conn->conectar();
 
+        $fecha_inicio = $request->data->fecha_inicio;
+        $fecha_termino = $request->data->fecha_termino;
+
+        $unavailableProducts = [];
+        $queryGetUnavailables ="SELECT php.*, phe.estado_id,p.fecha_inicio,p.fecha_termino  FROM proyecto_has_producto php 
+        INNER JOIN proyecto p ON p.id = php.proyecto_id
+        INNER JOIN proyecto_has_estado phe on phe.proyecto_id = p.id 
+        WHERE phe.estado_id = 2
+        AND p.fecha_inicio >= '$fecha_inicio' and p.fecha_termino <= '$fecha_termino'
+        AND p.empresa_id = $empresa_id";
+
+        // return $queryGetUnavailables;
+
+        if($responseDb = $conn->mysqli->query($queryGetUnavailables)){
+
+            while($dataDb = $responseDb->fetch_object()){
+                $unavailableProducts [] = $dataDb;
+            }
+            $conn->desconectar();
+            return array("success"=>true,"data"=>$unavailableProducts);
+
+        }else{
+
+            $conn->desconectar();
+            return array("error"=>true,"data"=>$unavailableProducts);
+        }
+
+    }
+
+
+    function GetAllProductsByBussiness($empresa_id){
+        $conn= new bd();
+        $conn->conectar();
+        $products = [];
+
+        $query = "SELECT p.*, inv.cantidad,c.nombre as categoria, i.item  FROM producto p
+        INNER JOIN categoria_has_item chi on chi.id = p.categoria_has_item_id 
+        INNER JOIN categoria c on c.id = chi.categoria_id 
+        INNER JOIN item i on i.id = chi.item_id
+        INNER JOIN inventario inv on inv.producto_id = p.id 
+        where p.empresa_id  = $empresa_id";
+
+        if($responseDb = $conn->mysqli->query($query)){
+
+            while($dataDb = $responseDb->fetch_object()){
+                $products [] = $dataDb;
+            }
+            $conn->desconectar();
+            return array("success"=>true,"data"=>$products);
+        }else{
+            $conn->desconectar();
+            return array("error"=>true,"data"=>$products);
+        }
+    }
 ?>
