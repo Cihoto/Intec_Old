@@ -269,7 +269,7 @@ function SetTotalProject($request){
     $queryIfTotal = "SELECT * FROM ingresos_has_proyecto WHERE proyecto_id =  $idProject";
 
     if($conn->mysqli->query($queryIfTotal)->num_rows>0){
-        $qdelete = "DELETE FROM ingresos_has_proyecto WHERE id_proyecto = $idProject";
+        $qdelete = "DELETE FROM ingresos_has_proyecto WHERE proyecto_id = $idProject";
         $conn->mysqli->query($qdelete);
     }
 

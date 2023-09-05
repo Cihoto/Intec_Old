@@ -107,15 +107,15 @@ $active = 'proximosEventos';
         <div class="card box">
           <div class="row" style="justify-content: end;">
 
-         
+
             <div class="col-3 mt-2 mb-2">
               <button class="btn btn-success" id="submitProject">Crear Proyecto</button>
             </div>
-            <?php if($empresaId === "1"):?>
+            <?php if ($empresaId === "1") : ?>
               <div class="col-3 mt-2 mb-2">
                 <button class="btn btn-success" id="verarray">Ver array</button>
               </div>
-            <?php endif;?>
+            <?php endif; ?>
           </div>
         </div>
       </div>
@@ -132,10 +132,11 @@ $active = 'proximosEventos';
   <?php require_once('./includes/footerScriptsJs.php') ?>
 
   <!-- REQUIRE FORM ARRIENDOS -->
-  <?php require_once('./includes/forms/arriendosForm.php')?>
+  <?php require_once('./includes/forms/arriendosForm.php') ?>
 
   <!-- REQUIRE DE FUNCIONES JS -->
   <script src="/js/Funciones/NewProject.js"></script>
+  <script src="/js/packages.js"></script>
   <script src="/js/clientes.js"></script>
   <script src="/js/direccion.js"></script>
   <script src="/js/personal.js"></script>
@@ -153,12 +154,12 @@ $active = 'proximosEventos';
 <script>
   //BOTON DE TEST
   $('#verarray').on('click', function() {
+
     // localStorage.clear();
     // console.log("asdjhasd,jahkdsjhasd");
-    $('#arriendosModal').modal('show');
+    // $('#arriendosModal').modal('show');
 
-
-
+    console.log(listProductArray);
   })
   //FIN BOTON TEST
 
@@ -177,28 +178,23 @@ $active = 'proximosEventos';
     $('.comentariosProjectResume').text($(this).val())
   })
 
-
   const EMPRESA_ID = document.getElementById('empresaId').textContent;
-  var ROL_ID = <?php echo json_encode($rol_id);?>
-
-  // console.log(EMPRESA_ID);
-  $(document).ready(function() {
+  let ROL_ID = <?php echo json_encode($rol_id); ?>;
 
 
-    // $("#sortable1, #sortable2").sortable({
-    //   connectWith: ".connectedSortable"
-    // }).disableSelection();
+  // ADD PACKAGE TO PROJECT ON PLUS ICON ON PACKAGE LIST
+  $(document).on('click', '.addPackageToAssigments', async function() {
+    addPackageToProjectAssigments($(this))
+  })
 
-    // $("#sortable1, #sortable2").sortable({
-    //   connectWith: ".connectedSortable"
-    // }).disableSelection();
+  $(document).ready(async function() {
 
-    // $("#sortablePersonal1, #sortablePersonal2").sortable({
-    //   connectWith: ".connectedSortablePersonal"
-    // }).disableSelection();
-
+    // const data = {
+    //   'fecha_inicio': "2023-08-01",
+    //   'fecha_termino': "2023-08-10"
+    // }
+    FillStandardPackages();
     $('#tableResume').DataTable({})
-
     //fillvehiculos
     FillVehiculos(EMPRESA_ID);
     // Fill Clientes
@@ -206,29 +202,26 @@ $active = 'proximosEventos';
     //FILL DIRECCIONES
     FillDirecciones();
     //FILL PRODUCTOS
-    FillProductos(EMPRESA_ID);
+    // FillProductos(EMPRESA_ID);
     //FILL PERSONAL
     FillPersonal(EMPRESA_ID);
     // CLEAR LOCALSTORGE
     localStorage.clear();
     // FILL REGIONES
-    FillRegiones(EMPRESA_ID)
-
-
+    FillRegiones(EMPRESA_ID);
     $(document).on('click', '.logoRemove', function() {
       let productId = $(this).closest('.detailsProduct-box').find('.itemId').text();
       removeProduct(productId);
       $(this).closest('.detailsProduct-box').remove()
       $('#resumeBody').find(`.idProd${productId}`).remove();
-
     })
 
     // SHOW BILLING DATA 
-    $('#clientHasFacturacion').on('click',function(){
-      if($(this).is(':checked')){
+    $('#clientHasFacturacion').on('click', function() {
+      if ($(this).is(':checked')) {
 
         $('#clientFactData').addClass('active');
-      }else{
+      } else {
 
         $('#clientFactData').removeClass('active');
       }
@@ -285,7 +278,7 @@ $active = 'proximosEventos';
         $('.lugarProjectResume').text(`${dir} ${numDir} ${depto}, ${comunaInput}, ${regionInput}`);
 
 
-        if (localStorage.getItem("direccion") === null){
+        if (localStorage.getItem("direccion") === null) {
           localStorage.setItem("direccion", JSON.stringify([{
             dir,
             numDir,
@@ -318,81 +311,83 @@ $active = 'proximosEventos';
     })
 
     $('#arriendoForm').validate({
-      rules:{
-        nombreArriendo:{
-          required:true
+      rules: {
+        nombreArriendo: {
+          required: true
         },
-        valorArriendo:{
-          required:true
+        valorArriendo: {
+          required: true
         },
-        txtNombre:{
-          required:true
+        txtNombre: {
+          required: true
         },
-        txtApellidos:{
-          required:true
+        txtApellidos: {
+          required: true
         },
-        txtRut:{
-          required:true
+        txtRut: {
+          required: true
         },
-        txtCorreo:{
-          required:true
+        txtCorreo: {
+          required: true
         },
-        txtTelefono:{
-          required:true
+        txtTelefono: {
+          required: true
         },
-        txtRut:{
-          required:true
+        txtRut: {
+          required: true
         },
-        txtRazonSocial:{
-          required:true
+        txtRazonSocial: {
+          required: true
         },
-        txtNombreFantasia:{
-          required:true
+        txtNombreFantasia: {
+          required: true
         },
-        txtDireccionDatosFacturacion:{
-          required:true
+        txtDireccionDatosFacturacion: {
+          required: true
         },
-        txtCorreoDatosFacturacion:{
-          required:true
+        txtCorreoDatosFacturacion: {
+          required: true
         }
-      },messages:{
-        nombreArriendo:{
+      },
+      messages: {
+        nombreArriendo: {
           required: "Ingrese un valor"
         },
-        valorArriendo:{
+        valorArriendo: {
           required: "Ingrese un valor"
         },
-        txtNombre:{
+        txtNombre: {
           required: "Ingrese un valor"
         },
-        txtApellidos:{
+        txtApellidos: {
           required: "Ingrese un valor"
         },
-        txtRut:{
+        txtRut: {
           required: "Ingrese un valor"
         },
-        txtCorreo:{
+        txtCorreo: {
           required: "Ingrese un valor"
         },
-        txtTelefono:{
+        txtTelefono: {
           required: "Ingrese un valor"
         },
-        txtRut:{
+        txtRut: {
           required: "Ingrese un valor"
         },
-        txtRazonSocial:{
+        txtRazonSocial: {
           required: "Ingrese un valor"
         },
-        txtNombreFantasia:{
+        txtNombreFantasia: {
           required: "Ingrese un valor"
         },
-        txtDireccionDatosFacturacion:{
+        txtDireccionDatosFacturacion: {
           required: "Ingrese un valor"
         },
-        txtCorreoDatosFacturacion:{
+        txtCorreoDatosFacturacion: {
           required: "Ingrese un valor"
         }
-      },submitHandler:function(){
+      },
+      submitHandler: function() {
         event.preventDefault();
         const form = $('#arriendoForm').serializeArray();
 
@@ -405,7 +400,7 @@ $active = 'proximosEventos';
           data: JSON.stringify({
             action: 'SetNewRent',
             request: request,
-            empresa_id : EMPRESA_ID
+            empresa_id: EMPRESA_ID
           }),
           dataType: 'json',
           success: function(data) {
@@ -583,17 +578,18 @@ $active = 'proximosEventos';
           correoDatosFacturacion: correoDatosFacturacion
         }
 
-        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {
-        }else{
-          requestCliente.push({"idCliente":idClienteReq})
-          
+        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {} else {
+          requestCliente.push({
+            "idCliente": idClienteReq
+          })
+
         }
 
-        console.log("----------------------------");
-        console.log("----------------------------");
-        console.log(requestCliente);
-        console.log("----------------------------");
-        console.log("----------------------------");
+        // console.log("----------------------------");
+        // console.log("----------------------------");
+        // console.log(requestCliente);
+        // console.log("----------------------------");
+        // console.log("----------------------------");
 
         //DATOS DE DIRECCION
         let dir = $('#txtDir').val()
@@ -648,7 +644,7 @@ $active = 'proximosEventos';
         if ($('#inputNombreCliente').val() === "") {
           idCliente = "";
         }
-        
+
         //PUT PLACE ID VALUE ON "" WHEN INPUT IS EMPTY ON PROJECT REQUEST
         if ($('#direccionInput').val() === "") {
           id_direccion = "";
@@ -773,7 +769,7 @@ $active = 'proximosEventos';
           })
           console.table()
           let responseRents = await AssignRents(arrayRequestRent);
-        }else{
+        } else {
           console.log("NO RENT TO ASSIGN");
         }
 
@@ -849,8 +845,6 @@ $active = 'proximosEventos';
     }
   })
 
-
-
   $('#getAvailableVehicles').on('click', function() {
     let navItem = $(this).find('.projectAssigmentTab')
     if ($(navItem).hasClass('active')) {
@@ -908,19 +902,393 @@ $active = 'proximosEventos';
           cancelButtonText: 'Seleccionaré un rango de fechas'
         }).then((result) => {
           if (result.isConfirmed) {
-            FillProductosAvailable(EMPRESA_ID, "all", "", "");
+            // FillProductosAvailable(EMPRESA_ID, "all", "", "");
+            FillAllProducts()
           }
         })
       }
       if ($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== "") {
-        FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
+        // FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
+
+        const dates = {
+          'fecha_inicio': $('#fechaInicio').val(),
+          'fecha_termino': $('#fechaTermino').val()
+        }
+        FillAllAvailableProducts(dates);
+
       }
     }
 
   })
 
-  $('#getAvailablePersonal').on('click', function() {
+  function GetAllProductsByBussiness(empresa_id) {
+    return $.ajax({
+      type: "POST",
+      url: "ws/productos/Producto.php",
+      dataType: 'json',
+      data: JSON.stringify({
+        "action": "GetAllProductsByBussiness",
+        empresa_id: empresa_id
+      }),
+      success: function(response) {
 
+      }
+    })
+  }
+
+  function GetUnavailableProductsByDate(data, empresa_id) {
+    return $.ajax({
+      type: "POST",
+      url: "ws/productos/Producto.php",
+      dataType: 'json',
+      data: JSON.stringify({
+        "action": "GetUnavailableProductsByDate",
+        'empresa_id': empresa_id,
+        'request': {
+          'data': data
+        }
+      }),
+      success: function(response) {
+
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    })
+  }
+
+  // function to call and fill table products without dates restrictions
+  async function FillAllProducts() {
+
+    allMyProducts = []
+    listProductArray = [];
+
+    const responseAllProducts = await GetAllProductsByBussiness(EMPRESA_ID);
+
+    if (responseAllProducts.success) {
+
+      allMyProducts = responseAllProducts.data;
+
+      // SET listProductArray (GLOBAL VARIABLE), CONFIG JSON OBJECT BY MAP FUNCTION WITH DB AJAX DATA
+      // THIS ARRAY WILL BE USED ON EVERY MOVE ON PRODUCTS ASSIGMENT
+      listProductArray = allMyProducts.map(function(producto) {
+        let disponibles = producto.cantidad
+        return {
+          'id': producto.id,
+          'categoria': producto.categoria,
+          'item': producto.item,
+          'nombre': producto.nombre,
+          'precio_arriendo': producto.precio_arriendo,
+          'cantidad': producto.cantidad,
+          'disponibles': disponibles,
+          'faltantes': 0
+        }
+      })
+      fillProductsTableAssigments();
+    }
+  }
+
+  async function FillAllAvailableProducts(dates) {
+
+    allMyProducts = [];
+    allMyTakenPoducts = [];
+    listProductArray = [];
+
+    const fecha_inicio = dates.fecha_inicio;
+    const fecha_termino = dates.fecha_termino;
+    const data = {
+      'fecha_inicio': fecha_inicio,
+      'fecha_termino': fecha_termino
+    }
+    const responseUnavailableProducts = await GetUnavailableProductsByDate(data, EMPRESA_ID);
+    const responseAllProducts = await GetAllProductsByBussiness(EMPRESA_ID);
+
+    if (responseUnavailableProducts.success && responseAllProducts.success) {
+      allMyProducts = responseAllProducts.data;
+      allMyTakenPoducts = responseUnavailableProducts.data;
+      // console.log(allMyProducts);
+      if (allMyTakenPoducts.length === 0) {
+
+        // listProductArray = allMyProducts
+
+        listProductArray = allMyProducts.map(function(producto) {
+          let disponibles = producto.cantidad
+          return {
+            'id': producto.id,
+            'categoria': producto.categoria,
+            'item': producto.item,
+            'nombre': producto.nombre,
+            'precio_arriendo': producto.precio_arriendo,
+            'cantidad': producto.cantidad,
+            'disponibles': disponibles,
+            'faltantes': 0
+          }
+        })
+      } else {
+        listProductArray = allMyProducts.map((producto, index) => {
+          let disponibles = producto.cantidad;
+          const takenProduct = allMyTakenPoducts.find((taken) => {
+            if (taken.producto_id === producto.id) {
+              return taken
+            }
+          });
+          if (takenProduct) {
+            disponibles = parseInt(producto.cantidad) - parseInt(takenProduct.cantidad)
+          }
+          return {
+            'id': producto.id,
+            'categoria': producto.categoria,
+            'item': producto.item,
+            'nombre': producto.nombre,
+            'precio_arriendo': producto.precio_arriendo,
+            'cantidad': producto.cantidad,
+            'disponibles': disponibles,
+            'faltantes': 0
+          }
+        })
+      }
+
+      // FILL TABLE WITH listProductArray
+      // this array contains a json object returned by map all data given by ajax db call
+      // map gives format to this json, after we can manage this array to disocunt available stock or whatever we need
+      fillProductsTableAssigments();
+      // allAndselectedProductsList = listProductArray;
+    }
+  }
+
+  function fillProductsTableAssigments() {
+    if ($.fn.DataTable.isDataTable('#tableProducts')) {
+      $('#tableProducts').DataTable().destroy();
+      $('#tableDrop > tr').each((key, element) => {
+        $(element).remove();
+      })
+    }
+    listProductArray.forEach(producto => {
+      let td = `
+            <td class="productId" style="display:none">${producto.id}</td>
+            <td class="catProd"> ${producto.categoria}</td>
+            <td class="itemProd"> ${producto.item}</td>
+            <td style="width:25%" class="productName">${producto.nombre}</td>
+            <td class="productPrice"> ${producto.precio_arriendo} </td>
+            <td class="productStock" >${producto.cantidad}</td>
+            <td class="productAvailable" >${(producto.disponibles < 0)? 0: producto.disponibles}</td>
+            <td><input style="margin-right:8px" class="addProdInput quantityToAdd" id="" type="number" min="1" max="${producto.cantidad}"/><i class="fa-solid fa-plus addItem" onclick="AddProduct(this)"></i></td>`
+      $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
+    });
+
+    $('#tableProducts').dataTable();
+  }
+
+  $(document).on('click', '.removePackageFromAssigment', async function() {
+    const package_id = $(this).closest('.packageNameContainer').attr('package_id');
+    console.log(package_id);
+
+    const packageExists = selectedPackages.find((selectedPackage) => {
+      return selectedPackage.id === package_id
+    })
+
+    if (!packageExists) {
+      Swal.fire(
+        'Ups!',
+        'Ha ocurrido un error, por favor intenta nuevamente',
+        'error'
+      );
+      return
+    }
+    //GET ALL PACKAGE DETAILS, NAME, ID FROM PACKAGE AND PRODUCTS THAT CONTAINS 
+    const detailsPackage = await GetPackageDetails(package_id);
+    console.log("detailsPackage", detailsPackage);
+    if (!detailsPackage.success) {
+      console.log("nada");
+    }
+
+    // SET PACKAGE ID TO FIND IT ON GLOBAL VARIABLE PACKAGE_LIST
+    // IF RETURN TRUE PUSH RESULT AND APPEND IT TO RESUME
+    const detailPackageId = detailsPackage.data[0].id;
+    const packageToAdd = PACKAGE_LIST.find((package) => {
+      if (package.id === detailPackageId) {
+        return package
+      }
+    })
+    // PUSH FINDED PACKAGE TO GLOBAL LIST
+    selectedPackages.find((existingPackage, index, array) => {
+      if (existingPackage.id === existingPackage.id) {
+        array.splice(index, 1)
+      }
+    })
+    console.log(selectedPackages);
+    // ADD SELECTED PACKAGES TO RESUME
+    addPackageToPackageAssigment();
+    // FORMAT PRODUCTS TO STANDARD JSON AND APPEND ON RESUME
+    // ALSO SET STOCK AND AVAILABILITY ON RESUME PRODUCT TABLE
+    const productsToAdd = detailsPackage.products.map((packageProducts) => {
+      return {
+        'product_id': packageProducts.product_id,
+        'quantityToAdd': packageProducts.quantity
+      }
+    });
+    // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+    AddStockFromProducts(productsToAdd);
+    // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+    fillProductsTableAssigments();
+
+    //FORMAT RESUME PRODUCT ARRAY
+    SetSelectedProducts_Add(productsToAdd);
+
+    // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+    addProductToResumeAssigment()
+  })
+
+  let lastValue = 0
+  $(document).on('click', '.addProdInputResume', async function() {
+    lastValue = $(this).val();
+  })
+
+  $(document).on('blur', '.addProdInputResume', async function() {
+    let currentValue = $(this).val();
+
+    if(!isNumeric(currentValue)){
+      Swal.fire(
+          'Ups!',
+          'Debes ingresar un número',
+          'error'
+        );
+      return
+    }
+    let product_id = $(this).closest('.detailsProduct-box').find('.itemId').text();
+    let minProducts = [];
+    let minvalue =0;
+
+    if (selectedPackages.length > 0) {
+
+      const prodExists = selectedProducts.find((product) => {
+        return product.id === product_id
+      })
+      if (!prodExists) {
+        Swal.fire(
+          'Ups!',
+          'Ha ocurrido un error, por favor intenta nuevamente',
+          'error'
+        );
+        $(this).val(lastValue);
+        return
+      }
+      const detailsPackage = await Promise.all(
+        selectedPackages.map(async (package)=>{
+        return await GetPackageDetails(package.id);
+      }))
+
+      minProducts =  detailsPackage.map((packageProds,index)=>{
+        return packageProds.products[index,0]
+      })
+
+      minProducts.forEach((prod) => {
+        if (prod.product_id === product_id){
+          minvalue += parseInt(prod.quantity)
+        }
+      })
+      if (parseInt(currentValue) < minvalue){
+        Swal.fire(
+          'Ups!',
+          `No puedes seleccionar menos de ${minvalue} de este equipo ya que pertenecen a un paquete estandard que ya seleccionaste`,
+          'error'
+        ).then(()=>{
+          console.log($(this));
+          $(this).val(lastValue);
+        });
+
+
+        return
+      } else {
+        const quantityAddStock = parseInt(lastValue) - parseInt(currentValue);
+        const productsToAdd =  [{
+          'product_id': product_id,
+          'quantityToAdd': quantityAddStock
+        }];
+        // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+        AddStockFromProducts(productsToAdd);
+        // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+        fillProductsTableAssigments();
+
+        //FORMAT RESUME PRODUCT ARRAY
+        SetSelectedProducts_Add(productsToAdd);
+
+        // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+        addProductToResumeAssigment()
+      }
+    }else{
+
+      const prodExists = selectedProducts.find((product) => {
+        return product.id === product_id
+      })
+      if (!prodExists) {
+        Swal.fire(
+          'Ups!',
+          'Ha ocurrido un error, por favor intenta nuevamente',
+          'error'
+        );
+        $(this).val(lastValue);
+        return
+      }
+
+      if(currentValue > 0){
+
+        const productsToAdd =  [{
+            'product_id': product_id,
+            'quantityToAdd': currentValue
+          }];
+          // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+          AddStockFromProducts(productsToAdd);
+          // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+          fillProductsTableAssigments();
+  
+          //FORMAT RESUME PRODUCT ARRAY
+          SetSelectedProducts_Add(productsToAdd);
+  
+          // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+          addProductToResumeAssigment()
+      }else{
+        $(this).val(lastValue)
+      }
+    }
+  })
+
+  function AddStockFromProductListArray_Package_Management(packageProducts) {
+    // MODIFY ARRAY listProductArray AND ADD AVAILABLES FROM EACH ROW
+    // THIS FUNCTION ONLY MODIFY GLOBAL VARIABLE listProductArray TO USE IT ON NEW APPEND IN PRODUCTS TABLE
+
+    listProductArray = listProductArray.map((product) => {
+      let faltantes = product.faltantes;
+      let disponibles = product.disponibles;
+
+      const productExists = packageProducts.find((packProd) => {
+        if (packProd.product_id === product.id) {
+          return packProd;
+        }
+      })
+
+      if (productExists) {
+        console.table(product)
+        disponibles = parseInt(product.disponibles) + parseInt(productExists.quantity);
+      }
+      if (disponibles > 0) {
+        faltantes = 0;
+      }
+
+      return {
+        'id': product.id,
+        'categoria': product.categoria,
+        'item': product.item,
+        'nombre': product.nombre,
+        'precio_arriendo': product.precio_arriendo,
+        'cantidad': product.cantidad,
+        'disponibles': disponibles,
+        'faltantes': faltantes
+      }
+    })
+  }
+
+  $('#getAvailablePersonal').on('click', function() {
     let navItem = $(this).find('.projectAssigmentTab')
     if ($(navItem).hasClass('active')) {
       $(navItem).removeClass('active')

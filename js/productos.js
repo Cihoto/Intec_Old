@@ -52,10 +52,10 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
 
   console.log(GetProductsStorage());
 
-  console.log("empresaId", empresaId);
-  console.log("tipo", tipo);
-  console.log("fecha_inicio", fecha_inicio);
-  console.log("fecha_termino", fecha_termino);
+  // console.log("empresaId", empresaId);
+  // console.log("tipo", tipo);
+  // console.log("fecha_inicio", fecha_inicio);
+  // console.log("fecha_termino", fecha_termino);
 
   $.ajax({
     type: "POST",
@@ -66,7 +66,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
       empresaId: empresaId
     }),
     success: function (response) {
-      console.table(response)
+      // console.table(response)
 
       if (tipo === "available") {
 
@@ -106,7 +106,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
           }
 
           // console.log(`STOCK PREVIO A FUNCIONES ${stock}`);
-          console.log(`ID DE PRODUCTO ${producto.id}`);
+          // console.log(`ID DE PRODUCTO ${producto.id}`);
 
           if (producto.fecha_inicio !== null && producto.fecha_termino !== null) {
 
@@ -115,19 +115,19 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
               fecha_termino < producto.fecha_inicio && fecha_termino < producto.fecha_termino) {
               console.log("DISPONIBLE");
 
-              console.log("Estoy dentro dE IF DE FECHAS DISPONIBLES Y PRODUCTOS LIBERADOS");
-              console.log(`ESTE STOCK ME ESTA LLEGANDO A LA FECHA LIBERADA ${stock}`);
-              console.log(`LE SUMANDO RESTANDO ${producto.assigned}`);
+              // console.log("Estoy dentro dE IF DE FECHAS DISPONIBLES Y PRODUCTOS LIBERADOS");
+              // console.log(`ESTE STOCK ME ESTA LLEGANDO A LA FECHA LIBERADA ${stock}`);
+              // console.log(`LE SUMANDO RESTANDO ${producto.assigned}`);
 
               let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
 
               if (trSearchable.prevObject.length === 1) {
 
-                console.log("ALLLLLLLL ENCONTRE UN ID DENTRO DE LA TABLA");
+                // console.log("ALLLLLLLL ENCONTRE UN ID DENTRO DE LA TABLA");
                 let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
 
                 if (producto.estado === "2") {
-                  console.log(`DISPONIBLE LE SUMO ${assigned}`);
+                  // console.log(`DISPONIBLE LE SUMO ${assigned}`);
                   stock = oldStock + parseInt(assigned);
                 }
 
@@ -136,7 +136,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
                 // console.log("DISPONIBLE NO ENCONTRE HAGO APPEND");
 
                 if (producto.estado === "2") {
-                  console.log(`DISPONIBLE LE SUMO ${assigned}`);
+                  // gconsole.lo(`DISPONIBLE LE SUMO ${assigned}`);
                   // stock = stock - parseInt(producto.assigned)
                   stock = stock + parseInt(assigned);
                 }
@@ -161,10 +161,10 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
               let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
 
               if (trSearchable.prevObject.length === 1) {
-                console.log("FECHA NO LIBERADA ENCONTRE UN ID DENTRO DE LA TABLA");
+                // console.log("FECHA NO LIBERADA ENCONTRE UN ID DENTRO DE LA TABLA");
                 let oldStock = parseInt($(trSearchable.prevObject).find('.productStock').text());
                 if (producto.estado !== "2") {
-                  console.log(`NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
+                  // console.log(`NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
                   // stock = stock - parseInt(producto.assigned)
                   stock = oldStock + parseInt(assigned);
                 }
@@ -173,7 +173,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
               } else {
 
                 if (producto.estado !== "2") {
-                  console.log(` NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
+                  // console.log(` NO DISPONIBLE LE SUMO NADA ${producto.assigned}`);
                   stock = stock + parseInt(assigned)
                 }
                 // console.log("NOOOOOOO DISPONIBLE NO ENCONTRE HAGO APPEND");
@@ -200,7 +200,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
 
           if (producto.fecha_inicio === null && producto.fecha_termino === null) {
 
-            console.log("SIN FECHA");
+            // console.log("SIN FECHA");
 
             // console.log("ALL");
             // console.log(`ALL STOCK ${stock}`);
@@ -208,8 +208,8 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
             // console.log(`ALL ESTADO ${producto.estado}`);
 
             let trSearchable = $("#tableDrop tbody tr").find(`#${producto.id}`);
-            console.log("EL TR A BUSCAR", trSearchable.prevObject);
-            console.log("EL LARGOOOOO TR A BUSCAR", trSearchable.prevObject.length);
+            // console.log("EL TR A BUSCAR", trSearchable.prevObject);
+            // console.log("EL LARGOOOOO TR A BUSCAR", trSearchable.prevObject.length);
 
             if (trSearchable.prevObject.length === 1) {
 
@@ -230,7 +230,7 @@ function FillProductosAvailable(empresaId, tipo, fecha_inicio, fecha_termino) {
                 stock = stock + parseInt(assigned);
               }
 
-              console.log("SIN FECHA  NO ENCONTRE HAGO APPEND");
+              // console.log("SIN FECHA  NO ENCONTRE HAGO APPEND");
 
 
               let td = `<td class="productId" style="display:none">${producto.id}</td>
@@ -381,14 +381,72 @@ function AppendProductToResume(tipo) {
 
   }
 }
+function AddProduct(el) {
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")){
+    let product_id = $(el).closest("tr").find('.productId').text();
+    console.log(product_id);
+    let quantityToAdd = $(el).closest("td").find('.quantityToAdd').val();
+
+    const productExist = listProductArray.find((producto)=>{
+      if(producto.id === product_id){
+        return producto
+      }
+    })
+    if(!productExist){
+      Swal.fire(
+        'Lo sentimos!',
+        'Ha ocurrido un error, intente nuevamente',
+        'error'
+      )
+      return
+    }
+
+    const disponibles = productExist.disponibles;
+
+    if((parseInt(disponibles) - parseInt(quantityToAdd)) < 0){
+      console.log("FALTARAN PRODUCTOS");
+    }
+
+    const productsToAdd = [{
+      'product_id' : product_id,
+      'quantityToAdd' : quantityToAdd
+    }];
+    console.log("previo 1");
+    substractStockFromProducts(productsToAdd);
+    // THIS FUNCTION USE GLOBLA VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+    console.log("previo 2");
+    fillProductsTableAssigments();
+    //FORMAT RESUME PRODUCT ARRAY
+    console.log("previo 3");
+    SetSelectedProducts_Substract(productsToAdd);
+    // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+    console.log("previo 4");
+    addProductToResumeAssigment()
+
+  }else{
+
+    Swal.fire({
+      title: 'Lo sentimos',
+      text: "No tienes los permisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+      icon: 'warning',
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: "Entendido"
+    })
+
+  }
+
+
+}
+
+
 
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
-function AddProduct(el) {
-  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
+function AddProductssssss(el) {
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")){
     // if (ROL_ID !== 3) {
     let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
-
     // tdProductos.each((index, td) => {
     //   if ($(td).text() === id) {
     //     $(td).closest('tr').remove();
@@ -400,14 +458,10 @@ function AddProduct(el) {
     let productId = $(el).closest("tr").find('.productId').text();
     let productName = $(el).closest("tr").find('.productName').text();
     let productPrice = $(el).closest("tr").find('.productPrice').text();
-
     let stock = parseInt($(el).closest("tr").find('.productStock').text());
-
     let finalStock = stock - parseInt(quantityToAdd);
 
-
     if (quantityToAdd === 0 || quantityToAdd === undefined || quantityToAdd === null || quantityToAdd === "") {
-
       Swal.fire({
         icon: 'info',
         title: 'Ups!',
@@ -415,13 +469,16 @@ function AddProduct(el) {
       })
       return;
     }
+
+
     if (finalStock < 0) {
       Swal.fire({
         icon: 'error',
         title: 'Ups!',
         text: `Has seleccionado más ${productName} de los que dispones`,
-      })
-    } else {
+      });
+
+    }else {
 
       $(el).closest("tr").find('.productStock').text(finalStock);
       $(el).closest("td").find('.quantityToAdd').val("");
@@ -434,18 +491,16 @@ function AddProduct(el) {
   } else {
     Swal.fire({
       title: 'Lo sentimos',
-      text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+      text: "No tienes los permisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
       icon: 'warning',
       showCancelButton: false,
       showConfirmButton: true,
       confirmButtonText: "Entendido"
     })
   }
-
 }
 
 function AppendProductosTableResumeArray(arrayProductos) {
-
   for (let i = 0; i < arrayProductos.length; i++) {
     let newTr = `<tr>
                 <td class="idProductoResume" style="display:none">${arrayProductos[i].productId}</td>
@@ -457,11 +512,8 @@ function AppendProductosTableResumeArray(arrayProductos) {
     $("#projectEquipos tr:last").before(newTr);
     TotalCosts(arrayProductos[i].totalPrice)
   }
-
   SetResumeProductsValue();
-
   console.log(GetTotalCosts());
-
   $('#totalCostProject').text(CLPFormatter(parseInt(GetTotalCosts())));
 
 }
