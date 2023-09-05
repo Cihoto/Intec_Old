@@ -578,11 +578,13 @@ $active = 'proximosEventos';
           correoDatosFacturacion: correoDatosFacturacion
         }
 
-        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {} else {
-          requestCliente.push({
-            "idCliente": idClienteReq
-          })
+        if (idClienteReq === "" || idClienteReq === null || idClienteReq === undefined) {
 
+        }else{
+          requestCliente["idCliente"] = idClienteReq
+          // requestCliente.push({
+          //   "idCliente": idClienteReq
+          // })
         }
 
         // console.log("----------------------------");
@@ -711,17 +713,28 @@ $active = 'proximosEventos';
         })
 
         let arrayProducts = []
-        $('.detailsProduct-box').each(function() {
-          let idProduct = $(this).find('.itemId').text();
-          let productPrice = $(this).find('.getPrice').text();
-          let productQuantity = $(this).find('.addProdInput').val();
+
+        // 'id': product.id,
+        // 'nombre': product.nombre,
+        // 'precio_arriendo': product.precio_arriendo,
+        // 'quantityToAdd': productExists.quantityToAdd,
+        // 'faltantes' : product.faltantes
+
+        selectedProducts.forEach((product)=>{
           arrayProducts.push({
             idProject: idProject,
-            idProduct: idProduct,
-            price: productPrice,
-            quantity: productQuantity
+            idProduct: product.id,
+            price: product.precio_arriendo,
+            quantity: product.quantityToAdd
           })
         })
+
+        // $('.detailsProduct-box').each(function() {
+        //   let idProduct = $(this).find('.itemId').text();
+        //   let productPrice = $(this).find('.getPrice').text();
+        //   let productQuantity = $(this).find('.addProdInput').val();
+
+        // })
 
         // console.log("requestPersonal", requestPersonal);
 
