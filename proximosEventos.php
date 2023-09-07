@@ -1222,10 +1222,8 @@ $active = 'proximosEventos';
         AddStockFromProducts(productsToAdd);
         // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
         fillProductsTableAssigments();
-
         //FORMAT RESUME PRODUCT ARRAY
         SetSelectedProducts_Add(productsToAdd);
-
         // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
         addProductToResumeAssigment()
       }

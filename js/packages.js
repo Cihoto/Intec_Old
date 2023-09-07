@@ -6,6 +6,7 @@ let allAndselectedProductsList = [];
 let selectedPackages = [];
 let selectedProducts = [];
 let resumeSelectedProducts = [];
+let allMyCatAndSubCat = [];
 
 
 async function FillStandardPackages() {
@@ -75,6 +76,7 @@ async function addPackageToProjectAssigments(element){
     console.log("detailsPackage",detailsPackage);
     if (!detailsPackage.success) {
         console.log("nada");
+        return
     }
     // SET PACKAGE ID TO FIND IT ON GLOBAL VARIABLE PACKAGE_LIST
     // IF RETURN TRUE PUSH RESULT AND APPEND IT TO RESUME
@@ -84,10 +86,16 @@ async function addPackageToProjectAssigments(element){
             return package
         }
     })
+    
     // PUSH FINDED PACKAGE TO GLOBAL LIST
     selectedPackages.push(packageToAdd);
     // ADD SELECTED PACKAGES TO RESUME
     addPackageToPackageAssigment();
+    Toastify({
+        text: `Se ha agregado el paquete ${packageToAdd.nombre} `,
+        duration: 2000,
+        close: true
+    }).showToast();
     // FORMAT PRODUCTS TO STANDARD JSON AND APPEND ON RESUME
     // ALSO SET STOCK AND AVAILABILITY ON RESUME PRODUCT TABLE
     const productsToAdd = detailsPackage.products.map((packageProducts)=>{
@@ -100,14 +108,11 @@ async function addPackageToProjectAssigments(element){
     substractStockFromProducts(productsToAdd);
     // THIS FUNCTION USE GLOBLA VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
     fillProductsTableAssigments();
-
     //FORMAT RESUME PRODUCT ARRAY
     SetSelectedProducts_Substract(productsToAdd);
-
     // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
     addProductToResumeAssigment()
 }
-
 
 function SetSelectedProducts_Substract(productsToAdd){
 
@@ -117,15 +122,16 @@ function SetSelectedProducts_Substract(productsToAdd){
                 return addProd
             }
         })
+
         if(productExists){
            
-            console.log("productExists",productExists);
+            // console.log("productExists",productExists);
             const exists = selectedProducts.find((selected)=>{
                 if(selected.id === productExists.product_id){
                     selected.quantityToAdd = parseInt(selected.quantityToAdd) + parseInt(productExists.quantityToAdd)
                     selected.faltantes = product.faltantes
-                    console.log("NUEVA VANTIDAD A A;ADIR");
-                    console.log(selected.quantityToAdd);
+                    // console.log("NUEVA VANTIDAD A A;ADIR");
+                    // console.log(selected.quantityToAdd);
                     return selected
                 }
             })
@@ -135,12 +141,59 @@ function SetSelectedProducts_Substract(productsToAdd){
                     'nombre': product.nombre,
                     'precio_arriendo': product.precio_arriendo,
                     'quantityToAdd': productExists.quantityToAdd,
+                    'categoria': product.categoria,
+                    'item': product.item,
                     'faltantes' : product.faltantes
                 })  
             }
         }
     })
+
+    // AFTER SET NEW AVAILABILITY STOCK ON "listProductArray" GLOBAL VARIABLE
+    // CALL FUNTION TO LOOP ALL CATEGORIES AND SUB CATEGORIES
+    // SAVE THE RESULT ARRAY ON NEW GLOBAL VARIABLE "allMyCatAndSubCat"
+    setMyCatsAndSubCats();
 }
+
+function setMyCatsAndSubCats(){
+    let arrayCategorias= [];
+    const allCats = selectedProducts.map((prodProperties)=>{
+        // return {"categoria":prodProperties.categoria,"subcat":prodProperties.item} 
+        
+        let categoria 
+        // 
+        
+        prodProperties.filter()
+
+
+
+        return {arrayCategoriasprodProperties}
+        return {
+            "audio":[{"accesorios":[1,5,7]},{"cables":[2,3]}],
+            "energia":[{"accesorios":[1,5,7]},{"cables":[2,3]}]
+        }
+    })
+
+    /*
+    {
+        selectedProducts=[{
+            'id': 1,
+            'nombre': product_1,
+            'categoria': product.categoria,
+            'item': product.item}];
+
+        arrayCategorias = [{
+            "audio":[{"accesorios":{1,5,7}},{"cables":{2,3}}],
+            "energia":[{"accesorios":{1,5,7}},{"cables":{2,3}}]
+        }]
+    }
+    */ 
+
+    const ps = [];
+    console.log(allCats);
+}
+
+
 function SetSelectedProducts_Add(productsToAdd){
 
     listProductArray.map((product)=>{

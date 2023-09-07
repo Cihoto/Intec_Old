@@ -411,16 +411,22 @@ function AddProduct(el) {
       'product_id' : product_id,
       'quantityToAdd' : quantityToAdd
     }];
-    console.log("previo 1");
+
+    Toastify({
+      text: `Se han agregado ${quantityToAdd} ${productExist.nombre}`,
+      duration: 2000,
+      close: true
+  }).showToast();
+    // console.log("previo 1");
     substractStockFromProducts(productsToAdd);
     // THIS FUNCTION USE GLOBLA VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
-    console.log("previo 2");
+    // console.log("previo 2");
     fillProductsTableAssigments();
     //FORMAT RESUME PRODUCT ARRAY
-    console.log("previo 3");
+    // console.log("previo 3");
     SetSelectedProducts_Substract(productsToAdd);
     // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
-    console.log("previo 4");
+    // console.log("previo 4");
     addProductToResumeAssigment()
 
   }else{
@@ -433,13 +439,8 @@ function AddProduct(el) {
       showConfirmButton: true,
       confirmButtonText: "Entendido"
     })
-
   }
-
-
 }
-
-
 
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
