@@ -186,55 +186,6 @@
   }
 
 
-  .tableProducts td {
-    /* padding: 0px !important;   */
-  }
-
-
-
-  @media (min-width: 1250px) {
-    .notSelectedProd{
-      max-width: 82%;
-      min-width: 50%;
-    }
-    td .catProd{
-      width: 120px ;
-    }
-    .selectedProd {
-      max-width:18%
-    }
-
-  }
-  
-
-
-
-
-
-  @media (min-width: 1250px) {
-
-      /* .notSelectedProd{
-        width: 100%;
-      }
-      THEME DARK STYLE FOR DISPLAY TABLE AND REUSMEN SELECTED PRODUCTS 
-      .theme-dark .notSelectedProd{
-        width: 100%;
-      } */
-    
-  }
-
-  @media (max-width: 1250px) {
-    #tableDrop .itemProd, #tableDrop .productPrice{
-      display: none;
-    }
-    #tableProducts .itemProd, #tableProducts .productPrice{
-      display:none;
-    }
-  }
-
-
-
-
   #tbodyReceive{
     min-height: 200px;
     border: 1px solid white;
@@ -1931,4 +1882,28 @@ table.dataTable tbody td .productName {
   z-index: 40000 !important;
 }
 
+.subcategorieName{
+  font-size:18px;
+  text-align: center;
+}
+.tableCatsAnsResume{
+  margin-bottom: 50px;
+}
+.tableCatsAnsResume th{
+  width: 25% !important;
+  text-align: center !important;
+  border: 1px solid black !important;
+}
+.tableCatsAnsResume td{
+  width: 25% !important;
+  text-align: center;
+  border: 2px solid black !important;
+}
+
+.theme-dark .tableCatsAnsResume th{
+  border: 1px solid white !important;
+}
+.theme-dark .tableCatsAnsResume td{
+  border: 1px solid white !important;
+}
 

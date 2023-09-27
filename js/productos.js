@@ -330,7 +330,7 @@ function removeProduct(idProduct) {
   RemoveProductFromResume(idProduct);
 }
 
-function RemoveProductFromResume(id) {
+function RemoveProductFromResume(id){
 
 
   if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
@@ -403,6 +403,18 @@ function AddProduct(el) {
 
     const disponibles = productExist.disponibles;
 
+
+    if(quantityToAdd === "" || quantityToAdd === undefined || quantityToAdd<0 ){
+      Swal.fire({
+        'title':'Ups!',
+        'text':'Ingresa una cantidad valida',
+        'icon':'warning',
+        'showConfirmButton':false,
+        'timer':2000
+      })
+      return;
+    }
+
     if((parseInt(disponibles) - parseInt(quantityToAdd)) < 0){
       console.log("FALTARAN PRODUCTOS");
     }
@@ -416,7 +428,8 @@ function AddProduct(el) {
       text: `Se han agregado ${quantityToAdd} ${productExist.nombre}`,
       duration: 2000,
       close: true
-  }).showToast();
+    }).showToast();
+
     // console.log("previo 1");
     substractStockFromProducts(productsToAdd);
     // THIS FUNCTION USE GLOBLA VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
@@ -427,7 +440,8 @@ function AddProduct(el) {
     SetSelectedProducts_Substract(productsToAdd);
     // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
     // console.log("previo 4");
-    addProductToResumeAssigment()
+    printAllMySelectedProds();
+    printAllMySelectedProdsOnProjectResume();
 
   }else{
 
@@ -516,7 +530,6 @@ function AppendProductosTableResumeArray(arrayProductos) {
   SetResumeProductsValue();
   console.log(GetTotalCosts());
   $('#totalCostProject').text(CLPFormatter(parseInt(GetTotalCosts())));
-
 }
 
 
