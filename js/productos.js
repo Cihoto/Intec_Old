@@ -330,7 +330,7 @@ function removeProduct(idProduct) {
   RemoveProductFromResume(idProduct);
 }
 
-function RemoveProductFromResume(id) {
+function RemoveProductFromResume(id){
 
 
   if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
@@ -403,6 +403,18 @@ function AddProduct(el) {
 
     const disponibles = productExist.disponibles;
 
+
+    if(quantityToAdd === "" || quantityToAdd === undefined || quantityToAdd<0 ){
+      Swal.fire({
+        'title':'Ups!',
+        'text':'Ingresa una cantidad valida',
+        'icon':'warning',
+        'showConfirmButton':false,
+        'timer':2000
+      })
+      return;
+    }
+
     if((parseInt(disponibles) - parseInt(quantityToAdd)) < 0){
       console.log("FALTARAN PRODUCTOS");
     }
@@ -411,17 +423,25 @@ function AddProduct(el) {
       'product_id' : product_id,
       'quantityToAdd' : quantityToAdd
     }];
-    console.log("previo 1");
+
+    Toastify({
+      text: `Se han agregado ${quantityToAdd} ${productExist.nombre}`,
+      duration: 2000,
+      close: true
+    }).showToast();
+
+    // console.log("previo 1");
     substractStockFromProducts(productsToAdd);
     // THIS FUNCTION USE GLOBLA VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
-    console.log("previo 2");
+    // console.log("previo 2");
     fillProductsTableAssigments();
     //FORMAT RESUME PRODUCT ARRAY
-    console.log("previo 3");
+    // console.log("previo 3");
     SetSelectedProducts_Substract(productsToAdd);
     // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
-    console.log("previo 4");
-    addProductToResumeAssigment()
+    // console.log("previo 4");
+    printAllMySelectedProds();
+    printAllMySelectedProdsOnProjectResume();
 
   }else{
 
@@ -433,13 +453,8 @@ function AddProduct(el) {
       showConfirmButton: true,
       confirmButtonText: "Entendido"
     })
-
   }
-
-
 }
-
-
 
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
@@ -515,7 +530,6 @@ function AppendProductosTableResumeArray(arrayProductos) {
   SetResumeProductsValue();
   console.log(GetTotalCosts());
   $('#totalCostProject').text(CLPFormatter(parseInt(GetTotalCosts())));
-
 }
 
 

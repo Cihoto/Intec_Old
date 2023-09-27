@@ -931,10 +931,9 @@ $active = 'proximosEventos';
 
       }
     }
-
   })
 
-  function GetAllProductsByBussiness(empresa_id) {
+  function GetAllProductsByBussiness(empresa_id){
     return $.ajax({
       type: "POST",
       url: "ws/productos/Producto.php",
@@ -944,7 +943,6 @@ $active = 'proximosEventos';
         empresa_id: empresa_id
       }),
       success: function(response) {
-
       }
     })
   }
@@ -1126,10 +1124,9 @@ $active = 'proximosEventos';
     // PUSH FINDED PACKAGE TO GLOBAL LIST
     selectedPackages.find((existingPackage, index, array) => {
       if (existingPackage.id === existingPackage.id) {
-        array.splice(index, 1)
+        selectedPackages.splice(index, 1)
       }
     })
-    console.log(selectedPackages);
     // ADD SELECTED PACKAGES TO RESUME
     addPackageToPackageAssigment();
     // FORMAT PRODUCTS TO STANDARD JSON AND APPEND ON RESUME
@@ -1144,12 +1141,30 @@ $active = 'proximosEventos';
     AddStockFromProducts(productsToAdd);
     // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
     fillProductsTableAssigments();
-
     //FORMAT RESUME PRODUCT ARRAY
     SetSelectedProducts_Add(productsToAdd);
-
     // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
-    addProductToResumeAssigment()
+    printAllMySelectedProds();
+    printAllMySelectedProdsOnProjectResume();
+  })
+
+  $(document).on('change', '#filterSelectedProducts',function() {
+    // console.log("estoy haciendo algo en el chagne de las categorias");
+    const categorieToSearch = $(this).val()
+
+    if(categorieToSearch === "all"){
+      filterProductsResume(selectedProdsAndCategories)
+      return
+    }
+    const catExists = selectedProdsAndCategories.find((categorie)=>{
+      if(categorie.categoria === categorieToSearch){
+        return true;
+      }
+    })
+    if(catExists){
+      console.log(catExists);
+      filterProductsResume([catExists])
+    }
   })
 
   let lastValue = 0
@@ -1157,7 +1172,7 @@ $active = 'proximosEventos';
     lastValue = $(this).val();
   })
 
-  $(document).on('blur', '.addProdInputResume', async function() {
+  $(document).on('blur', '.addProdInputResume', async function(){
     let currentValue = $(this).val();
 
     if(!isNumeric(currentValue)){
@@ -1168,7 +1183,8 @@ $active = 'proximosEventos';
         );
       return
     }
-    let product_id = $(this).closest('.detailsProduct-box').find('.itemId').text();
+
+    let product_id = $(this).closest('tr').attr('product_id');
     let minProducts = [];
     let minvalue =0;
 
@@ -1222,12 +1238,11 @@ $active = 'proximosEventos';
         AddStockFromProducts(productsToAdd);
         // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
         fillProductsTableAssigments();
-
         //FORMAT RESUME PRODUCT ARRAY
         SetSelectedProducts_Add(productsToAdd);
-
         // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
-        addProductToResumeAssigment()
+        // addProductToResumeAssigment()
+        printAllMySelectedProds()
       }
     }else{
 
