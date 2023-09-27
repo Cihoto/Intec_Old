@@ -22,6 +22,7 @@ class bd{
         $this->servidor = '154.49.142.103';
         $this->usuario = 'u136839350_intec_admin';
         $this->password = 'intecBd2023';
+        // $this->password = 'Intec2023.';
         $this->database = 'u136839350_intec';
         $this->port ='3306';
         

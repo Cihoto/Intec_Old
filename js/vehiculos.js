@@ -1,4 +1,7 @@
-function searchVehiculoDrag() {
+let allVehicles = [];
+let selectedVehicles = [];
+
+function searchVehiculoDrag(){
     let dragVehiculos = document.getElementById('sortable1').getElementsByTagName('li')
     let inputValue = document.getElementById('searchInputVehiculo').value.toUpperCase();
     for (let item of dragVehiculos) {
@@ -12,13 +15,9 @@ function searchVehiculoDrag() {
 }
 
 function FillVehiculos(empresaId) {
-
    $('#sortable1 li').each((key,element)=>{
     element.remove();
    })
-
-    
-
 
     $.ajax({
         type: "POST",
@@ -30,7 +29,7 @@ function FillVehiculos(empresaId) {
         }),
         success: function (response) {
             console.log("vehiculos", response);
-
+            allVehicles = response
             response.forEach(vehiculo => {
 
                 let li = `<li style="display:flex; justify-content:space-between;" class="${vehiculo.id}">
@@ -46,10 +45,7 @@ function FillVehiculos(empresaId) {
             });
         }
     })
-
-
 }
-
 
 function GetAvailableVehicles(empresaId, fechaInicio, fechaTermino) {
     let arrayRequest = [{ "empresaId": empresaId, "fechaInicio": fechaInicio, "fechaTermino": fechaTermino }];
@@ -63,6 +59,7 @@ function GetAvailableVehicles(empresaId, fechaInicio, fechaTermino) {
         }),
         success: function (response) {
             console.log("vehiculos", response);
+            allVehicles = response
             $('#DragVehiculos').show();
             response.forEach(vehiculo => {
 
@@ -70,7 +67,7 @@ function GetAvailableVehicles(empresaId, fechaInicio, fechaTermino) {
                         ${vehiculo.patente}
                         <div class="personalPricing" style="display:flex;align-content: center;">
                             <input type="number" name="price" class="vehiclePrice" placeholder="Costo"/>
-                            <i onclick="AddVehiculo(this)"class="fa-solid fa-plus addPersonal"></i>
+                            <i onclick="AddVehiculo(this)"class="fa-solid fa-plus addPersonal addVehicle"></i>
                             <i onclick="removeVehicle(this)" class="fa-solid fa-minus addVehicle" style="display:none; color: #b92413;"></i>
                         </div>
                     </li>`;
@@ -81,8 +78,126 @@ function GetAvailableVehicles(empresaId, fechaInicio, fechaTermino) {
     })
 }
 
-function AddVehiculo(el) {
 
+
+function AddVehiculo(element){
+
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
+        console.log(allVehicles)
+
+        const valorVehiculo = $('.addVehicle').closest('.personalPricing').find('.vehiclePrice').val();
+
+        let idVehiculo = $(element).closest('li').attr('class').trim();
+
+        if (valorVehiculo === undefined || valorVehiculo === "" || valorVehiculo === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Ups!',
+                text: 'Ingresa el costo de este Vehículo antes de asignarlo a este evento'
+            })
+            return;
+        }
+
+        const vehicleExists = allVehicles.find((vehicle)=>{
+            if(vehicle.id === idVehiculo){
+                return true 
+            }    
+        })
+
+        if(vehicleExists){
+            selectedVehicles.push({
+                'id':vehicleExists.id,
+                'patente':vehicleExists.patente,
+                'valor':valorVehiculo
+            })
+        }
+
+        printSelectedVehicles();
+
+
+    }else{
+
+        Swal.fire({
+            title: 'Lo sentimos',
+            text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+            icon: 'warning',
+            showCancelButton: false,
+            showConfirmButton: true,
+            confirmButtonText: "Entendido"
+        })
+
+    }
+
+}
+
+function removeVehicle(element){
+    if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
+
+        let vehicle_id = $(element).closest('li').attr('vehicle_id');
+
+        const existsToDelete = selectedVehicles.find((selected,index)=>{
+            if(selected.id === vehicle_id){
+                selectedVehicles.splice(index,1);
+                return true
+            }
+        })
+
+        console.log(existsToDelete);
+
+    }else{
+        Swal.fire({
+            title: 'Lo sentimos',
+            text: "No tienes los persisos para poder ejecutar esta acción, si deseas tenerlos debes ponerte en contacto con el administrador de tú organización",
+            icon: 'warning',
+            showCancelButton: false,
+            showConfirmButton: true,
+            confirmButtonText: "Entendido"
+        })
+    }
+}
+
+
+function printSelectedVehicles(){
+    $('#sortable2 li').remove();
+    $('#sortable1 li').remove();
+
+
+    allVehicles.forEach((vehicle)=>{
+        const vehicleExists = selectedVehicles.find((selected)=>{
+            if(selected.id === vehicle.id){
+                return true;
+            }
+        })
+        if(!vehicleExists){
+            let li = `<li vehicle_id="${vehicle.id}" style="display:flex; justify-content:space-between;" class="${vehicle.id}">
+                ${vehicle.patente}
+                <div class="personalPricing" style="display:flex;align-content: center;">
+                    <input type="number" name="price" class="vehiclePrice" placeholder="Costo"/>
+                    <i onclick="AddVehiculo(this)"class="fa-solid fa-plus addPersonal addVehicle"></i>
+                </div>
+            </li`;
+
+            $('#sortable1').append(li)
+        }
+    })
+
+
+    selectedVehicles.forEach((vehicle)=>{
+        let li = `<li vehicle_id="${vehicle.id}" style="display:flex; justify-content:space-between;" class="${vehicle.id}">
+        ${vehicle.patente}
+        <div class="personalPricing" style="display:flex;align-content: center;">
+            <input type="number" name="price" class="vehiclePrice" placeholder="Costo"/>
+            <i onclick="removeVehicle(this)" class="fa-solid fa-minus" style="color: #b92413;"></i>
+        </div>
+    </li`;
+
+        $('#sortable2').append(li)
+
+    })
+
+}
+
+function AddVehiculo_Old(el) {
 
     if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
 
@@ -119,7 +234,7 @@ function AddVehiculo(el) {
     }
 }
 
-function removeVehicle(element) {
+function removeVehicle_old(element) {
 
     if (ROL_ID.includes("1")||ROL_ID.includes("2")||ROL_ID.includes("13")){
         let li = $(element).closest('li');

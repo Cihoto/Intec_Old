@@ -36,7 +36,18 @@
                 <h4>Paquetes Seleccionados</h2>
             </div>
             <div id="receiveProducto" class="">
-                <h3>Productos Asignados</h3>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <h3>Productos Asignados</h3>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <select name="" id="filterSelectedProducts">
+                        </select>
+                    </div>
+                    
+                </div>
+                <div id="productResume-tables" style="margin-top: 30px;">
+                </div>
             </div>
         </div>
     </div>
