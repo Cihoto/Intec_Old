@@ -330,7 +330,7 @@ function removeProduct(idProduct) {
   RemoveProductFromResume(idProduct);
 }
 
-function RemoveProductFromResume(id){
+function RemoveProductFromResume(id) {
 
 
   if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
@@ -382,17 +382,17 @@ function AppendProductToResume(tipo) {
   }
 }
 function AddProduct(el) {
-  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")){
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
     let product_id = $(el).closest("tr").find('.productId').text();
     console.log(product_id);
     let quantityToAdd = $(el).closest("td").find('.quantityToAdd').val();
 
-    const productExist = listProductArray.find((producto)=>{
-      if(producto.id === product_id){
+    const productExist = listProductArray.find((producto) => {
+      if (producto.id === product_id) {
         return producto
       }
     })
-    if(!productExist){
+    if (!productExist) {
       Swal.fire(
         'Lo sentimos!',
         'Ha ocurrido un error, intente nuevamente',
@@ -404,24 +404,24 @@ function AddProduct(el) {
     const disponibles = productExist.disponibles;
 
 
-    if(quantityToAdd === "" || quantityToAdd === undefined || quantityToAdd<0 ){
+    if (quantityToAdd === "" || quantityToAdd === undefined || quantityToAdd < 0) {
       Swal.fire({
-        'title':'Ups!',
-        'text':'Ingresa una cantidad valida',
-        'icon':'warning',
-        'showConfirmButton':false,
-        'timer':2000
+        'title': 'Ups!',
+        'text': 'Ingresa una cantidad valida',
+        'icon': 'warning',
+        'showConfirmButton': false,
+        'timer': 2000
       })
       return;
     }
 
-    if((parseInt(disponibles) - parseInt(quantityToAdd)) < 0){
+    if ((parseInt(disponibles) - parseInt(quantityToAdd)) < 0) {
       console.log("FALTARAN PRODUCTOS");
     }
 
     const productsToAdd = [{
-      'product_id' : product_id,
-      'quantityToAdd' : quantityToAdd
+      'product_id': product_id,
+      'quantityToAdd': quantityToAdd
     }];
 
     Toastify({
@@ -443,7 +443,7 @@ function AddProduct(el) {
     printAllMySelectedProds();
     printAllMySelectedProdsOnProjectResume();
 
-  }else{
+  } else {
 
     Swal.fire({
       title: 'Lo sentimos',
@@ -459,7 +459,7 @@ function AddProduct(el) {
 // AGREGAR UN ITEM A LA TABLA DE RESUMEN A UN COSTADO DE 
 //LA TABLA, CREA RESUMEN DEPENDIENDO DE LAS CANTIDADES, NOMBRE Y PRECIO DE ARRIENDO
 function AddProductssssss(el) {
-  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")){
+  if (ROL_ID.includes("1") || ROL_ID.includes("2") || ROL_ID.includes("7")) {
     // if (ROL_ID !== 3) {
     let tdProductos = $('#projectEquipos tbody').find('.idProductoResume');
     // tdProductos.each((index, td) => {
@@ -493,7 +493,7 @@ function AddProductssssss(el) {
         text: `Has seleccionado más ${productName} de los que dispones`,
       });
 
-    }else {
+    } else {
 
       $(el).closest("tr").find('.productStock').text(finalStock);
       $(el).closest("td").find('.quantityToAdd').val("");
@@ -531,5 +531,412 @@ function AppendProductosTableResumeArray(arrayProductos) {
   console.log(GetTotalCosts());
   $('#totalCostProject').text(CLPFormatter(parseInt(GetTotalCosts())));
 }
+
+
+
+//ASIGNACION DE PRODUCTOS Y PAQUETES DATOS TOMADOS DESDE EL DOM, FUNCIONES DE MODULO PRODUCTOS
+let lastValue = 0
+$(document).on('click', '.addProdInputResume', async function () {
+  lastValue = $(this).val();
+})
+
+$(document).on('blur', '.addProdInputResume', async function () {
+  let currentValue = $(this).val();
+
+  if (!isNumeric(currentValue)) {
+    Swal.fire(
+      'Ups!',
+      'Debes ingresar un número',
+      'error'
+    );
+    return
+  }
+
+  let product_id = $(this).closest('tr').attr('product_id');
+  let minProducts = [];
+  let minvalue = 0;
+
+  if (selectedPackages.length > 0) {
+
+    const prodExists = selectedProducts.find((product) => {
+      return product.id === product_id
+    })
+    if (!prodExists) {
+      Swal.fire(
+        'Ups!',
+        'Ha ocurrido un error, por favor intenta nuevamente',
+        'error'
+      );
+      $(this).val(lastValue);
+      return
+    }
+    const detailsPackage = await Promise.all(
+      selectedPackages.map(async (package) => {
+        return await GetPackageDetails(package.id);
+      }))
+
+    minProducts = detailsPackage.map((packageProds, index) => {
+      return packageProds.products[index, 0]
+    })
+
+    minProducts.forEach((prod) => {
+      if (prod.product_id === product_id) {
+        minvalue += parseInt(prod.quantity)
+      }
+    })
+    if (parseInt(currentValue) < minvalue) {
+      Swal.fire(
+        'Ups!',
+        `No puedes seleccionar menos de ${minvalue} de este equipo ya que pertenecen a un paquete estandard que ya seleccionaste`,
+        'error'
+      ).then(() => {
+        console.log($(this));
+        $(this).val(lastValue);
+      });
+
+
+      return
+    } else {
+      const quantityAddStock = parseInt(lastValue) - parseInt(currentValue);
+      const productsToAdd = [{
+        'product_id': product_id,
+        'quantityToAdd': quantityAddStock
+      }];
+      // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+      AddStockFromProducts(productsToAdd);
+      // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+      fillProductsTableAssigments();
+      //FORMAT RESUME PRODUCT ARRAY
+      SetSelectedProducts_Add(productsToAdd);
+      // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+      // addProductToResumeAssigment()
+      printAllMySelectedProds()
+    }
+  } else {
+
+    const prodExists = selectedProducts.find((product) => {
+      return product.id === product_id
+    })
+    if (!prodExists) {
+      Swal.fire(
+        'Ups!',
+        'Ha ocurrido un error, por favor intenta nuevamente',
+        'error'
+      );
+      $(this).val(lastValue);
+      return
+    }
+
+    if (currentValue > 0) {
+
+      const productsToAdd = [{
+        'product_id': product_id,
+        'quantityToAdd': currentValue
+      }];
+      // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+      AddStockFromProducts(productsToAdd);
+      // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+      fillProductsTableAssigments();
+
+      //FORMAT RESUME PRODUCT ARRAY
+      SetSelectedProducts_Add(productsToAdd);
+
+      // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+      addProductToResumeAssigment()
+    } else {
+      $(this).val(lastValue)
+    }
+  }
+})
+
+$(document).on('click', '.removePackageFromAssigment', async function () {
+  const package_id = $(this).closest('.packageNameContainer').attr('package_id');
+  // console.log(package_id);
+
+  const packageExists = selectedPackages.find((selectedPackage) => {
+    return selectedPackage.id === package_id
+  })
+
+  if (!packageExists) {
+    Swal.fire(
+      'Ups!',
+      'Ha ocurrido un error, por favor intenta nuevamente',
+      'error'
+    );
+    return
+  }
+
+
+
+  //GET ALL PACKAGE DETAILS, NAME, ID FROM PACKAGE AND PRODUCTS THAT CONTAINS 
+  const detailsPackage = await GetPackageDetails(package_id);
+  console.log("detailsPackage", detailsPackage);
+  if (!detailsPackage.success) {
+    console.log("nada");
+  }
+
+  // SET PACKAGE ID TO FIND IT ON GLOBAL VARIABLE PACKAGE_LIST
+  // IF RETURN TRUE PUSH RESULT AND APPEND IT TO RESUME
+  const detailPackageId = detailsPackage.data[0].id;
+  const packageToAdd = PACKAGE_LIST.find((package) => {
+    if (package.id === detailPackageId) {
+      return package
+    }
+  })
+
+  // PUSH FINDED PACKAGE TO GLOBAL LIST
+  selectedPackages.find((existingPackage, index, array) => {
+    if (existingPackage.id === existingPackage.id) {
+      selectedPackages.splice(index, 1)
+    }
+  })
+  // ADD SELECTED PACKAGES TO RESUME
+  addPackageToPackageAssigment();
+  // FORMAT PRODUCTS TO STANDARD JSON AND APPEND ON RESUME
+  // ALSO SET STOCK AND AVAILABILITY ON RESUME PRODUCT TABLE
+  const productsToAdd = detailsPackage.products.map((packageProducts) => {
+    return {
+      'product_id': packageProducts.product_id,
+      'quantityToAdd': packageProducts.quantity
+    }
+  });
+  // THIS FUNCTION MODIFY GLOBAL CONST listProductArray 
+  AddStockFromProducts(productsToAdd);
+  // THIS FUNCTION USE GLOBAL VARIABLE AND APPEND ARRAY ON TABLE PRODUCTS
+  fillProductsTableAssigments();
+  //FORMAT RESUME PRODUCT ARRAY
+  SetSelectedProducts_Add(productsToAdd);
+  // APPEND ALL PRODUCTS TO RESUME AND RESUME PROJECT TABLE
+  printAllMySelectedProds();
+  printAllMySelectedProdsOnProjectResume();
+})
+
+
+
+function GetAllProductsByBussiness(empresa_id) {
+  return $.ajax({
+    type: "POST",
+    url: "ws/productos/Producto.php",
+    dataType: 'json',
+    data: JSON.stringify({
+      "action": "GetAllProductsByBussiness",
+      empresa_id: empresa_id
+    }),
+    success: function (response) {
+    }
+  })
+}
+
+function GetUnavailableProductsByDate(data, empresa_id) {
+  return $.ajax({
+    type: "POST",
+    url: "ws/productos/Producto.php",
+    dataType: 'json',
+    data: JSON.stringify({
+      "action": "GetUnavailableProductsByDate",
+      'empresa_id': empresa_id,
+      'request': {
+        'data': data
+      }
+    }),
+    success: function (response) {
+
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  })
+}
+
+// function to call and fill table products without dates restrictions
+async function FillAllProducts() {
+
+  allMyProducts = []
+  listProductArray = [];
+
+  const responseAllProducts = await GetAllProductsByBussiness(EMPRESA_ID);
+
+  if (responseAllProducts.success) {
+
+    allMyProducts = responseAllProducts.data;
+
+    // SET listProductArray (GLOBAL VARIABLE), CONFIG JSON OBJECT BY MAP FUNCTION WITH DB AJAX DATA
+    // THIS ARRAY WILL BE USED ON EVERY MOVE ON PRODUCTS ASSIGMENT
+    listProductArray = allMyProducts.map(function (producto) {
+      let disponibles = producto.cantidad
+      return {
+        'id': producto.id,
+        'categoria': producto.categoria,
+        'item': producto.item,
+        'nombre': producto.nombre,
+        'precio_arriendo': producto.precio_arriendo,
+        'cantidad': producto.cantidad,
+        'disponibles': disponibles,
+        'faltantes': 0
+      }
+    })
+    fillProductsTableAssigments();
+  }
+}
+
+async function FillAllAvailableProducts(dates) {
+
+  allMyProducts = [];
+  allMyTakenPoducts = [];
+  listProductArray = [];
+
+  const fecha_inicio = dates.fecha_inicio;
+  const fecha_termino = dates.fecha_termino;
+  const data = {
+    'fecha_inicio': fecha_inicio,
+    'fecha_termino': fecha_termino
+  }
+  const responseUnavailableProducts = await GetUnavailableProductsByDate(data, EMPRESA_ID);
+  const responseAllProducts = await GetAllProductsByBussiness(EMPRESA_ID);
+
+  if (responseUnavailableProducts.success && responseAllProducts.success) {
+    allMyProducts = responseAllProducts.data;
+    allMyTakenPoducts = responseUnavailableProducts.data;
+    // console.log(allMyProducts);
+    if (allMyTakenPoducts.length === 0) {
+
+      // listProductArray = allMyProducts
+
+      listProductArray = allMyProducts.map(function (producto) {
+        let disponibles = producto.cantidad
+        return {
+          'id': producto.id,
+          'categoria': producto.categoria,
+          'item': producto.item,
+          'nombre': producto.nombre,
+          'precio_arriendo': producto.precio_arriendo,
+          'cantidad': producto.cantidad,
+          'disponibles': disponibles,
+          'faltantes': 0
+        }
+      })
+    } else {
+      listProductArray = allMyProducts.map((producto, index) => {
+        let disponibles = producto.cantidad;
+        const takenProduct = allMyTakenPoducts.find((taken) => {
+          if (taken.producto_id === producto.id) {
+            return taken
+          }
+        });
+        if (takenProduct) {
+          disponibles = parseInt(producto.cantidad) - parseInt(takenProduct.cantidad)
+        }
+        return {
+          'id': producto.id,
+          'categoria': producto.categoria,
+          'item': producto.item,
+          'nombre': producto.nombre,
+          'precio_arriendo': producto.precio_arriendo,
+          'cantidad': producto.cantidad,
+          'disponibles': disponibles,
+          'faltantes': 0
+        }
+      })
+    }
+
+    // FILL TABLE WITH listProductArray
+    // this array contains a json object returned by map all data given by ajax db call
+    // map gives format to this json, after we can manage this array to disocunt available stock or whatever we need
+    fillProductsTableAssigments();
+    // allAndselectedProductsList = listProductArray;
+  }
+}
+
+function fillProductsTableAssigments() {
+  if ($.fn.DataTable.isDataTable('#tableProducts')) {
+    $('#tableProducts').DataTable().destroy();
+    $('#tableDrop > tr').each((key, element) => {
+      $(element).remove();
+    })
+  }
+  listProductArray.forEach(producto => {
+    let td = `
+          <td class="productId" style="display:none">${producto.id}</td>
+          <td class="catProd"> ${producto.categoria}</td>
+          <td class="itemProd"> ${producto.item}</td>
+          <td style="width:25%" class="productName">${producto.nombre}</td>
+          <td class="productPrice"> ${producto.precio_arriendo} </td>
+          <td class="productStock" >${producto.cantidad}</td>
+          <td class="productAvailable" >${(producto.disponibles < 0) ? 0 : producto.disponibles}</td>
+          <td><input style="margin-right:8px" class="addProdInput quantityToAdd" id="" type="number" min="1" max="${producto.cantidad}"/><i class="fa-solid fa-plus addItem" onclick="AddProduct(this)"></i></td>`
+    $('#tableDrop').append(`<tr id="${producto.id}">${td}</tr>`);
+  });
+
+  $('#tableProducts').dataTable();
+}
+
+
+
+$(document).on('change', '#filterSelectedProducts', function () {
+  // console.log("estoy haciendo algo en el chagne de las categorias");
+  const categorieToSearch = $(this).val()
+
+  if (categorieToSearch === "all") {
+    filterProductsResume(selectedProdsAndCategories)
+    return
+  }
+  const catExists = selectedProdsAndCategories.find((categorie) => {
+    if (categorie.categoria === categorieToSearch) {
+      return true;
+    }
+  })
+  if (catExists) {
+    console.log(catExists);
+    filterProductsResume([catExists])
+  }
+})
+
+
+
+$('#getAvailableProducts').on('click', function () {
+  let navItem = $(this).find('.projectAssigmentTab')
+
+  if ($(navItem).hasClass('active')) {
+    $(navItem).removeClass('active')
+    $('#products').removeClass('active show').addClass('fade');
+  } else {
+    CloseAllTabsOnProjectsAssigments();
+    $(navItem).addClass('active')
+    $('#products').removeClass('fade')
+    $('#products').addClass('active show');
+
+    if ($('#fechaInicio').val() === "" || $('#fechaTermino').val() === "") {
+
+      Swal.fire({
+        title: '',
+        text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ver todos los productos',
+        cancelButtonText: 'Seleccionaré un rango de fechas'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // FillProductosAvailable(EMPRESA_ID, "all", "", "");
+          FillAllProducts()
+        }
+      })
+    }
+    if ($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== "") {
+      // FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
+      const dates = {
+        'fecha_inicio': $('#fechaInicio').val(),
+        'fecha_termino': $('#fechaTermino').val()
+      }
+      FillAllAvailableProducts(dates);
+    }
+  }
+})
+
+
+
+
+
+
+
 
 

@@ -48,7 +48,6 @@ async function addPackageToProjectAssigments(element){
     const idExists = PACKAGE_LIST.find((package) => {
         return parseInt(package.id) === parseInt(package_id)
     });
-
     if (!idExists) {
         Swal.fire(
             'Lo sentimos!',
@@ -56,7 +55,6 @@ async function addPackageToProjectAssigments(element){
             'error'
         )
     }
-
     if(selectedPackages.length > 0 ){
         const packageIsSelected = selectedPackages.find((selected)=>{
             return selected.id === package_id
@@ -70,7 +68,6 @@ async function addPackageToProjectAssigments(element){
             return
         }
     }
-
     //GET ALL PACKAGE DETAILS, NAME, ID FROM PACKAGE AND PRODUCTS THAT CONTAINS 
     const detailsPackage = await GetPackageDetails(package_id);
     console.log("detailsPackage",detailsPackage);
@@ -86,13 +83,12 @@ async function addPackageToProjectAssigments(element){
             return package
         }
     })
-    
     // PUSH FINDED PACKAGE TO GLOBAL LIST
     selectedPackages.push(packageToAdd);
     // ADD SELECTED PACKAGES TO RESUME
     addPackageToPackageAssigment();
     Toastify({
-        text: `Se ha agregado el paquete ${packageToAdd.nombre} `,
+        text: `Se ha agregado el paquete ${packageToAdd.nombre}`,
         duration: 2000,
         close: true
     }).showToast();
@@ -115,7 +111,6 @@ async function addPackageToProjectAssigments(element){
     printAllMySelectedProds();
     printAllMySelectedProdsOnProjectResume();
 }
-
 
 function printAllMySelectedProds(){
     $('#productResume-tables h3').remove();
@@ -429,14 +424,11 @@ function SetSelectedProducts_Add(productsToAdd){
 
         if(productExists){
             const exists = selectedProducts.find((selected,index)=>{
+                console.log("selected",selected);
                 if(selected.id === productExists.product_id){
-                    selected.quantityToAdd = parseInt(selected.quantityToAdd) - parseInt(productExists.quantityToAdd)
+                    selected.quantityToAdd = parseInt(selected.quantityToAdd) - parseInt(productExists.quantityToAdd);
                     selected.faltantes = product.faltantes;
-                    if(selected.quantityToAdd === 0){
-                        selectedProducts.splice(index,1);
-                    }else{
-                        return selected
-                    }
+                    return selected;
                 }
             })
 
@@ -449,6 +441,11 @@ function SetSelectedProducts_Add(productsToAdd){
                     'faltantes' : product.faltantes
                 })  
             }
+            console.log("previo",selectedProducts);
+
+            selectedProducts = selectedProducts.filter((selProd)=>{
+                return selProd.quantityToAdd > 0
+            })
         }
     })
     setMyCatsAndSubCats();
@@ -685,3 +682,10 @@ function addProductToResumeAssigment(){
         $("#projectEquipos tr:last").before(newTr);
     })
 }
+
+
+$(document).on('click', '.addPackageToAssigments', async function() {
+    addPackageToProjectAssigments($(this))
+})
+
+
