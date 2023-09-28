@@ -226,6 +226,8 @@ $active = 'proximosEventos';
   <script src="/js/ProjectResume/projectResume.js"></script>
   <script src="/js/Funciones/assigments.js"></script>
   <script src="/js/calendar.js"></script>
+  <script src="/js/packages.js"></script>
+  
 
   <script>
     const EMPRESA_ID = document.getElementById('empresaId').textContent;
@@ -249,6 +251,15 @@ $active = 'proximosEventos';
 
 
     $(document).ready(function(){
+
+      FillStandardPackages();
+      $('#tableResume').DataTable({})
+      // Fill Clientes
+      FillClientes(EMPRESA_ID);
+      //FILL DIRECCIONES
+      FillDirecciones();
+      // FILL PERSONAL
+      FillPersonal(EMPRESA_ID);
       
       $('#direccionAddForm').validate({
         rules: {
@@ -394,21 +405,6 @@ $active = 'proximosEventos';
 
         }
       })
-
-      // Fill Clientes
-      FillClientes(EMPRESA_ID);
-      //FILL DIRECCIONES
-      FillDirecciones();
-
-      //FILL PRODUCTOS
-      // FillProductos(EMPRESA_ID);
-
-      // FILL PERSONAL
-      FillPersonal(EMPRESA_ID);
-
-      //FILLPROJECTS
-      // FillCreated(EMPRESA_ID);
-
     })
 
     function convertFormToJSON(form) {
@@ -825,43 +821,40 @@ $active = 'proximosEventos';
 
     })
 
-    $('#getAvailableProducts').on('click', function() {
+    // $('#getAvailableProducts').on('click', function(){
 
+    //   let navItem = $(this).find('.projectAssigmentTab')
+    //   if ($(navItem).hasClass('active')) {
+    //     $(navItem).removeClass('active')
+    //     $('#products').removeClass('active show').addClass('fade');
+    //   } else {
 
-      let navItem = $(this).find('.projectAssigmentTab')
-      if ($(navItem).hasClass('active')) {
-        $(navItem).removeClass('active')
-        $('#products').removeClass('active show').addClass('fade');
-      } else {
+    //     CloseAllTabsOnProjectsAssigments();
+    //     $(navItem).addClass('active')
+    //     $('#products').removeClass('fade').addClass('active show');
 
-        CloseAllTabsOnProjectsAssigments();
-        $(navItem).addClass('active')
-        $('#products').removeClass('fade').addClass('active show');
+    //     if ($('#fechaInicio').val() === "" || $('#fechaTermino').val() === "") {
 
-        if ($('#fechaInicio').val() === "" || $('#fechaTermino').val() === "") {
+    //       Swal.fire({
+    //         title: '',
+    //         text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Ver todos los productos',
+    //         cancelButtonText: 'Seleccionaré un rango de fechas'
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           FillProductosAvailable(EMPRESA_ID, "all", "", "");
+    //         }
+    //       })
+    //     }
+    //     if ($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== "") {
+    //       FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
+    //     }
+    //   }
+    // })
+    
 
-          Swal.fire({
-            title: '',
-            text: "Debes seleccionar el rango de fechas en las que se realizara este proyecto para poder ver los productos disponibles,Deseas continuar y ver todos tus productos sin asignar?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ver todos los productos',
-            cancelButtonText: 'Seleccionaré un rango de fechas'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              FillProductosAvailable(EMPRESA_ID, "all", "", "");
-            }
-          })
-        }
-
-        if ($('#fechaInicio').val() !== "" && $('#fechaTermino').val() !== "") {
-          FillProductosAvailable(EMPRESA_ID, "available", $('#fechaInicio').val(), $('#fechaTermino').val());
-        }
-
-
-      }
-
-    })
 
     $('#getAvailablePersonal').on('click', function() {
 
@@ -988,20 +981,9 @@ $active = 'proximosEventos';
         }),
         dataType: 'json',
         success: function(response) {
-          // console.log(response);
-          // console.table(response.asignados.vehiculos);
-          // console.table(response.asignados.personal);
-          // console.table(response.asignados.cliente);
-          // console.table(response.asignados.productos);
-          // console.table(response.asignados.viaticos);
-          // console.table(response.asignados.arriendos);
-          // console.table(response.asignados.totalIngresos);
-          // console.table(response.dataProject);
 
           response.dataProject.forEach(data => {
-
             let nombre_cliente;
-
             // console.table("response.asignados.cliente",response.asignados.cliente);
             if (response.asignados.cliente.length > 0) {
 

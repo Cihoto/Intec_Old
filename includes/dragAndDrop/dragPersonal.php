@@ -13,12 +13,12 @@
             <div class="row">
                 <div class="col-md-6 col-12 mb-4 ">
                     <ul id="sortablePersonal1" class="connectedSortablePersonal" style="min-height: 150px;">
-                        
+
                     </ul>
                 </div>
                 <div class="col-md-6 col-12">
                     <ul id="sortablePersonal2" class="connectedSortablePersonal" style="min-height: 150px;">
-
+                    
                     </ul>
                 </div>
             </div>
