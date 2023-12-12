@@ -142,7 +142,10 @@ function removeVehicle(element){
             }
         })
 
-        console.log(existsToDelete);
+        console.log("existsToDelete",existsToDelete);
+        console.log("selectedVehicles",selectedVehicles);
+
+        printSelectedVehicles()
 
     }else{
         Swal.fire({
@@ -160,6 +163,7 @@ function removeVehicle(element){
 function printSelectedVehicles(){
     $('#sortable2 li').remove();
     $('#sortable1 li').remove();
+    $("#vehiculosProject .resumeVehicleData").remove();
 
 
     allVehicles.forEach((vehicle)=>{
@@ -184,14 +188,28 @@ function printSelectedVehicles(){
 
     selectedVehicles.forEach((vehicle)=>{
         let li = `<li vehicle_id="${vehicle.id}" style="display:flex; justify-content:space-between;" class="${vehicle.id}">
-        ${vehicle.patente}
-        <div class="personalPricing" style="display:flex;align-content: center;">
-            <input type="number" name="price" class="vehiclePrice" placeholder="Costo"/>
-            <i onclick="removeVehicle(this)" class="fa-solid fa-minus" style="color: #b92413;"></i>
-        </div>
-    </li`;
+            ${vehicle.patente}
+            <div class="personalPricing" style="display:flex;align-content: center;">
+                <input type="number" name="price" class="vehiclePrice" placeholder="Costo"/>
+                <i onclick="removeVehicle(this)" class="fa-solid fa-minus" style="color: #b92413;"></i>
+            </div>
+        </li>`;
 
         $('#sortable2').append(li)
+
+    })
+
+
+    selectedVehicles.forEach((selected)=>{
+       let tr = `<tr class="resumeVehicleData">
+            <td class="idVehicleResume" style="display:none">${selected.id}</td>
+            <td class="tbodyHeader">${selected.patente}</td>
+            <td></td>
+            <td>${CLPFormatter(parseInt(selected.valor)) }</td>
+            <td></td>
+        </tr>`;
+
+        $("#vehiculosProject tr:last").before(tr);
 
     })
 
@@ -290,8 +308,6 @@ function AppendVehiculoToResume(tipo) {
         for (let i = arrayLength - 1; i === arrayLength - 1; i++) {
             $("#vehiculosProject tr:last").before(newTr);
         }
-
-
     }
 }
 
